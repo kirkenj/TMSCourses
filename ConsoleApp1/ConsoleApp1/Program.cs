@@ -1,5 +1,10 @@
 ﻿int Input(string msg)
 {
+    if (msg == null)
+    {
+        throw new ArgumentNullException(nameof(msg));
+    }
+
     bool firstIterCompleted = false;
     int ret;
     do
@@ -11,12 +16,17 @@
         Console.WriteLine(msg);
         firstIterCompleted = true;
     }
-    while(!int.TryParse(Console.ReadLine(), out ret));
+    while (!int.TryParse(Console.ReadLine(), out ret));
     return ret;
 }
 
 int PrintMessageAndChooseValue(string menu, int minValue, int maxValue)
 {
+    if (menu == null)
+    {
+        throw new ArgumentNullException(nameof(menu));
+    }
+
     int ret;
     do
     {
@@ -60,6 +70,11 @@ int[][] GenerateMatrix(int columns, int rows, int minValue, int maxValue)
         throw new ArgumentOutOfRangeException(nameof(rows));
     }
 
+    if (maxValue < minValue)
+    {
+        (maxValue, minValue) = (minValue, maxValue);
+    }
+
     Random random = new Random();
     int[][] matrix = new int[rows][];
     for (int i = 0; i < matrix.Length; i++)
@@ -74,17 +89,27 @@ int[][] GenerateMatrix(int columns, int rows, int minValue, int maxValue)
     return matrix;
 }
 
-void GetAmountOfPositiveAndNegativeElements(int[][]matrix, out int negatives, out int positives)
+void GetAmountOfPositiveAndNegativeElements(int[][] matrix, out int negatives, out int positives)
 {
+    if (matrix == null)
+    {
+        throw new ArgumentNullException(nameof(matrix));
+    }
+
     positives = 0;
     negatives = 0;
-    foreach(var row in matrix)
+    foreach (var row in matrix)
     {
-        foreach(var value in row)
+        if (row == null)
+        {
+            throw new ArgumentNullException(nameof(matrix), "One of matrix's rows is null");
+        }
+
+        foreach (var value in row)
         {
             if (value < 0)
             {
-                negatives++; 
+                negatives++;
             }
             else
             {
@@ -96,6 +121,11 @@ void GetAmountOfPositiveAndNegativeElements(int[][]matrix, out int negatives, ou
 
 void BubleSortDesc(int[] arr)
 {
+    if (arr == null)
+    {
+        throw new ArgumentNullException(nameof(arr));
+    }
+
     for (int j = 0; j <= arr.Length - 2; j++)
     {
         for (int i = 0; i <= arr.Length - 2; i++)
@@ -110,6 +140,11 @@ void BubleSortDesc(int[] arr)
 
 void BubleSort(int[] arr)
 {
+    if (arr == null)
+    {
+        throw new ArgumentNullException(nameof(arr));
+    }
+
     for (int j = 0; j <= arr.Length - 2; j++)
     {
         for (int i = 0; i <= arr.Length - 2; i++)
@@ -124,10 +159,15 @@ void BubleSort(int[] arr)
 
 void Reverse(int[] arr)
 {
+    if (arr == null)
+    {
+        throw new ArgumentNullException(nameof(arr));
+    }
+
     for (int i = 0; i < arr.Length / 2; i++)
     {
         (arr[i], arr[^(i + 1)]) = (arr[^(i + 1)], arr[i]);
-    }  
+    }
 }
 
 int columnAmm = Input("Input columns amount"), rowsAmm = Input("Input rows amount"), minValue = Input("Input minimal value"), maxValue = Input("Input maximal value");
