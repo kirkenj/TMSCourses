@@ -217,3 +217,4 @@ while (true)
         break;
     }
 }
+Console.WriteLine("Programm stoped");
