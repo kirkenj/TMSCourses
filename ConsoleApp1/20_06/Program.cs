@@ -1,6 +1,6 @@
 ﻿using static Programm0;
-class Programm1 
-{ 
+class Programm1
+{
     static string ReverseDigitsInText(string text)
     {
         if (string.IsNullOrWhiteSpace(text))
@@ -82,8 +82,8 @@ class Programm1
             text = text.ToLower();
         }
 
-        int index = 0, newIndex = 0, count = 0;
-        while(index < text.Length)
+        int index = 0, newIndex, count = 0;
+        while (index < text.Length)
         {
             newIndex = text.IndexOf(substring, index);
             if (newIndex == -1)
@@ -104,12 +104,12 @@ class Programm1
             throw new ArgumentNullException(nameof(text));
         }
 
-        if (replaceDictionary == null || replaceDictionary.Count() == 0)
+        if (replaceDictionary == null || replaceDictionary.Count == 0)
         {
             throw new ArgumentNullException(nameof(replaceDictionary), "Dictionary is null or empty");
         }
 
-        foreach(var q in replaceDictionary)
+        foreach (var q in replaceDictionary)
         {
             text = text.Replace(q.Key, q.Value);
         }
@@ -216,9 +216,9 @@ class Programm1
         { "9", "nine" }
     };
 
-    private static char[] WORD_SEPARATORS = { '.', ',', '!', '?', ' ', ';', '>', '<'};
-    private static char[] SENTENCE_SEPARATOR = { '.', '!', '?' };
-    private static char[] BANNED_CHARS = { ',' };
+    private static readonly char[] WORD_SEPARATORS = { '.', ',', '!', '?', ' ', ';', '>', '<', '-' };
+    private static readonly char[] SENTENCE_SEPARATOR = { '.', '!', '?' };
+    private static readonly char[] BANNED_CHARS = { ',' };
 
     public static void Main()
     {
@@ -237,23 +237,22 @@ class Programm1
                     case 0:
                         textInputOption = PrintMessageAndChooseValue(textInputMenu, 1, 3);
                         string inpText;
-                        
+
                         switch (textInputOption)
                         {
-                            case 1:       
+                            #pragma warning disable CS8600, CS8604  // Преобразование литерала, допускающего значение NULL или возможного значения NULL в тип, не допускающий значение NULL.
+                            case 1:
                                 Console.WriteLine("Input text:");
-                                #pragma warning disable CS8600 // Преобразование литерала, допускающего значение NULL или возможного значения NULL в тип, не допускающий значение NULL.
                                 inpText = Console.ReadLine();
-                                #pragma warning restore CS8600 // Преобразование литерала, допускающего значение NULL или возможного значения NULL в тип, не допускающий значение NULL.
+
                                 break;
                             case 2:
                                 Console.WriteLine("Input file's path:");
-                                #pragma warning disable CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
                                 inpText = ReadTextFromFile(Console.ReadLine());
-                                #pragma warning restore CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
                                 break;
                             default:
                                 continue;
+                            #pragma warning restore CS8604, CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
                         };
 
                         if (string.IsNullOrWhiteSpace(inpText))
@@ -266,11 +265,11 @@ class Programm1
                             Console.WriteLine("Success");
                         }
                         break;
-                    
+
                     case 1:
                         Console.WriteLine(text);
                         break;
-                    
+
                     case 2:
                         int count;
                         string word;
@@ -289,12 +288,12 @@ class Programm1
                         Console.WriteLine();
                         Console.WriteLine(ReplaceWithDictionary(text, WORDS_FOR_DIGITS));
                         break;
-                    
+
                     case 4:
                         var sentences = GetSentencesWithSentenceSeparator(text, SENTENCE_SEPARATOR);
                         var interrogative = sentences.Where(sent => sent.EndsWith('?'));
                         var exclamatory = sentences.Where(sent => sent.EndsWith('!'));
-                        
+
                         if (interrogative.Any())
                         {
                             Console.WriteLine("Interrogatives:\n" + string.Join("\n", interrogative));
@@ -318,7 +317,7 @@ class Programm1
                     case 5:
                         Console.WriteLine(string.Join("\n", GetSentencesWithoutChars(text, SENTENCE_SEPARATOR, BANNED_CHARS)));
                         break;
-                    
+
                     case 6:
                         var dict = GetWordsWithSimilarLastAndFirstLetters(text, WORD_SEPARATORS);
                         if (!dict.Any())
@@ -332,11 +331,11 @@ class Programm1
                             Console.WriteLine($"{pair.Key}: {string.Join(", ", pair.Value)}");
                         }
                         break;
-                    
+
                     case 7:
                         Console.WriteLine(ReverseDigitsInText(text));
                         break;
-                    
+
                     default:
                         Console.WriteLine("Programm stoped...");
                         return;
