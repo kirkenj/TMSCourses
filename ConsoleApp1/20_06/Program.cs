@@ -254,89 +254,65 @@ class Programm1
         int textInputOption;
         while (true)
         {
-            option = PrintMessageAndChooseValue(menu, 0, 8);
-            if (option == 0)
+            try
             {
-                textInputOption = PrintMessageAndChooseValue(textInputMenu, 1, 3);
-                string inpText;
-                if (textInputOption == 1)
+                option = PrintMessageAndChooseValue(menu, 0, 8);
+                if (option == 0)
                 {
-                    Console.WriteLine("Input text:");
-                    #pragma warning disable CS8600 // Преобразование литерала, допускающего значение NULL или возможного значения NULL в тип, не допускающий значение NULL.
-                    inpText = Console.ReadLine();
-                    #pragma warning restore CS8600 // Преобразование литерала, допускающего значение NULL или возможного значения NULL в тип, не допускающий значение NULL.
-                }
-                else if (textInputOption == 2)
-                {
-                    try 
+                    textInputOption = PrintMessageAndChooseValue(textInputMenu, 1, 3);
+                    string inpText;
+                    if (textInputOption == 1)
+                    {
+                        Console.WriteLine("Input text:");
+#pragma warning disable CS8600 // Преобразование литерала, допускающего значение NULL или возможного значения NULL в тип, не допускающий значение NULL.
+                        inpText = Console.ReadLine();
+#pragma warning restore CS8600 // Преобразование литерала, допускающего значение NULL или возможного значения NULL в тип, не допускающий значение NULL.
+                    }
+                    else if (textInputOption == 2)
                     {
                         Console.WriteLine("Input file's path:");
-                        #pragma warning disable CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
+#pragma warning disable CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
                         inpText = ReadTextFromFile(Console.ReadLine());
-                        #pragma warning restore CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
+#pragma warning restore CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        Console.WriteLine(ex.ToString());
                         continue;
                     }
-                }
-                else
-                {
-                    continue;
-                }
 
-                if (string.IsNullOrWhiteSpace(inpText))
-                {
-                    Console.WriteLine("Invalid input text. Change is not applied");
+                    if (string.IsNullOrWhiteSpace(inpText))
+                    {
+                        Console.WriteLine("Invalid input text. Change is not applied");
+                    }
+                    else
+                    {
+                        text = inpText;
+                        Console.WriteLine("Success");
+                    }
                 }
-                else
+                else if (option == 1)
                 {
-                    text = inpText;
-                    Console.WriteLine("Success");
+                    Console.WriteLine(text);
                 }
-            }
-            else if (option == 1)
-            {
-                Console.WriteLine(text);
-            }
-            else if (option == 2)
-            {
-                int count;
-                string word;
-                try
+                else if (option == 2)
                 {
+                    int count;
+                    string word;
                     word = GetLongestWord(text, WORD_SEPARATORS);
                     count = Count(text, word);
+                    Console.WriteLine($"The longest word - {word}; count - {count}");
                 }
-                catch (Exception ex)
+                else if (option == 3)
                 {
-                    Console.WriteLine(ex.Message);
-                    continue;
-                }
-
-                Console.WriteLine($"The longest word - {word}; count - {count}");
-            }
-            else if (option == 3) 
-            {
-                Console.WriteLine("Dictionary:");
-                foreach (var pair in WORDS_FOR_DIGITS)
-                {
-                    Console.WriteLine($"{pair.Key}: {pair.Value}");
-                }
-                Console.WriteLine();
-                try
-                {
+                    Console.WriteLine("Dictionary:");
+                    foreach (var pair in WORDS_FOR_DIGITS)
+                    {
+                        Console.WriteLine($"{pair.Key}: {pair.Value}");
+                    }
+                    Console.WriteLine();
                     Console.WriteLine(ReplaceWithDictionary(text, WORDS_FOR_DIGITS));
                 }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-            }
-            else if (option == 4)
-            {
-                try
+                else if (option == 4)
                 {
                     var sentences = GetSentencesWithSentenceSeparator(text, SENTENCE_SEPARATOR);
                     var interrogative = sentences.Where(sent => sent.EndsWith('?'));
@@ -359,25 +335,11 @@ class Programm1
                         Console.WriteLine("Exclamatories not found");
                     }
                 }
-                catch (Exception ex)
+                else if (option == 5)
                 {
-                    Console.WriteLine(ex.Message);
+                    Console.WriteLine(string.Join("\n", GetSentencesWithoutChars(text, SENTENCE_SEPARATOR, BANNED_CHARS)));
                 }
-            }
-            else if (option == 5)
-            {
-                try
-                {
-                    Console.WriteLine(string.Join("\n", GetSentencesWithoutChars(text,SENTENCE_SEPARATOR, BANNED_CHARS)));
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-            }
-            else if (option == 6)
-            {// 6.Print words with similar first and last letters
-                try
+                else if (option == 6)
                 {
                     var dict = GetWordsWithSimilarLastAndFirstLetters(text, WORD_SEPARATORS);
                     if (!dict.Any())
@@ -391,25 +353,18 @@ class Programm1
                         Console.WriteLine($"{pair.Key}: {string.Join(", ", pair.Value)}");
                     }
                 }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-            }
-            else if (option == 7)
-            {//7.Additional task: reverse digits in a word
-                try
+                else if (option == 7)
                 {
                     Console.WriteLine(ReverseDigitsInText(text));
                 }
-                catch (Exception ex)
+                else
                 {
-                    Console.WriteLine(ex.Message);
+                    break;
                 }
             }
-            else
+            catch (Exception ex)
             {
-                break;
+                Console.WriteLine(ex.Message);
             }
         }
         Console.WriteLine("Programm stoped...");
