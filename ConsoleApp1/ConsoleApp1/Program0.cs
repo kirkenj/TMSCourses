@@ -1,22 +1,23 @@
 ﻿public class Programm0
 {
-    public static int Input(string msg)
+    public static int ReadIntFromConsole(string msg)
     {
         if (msg == null)
         {
             throw new ArgumentNullException(nameof(msg));
         }
 
-        bool firstIterCompleted = false;
+        bool isFirstIterCompleted = false;
         int ret;
         do
         {
-            if (firstIterCompleted)
+            if (isFirstIterCompleted)
             {
                 Console.WriteLine("Convertion error");
             }
+
             Console.WriteLine(msg);
-            firstIterCompleted = true;
+            isFirstIterCompleted = true;
         }
         while (!int.TryParse(Console.ReadLine(), out ret));
         return ret;
@@ -33,7 +34,7 @@
         do
         {
             Console.WriteLine(CONSOLE_SEPARATOR + menu + CONSOLE_SEPARATOR);
-            ret = Input($"Input value from {minValue} to {maxValue}");
+            ret = ReadIntFromConsole($"Input value from {minValue} to {maxValue}");
         }
         while (ret < minValue || ret > maxValue);
         return ret;
@@ -41,19 +42,14 @@
 
     public static void PrintMatrix(int[][] matrix)
     {
-        if (matrix == null)
+        if (matrix == null || matrix.Length == 0)
         {
-            throw new ArgumentNullException(nameof(matrix));
+            throw new ArgumentNullException(nameof(matrix), "Array is null or empty");
         }
 
-        if (matrix.Length == 0)
-        {
-            throw new ArgumentException("Matrix length is 0", nameof(matrix));
-        }
-
-        string max = matrix.Select(r => r.Max()).Max().ToString();
-        string min = matrix.Select(r => r.Min()).Min().ToString();
-        int padLen = max.Length > min.Length ? max.Length : min.Length;
+        int maxLen = matrix.Select(r => r.Max()).Max().ToString().Length;
+        int minLen = matrix.Select(r => r.Min()).Min().ToString().Length;
+        int padLen = maxLen > minLen ? maxLen : minLen;
         foreach (var row in matrix)
         {
             Console.WriteLine(string.Join(" ", row.Select(el => el.ToString().PadLeft(padLen))));
@@ -77,7 +73,7 @@
             (maxValue, minValue) = (minValue, maxValue);
         }
 
-        Random random = new Random();
+        Random random = new ();
         int[][] matrix = new int[rows][];
         for (int i = 0; i < matrix.Length; i++)
         {
@@ -91,67 +87,48 @@
         return matrix;
     }
 
-    public static void GetAmountOfPositiveAndNegativeElements(int[][] matrix, out int negatives, out int positives)
+    public static void GetAmountOfPositiveAndNegativeElements(int[][] matrix, out int negativesCount, out int positivesCount, out int zerosCount)
     {
         if (matrix == null)
         {
             throw new ArgumentNullException(nameof(matrix));
         }
 
-        positives = 0;
-        negatives = 0;
+        positivesCount = 0;
+        negativesCount = 0;
+        zerosCount = 0;
         foreach (var row in matrix)
         {
-            if (row == null)
-            {
-                throw new ArgumentNullException(nameof(matrix), "One of matrix's rows is null");
-            }
-
             foreach (var value in row)
             {
                 if (value < 0)
                 {
-                    negatives++;
+                    negativesCount++;
+                }
+                else if (value > 0)
+                {
+                    positivesCount++;
                 }
                 else
                 {
-                    positives++;
+                    zerosCount++;
                 }
             }
         }
     }
 
-    public static void BubleSortDesc(int[] arr)
+    public static void BubleSort(int[] arr, bool isDescending = false)
     {
         if (arr == null)
         {
             throw new ArgumentNullException(nameof(arr));
         }
 
-        for (int j = 0; j <= arr.Length - 2; j++)
+        for (int j = 0; j < arr.Length - 1; j++)
         {
-            for (int i = 0; i <= arr.Length - 2; i++)
+            for (int i = 0; i < arr.Length - 1; i++)
             {
-                if (arr[i] < arr[i + 1])
-                {
-                    (arr[i], arr[i + 1]) = (arr[i + 1], arr[i]);
-                }
-            }
-        }
-    }
-
-    public static void BubleSort(int[] arr)
-    {
-        if (arr == null)
-        {
-            throw new ArgumentNullException(nameof(arr));
-        }
-
-        for (int j = 0; j <= arr.Length - 2; j++)
-        {
-            for (int i = 0; i <= arr.Length - 2; i++)
-            {
-                if (arr[i] > arr[i + 1])
+                if ((isDescending && arr[i] < arr[i + 1]) || (!isDescending && arr[i] > arr[i + 1]))
                 {
                     (arr[i], arr[i + 1]) = (arr[i + 1], arr[i]);
                 }
@@ -172,56 +149,64 @@
         }
     }
 
-    private static string CONSOLE_SEPARATOR = '\n' + new string('-', 30) + '\n';
+    private static readonly string CONSOLE_SEPARATOR = '\n' + new string('-', 30) + '\n';
     public static void Main()
     {
-        int columnAmm = Input("Input columns amount"), rowsAmm = Input("Input rows amount"), minValue = Input("Input minimal value"), maxValue = Input("Input maximal value");
+        int columnAmm = ReadIntFromConsole("Input columns amount");
+        int rowsAmm = ReadIntFromConsole("Input rows amount");
+        int minValue = ReadIntFromConsole("Input minimal value");
+        int maxValue = ReadIntFromConsole("Input maximal value");
         //int columnAmm = 10, rowsAmm = 10, minValue = -1, maxValue = 5;
         int[][] matrix = GenerateMatrix(columnAmm, rowsAmm, minValue, maxValue);
         string menu = "0.Print matrix\n1.Get amount of positive and negative numbers\n2.Sort selected row\n3.Sort selected row (desc)\n4.Reverse selected row\n5.Quit";
         PrintMatrix(matrix);
         int option;
+        int rowNumber;
+        int[] row;
         while (true)
         {
-            option = PrintMessageAndChooseValue(menu, 0, 5);
-            if (option == 0)
+            try
             {
-                PrintMatrix(matrix);
+                option = PrintMessageAndChooseValue(menu, 0, 5);
+                switch (option)
+                {
+                    case 0:
+                        PrintMatrix(matrix);
+                        break;
+                    case 1:
+                        GetAmountOfPositiveAndNegativeElements(matrix, out int negatives, out int positives, out int zeros);
+                        Console.WriteLine($"Amount of postives - {positives}; negatives - {negatives}; zeros - {zeros}");
+                        break;
+                    case 2:
+                        rowNumber = PrintMessageAndChooseValue("Input row's number", 0, matrix.Length - 1);
+                        row = matrix[rowNumber];
+                        Console.WriteLine("Selected row: " + String.Join(" ", row));
+                        BubleSort(row);
+                        Console.WriteLine("Sorted row: " + String.Join(" ", row));
+                        break;
+                    case 3:
+                        rowNumber = PrintMessageAndChooseValue("Input row's number", 0, matrix.Length - 1);
+                        row = matrix[rowNumber];
+                        Console.WriteLine("Selected row: " + String.Join(" ", row));
+                        BubleSort(row, true);
+                        Console.WriteLine("Sorted row: " + String.Join(" ", row));
+                        break;
+                    case 4:
+                        rowNumber = PrintMessageAndChooseValue("Input row's number", 0, matrix.Length - 1);
+                        row = matrix[rowNumber];
+                        Console.WriteLine("Selected row: " + String.Join(" ", row));
+                        Reverse(row);
+                        Console.WriteLine("Reversed row: " + String.Join(" ", row));
+                        break;
+                    default:
+                        Console.WriteLine("Bue...");
+                        return;
+                }
             }
-            else if (option == 1)
+            catch (Exception ex)
             {
-                GetAmountOfPositiveAndNegativeElements(matrix, out int negatives, out int positives);
-                Console.WriteLine($"Amount of postives - {positives}; negatives - {negatives}");
-            }
-            else if (option == 2)
-            {
-                int rowNumber = PrintMessageAndChooseValue("Input row's number", 0, matrix.Length - 1);
-                int[] row = matrix[rowNumber];
-                Console.WriteLine("Selected row: " + String.Join(" ", row));
-                BubleSort(row);
-                Console.WriteLine("Sorted row: " + String.Join(" ", row));
-            }
-            else if (option == 3)
-            {
-                int rowNumber = PrintMessageAndChooseValue("Input row's number", 0, matrix.Length - 1);
-                int[] row = matrix[rowNumber];
-                Console.WriteLine("Selected row: " + String.Join(" ", row));
-                BubleSortDesc(row);
-                Console.WriteLine("Sorted row: " + String.Join(" ", row));
-            }
-            else if (option == 4)
-            {
-                int rowNumber = PrintMessageAndChooseValue("Input row's number", 0, matrix.Length - 1);
-                int[] row = matrix[rowNumber];
-                Console.WriteLine("Selected row: " + String.Join(" ", row));
-                Reverse(row);
-                Console.WriteLine("Reversed row: " + String.Join(" ", row));
-            }
-            else
-            {
-                break;
+                Console.WriteLine(ex.Message);
             }
         }
-        Console.WriteLine("Programm stoped...");
     }
 }
