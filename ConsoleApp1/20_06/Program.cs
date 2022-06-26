@@ -78,9 +78,8 @@ class Programm1
 
         return text.Split(wordSeparators, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
             .Distinct()
-            .Select(el => new {word = el, count = countFunc(el) })
-            .OrderByDescending(g => g.count)
-            .First().word;
+            .OrderByDescending(g => countFunc(g))
+            .First();
     }
 
     static string GetLongestWord(string text, in char[] wordSeparators)
