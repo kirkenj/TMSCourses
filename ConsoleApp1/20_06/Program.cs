@@ -1,6 +1,24 @@
 ﻿using static Programm0;
 class Programm1
 {
+    private static readonly Dictionary<string, string> WORDS_FOR_DIGITS = new()
+    {
+        { "0", "zero" },
+        { "1", "one" },
+        { "2", "two" },
+        { "3", "three" },
+        { "4", "four" },
+        { "5", "five" },
+        { "6", "six" },
+        { "7", "seven" },
+        { "8", "eight" },
+        { "9", "nine" }
+    };
+
+    private static readonly char[] WORD_SEPARATORS = { '.', ',', '!', '?', ' ', ';', '>', '<', '-' };
+    private static readonly char[] SENTENCE_SEPARATOR = { '.', '!', '?' };
+    private static readonly char[] BANNED_CHARS = { ',' };
+
     static string ReverseDigitsInText(string text)
     {
         if (string.IsNullOrWhiteSpace(text))
@@ -46,7 +64,7 @@ class Programm1
         return text;
     }
 
-    static string GetLongestWord(string text, char[] wordSeparators)
+    static string GetWordWithMaximalCount(string text, in char[] wordSeparators, Func<string, int> countFunc)
     {
         if (string.IsNullOrWhiteSpace(text))
         {
@@ -58,7 +76,26 @@ class Programm1
             throw new ArgumentNullException(nameof(wordSeparators), "Words separators array is null or empty");
         }
 
-        return text.ToLower()
+        return text.Split(wordSeparators, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .Distinct()
+            .Select(el => new {word = el, count = countFunc(el) })
+            .OrderByDescending(g => g.count)
+            .First().word;
+    }
+
+    static string GetLongestWord(string text, in char[] wordSeparators)
+    {
+        if (string.IsNullOrWhiteSpace(text))
+        {
+            throw new ArgumentNullException(nameof(text));
+        }
+
+        if (wordSeparators == null || wordSeparators.Length == 0)
+        {
+            throw new ArgumentNullException(nameof(wordSeparators), "Words separators array is null or empty");
+        }
+
+        return text
             .Split(wordSeparators, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
             .Distinct()
             .OrderByDescending(word => word.Length).First();
@@ -97,7 +134,7 @@ class Programm1
         return count;
     }
 
-    static string ReplaceWithDictionary(string text, Dictionary<string, string> replaceDictionary)
+    static string ReplaceWithDictionary(string text, in Dictionary<string, string> replaceDictionary)
     {
         if (string.IsNullOrWhiteSpace(text))
         {
@@ -117,7 +154,7 @@ class Programm1
         return text;
     }
 
-    static Dictionary<string, IEnumerable<string>> GetWordsWithSimilarLastAndFirstLetters(string text, char[] wordSeparators)
+    static Dictionary<string, IEnumerable<string>> GetWordsWithSimilarLastAndFirstLetters(string text,in char[] wordSeparators)
     {
         if (string.IsNullOrWhiteSpace(text))
         {
@@ -151,8 +188,8 @@ class Programm1
         return dict;
     }
 
-    static string[] GetSentencesWithoutChars(string text, char[] sentencesSeparator, char[] bannedChars)
-    {
+    static string[] GetSentencesWithoutChars(string text, in char[] sentencesSeparator, char[] bannedChars)
+    {//i can't use parameters with in, out, ref in anonimous methods, lyambdas, queries or local function - CS1628
         if (string.IsNullOrWhiteSpace(text))
         {
             throw new ArgumentNullException(nameof(text));
@@ -173,7 +210,7 @@ class Programm1
             .ToArray();
     }
 
-    static string[] GetSentencesWithSentenceSeparator(string text, char[] sentSeparators)
+    static string[] GetSentencesWithSentenceSeparator(in string text, in char[] sentSeparators)
     {
         if (string.IsNullOrWhiteSpace(text))
         {
@@ -202,27 +239,10 @@ class Programm1
         return sentences.ToArray();
     }
 
-    private static Dictionary<string, string> WORDS_FOR_DIGITS = new()
-    {
-        { "0", "zero" },
-        { "1", "one" },
-        { "2", "two" },
-        { "3", "three" },
-        { "4", "four" },
-        { "5", "five" },
-        { "6", "six" },
-        { "7", "seven" },
-        { "8", "eight" },
-        { "9", "nine" }
-    };
-
-    private static readonly char[] WORD_SEPARATORS = { '.', ',', '!', '?', ' ', ';', '>', '<', '-' };
-    private static readonly char[] SENTENCE_SEPARATOR = { '.', '!', '?' };
-    private static readonly char[] BANNED_CHARS = { ',' };
-
     public static void Main()
     {
-        string menu = "0.Input text\n1.Print text\n2.Get the longest word and count it into the text\n3.Replace digits with words\n4.Print first interrogative than exclamatory sentences\n5.Print sentences without points\n6.Print words with similar first and last letters\n7.Additional task: reverse digits in a word\n8.Quit";
+        //../../../TextFile1.txt
+        string menu = "0.Input text\n1.Print text\n2.Get word with highest digits ammount\n3.Get the longest word and count it into the text\n4.Replace digits with words\n5.Print first interrogative than exclamatory sentences\n6.Print sentences without points\n7.Print words with similar first and last letters\n8.Additional task: reverse digits in a word\n9.Quit";
         string textInputMenu = "1.Read from console\n2.Read from file\n3.Cancel";
         string text = string.Empty;
         int option;
@@ -231,7 +251,7 @@ class Programm1
         {
             try
             {
-                option = PrintMessageAndChooseValue(menu, 0, 8);
+                option = PrintMessageAndChooseValue(menu, 0, 9);
                 switch (option)
                 {
                     case 0:
@@ -271,6 +291,11 @@ class Programm1
                         break;
 
                     case 2:
+                        var digitsWord = GetWordWithMaximalCount(text, WORD_SEPARATORS, (someText) => someText.Count(ch => char.IsDigit(ch)));
+                        Console.WriteLine($"The word with the highest figits ammount is '{digitsWord}'");
+                        break;
+
+                    case 3:
                         int count;
                         string word;
                         word = GetLongestWord(text, WORD_SEPARATORS);
@@ -278,7 +303,7 @@ class Programm1
                         Console.WriteLine($"The longest word - {word}; count - {count}");
                         break;
 
-                    case 3:
+                    case 4:
                         Console.WriteLine("Dictionary:");
                         foreach (var pair in WORDS_FOR_DIGITS)
                         {
@@ -289,7 +314,7 @@ class Programm1
                         Console.WriteLine(ReplaceWithDictionary(text, WORDS_FOR_DIGITS));
                         break;
 
-                    case 4:
+                    case 5:
                         var sentences = GetSentencesWithSentenceSeparator(text, SENTENCE_SEPARATOR);
                         var interrogative = sentences.Where(sent => sent.EndsWith('?'));
                         var exclamatory = sentences.Where(sent => sent.EndsWith('!'));
@@ -314,11 +339,11 @@ class Programm1
 
                         break;
 
-                    case 5:
+                    case 6:
                         Console.WriteLine(string.Join("\n", GetSentencesWithoutChars(text, SENTENCE_SEPARATOR, BANNED_CHARS)));
                         break;
 
-                    case 6:
+                    case 7:
                         var dict = GetWordsWithSimilarLastAndFirstLetters(text, WORD_SEPARATORS);
                         if (!dict.Any())
                         {
@@ -332,7 +357,7 @@ class Programm1
                         }
                         break;
 
-                    case 7:
+                    case 8:
                         Console.WriteLine(ReverseDigitsInText(text));
                         break;
 
@@ -346,6 +371,5 @@ class Programm1
                 Console.WriteLine(ex.Message);
             }
         }
-        //../../../TextFile1.txt
     }
 }
