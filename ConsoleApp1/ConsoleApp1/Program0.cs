@@ -1,6 +1,6 @@
 ﻿public class Programm0
 {
-    public static int ReadIntFromConsole(string msg)
+    public static int ReadIntFromConsole(in string msg)
     {
         if (msg == null)
         {
@@ -23,11 +23,16 @@
         return ret;
     }
 
-    public static int PrintMessageAndChooseValue(string menu, int minValue, int maxValue)
+    public static int PrintMessageAndChooseValue(in string menu, int minValue, int maxValue)
     {
         if (menu == null)
         {
             throw new ArgumentNullException(nameof(menu));
+        }
+
+        if (maxValue < minValue)
+        {
+            (maxValue, minValue) = (minValue, maxValue);
         }
 
         int ret;
@@ -40,7 +45,7 @@
         return ret;
     }
 
-    public static void PrintMatrix(int[][] matrix)
+    public static void PrintMatrix(in int[][] matrix)
     {
         if (matrix == null || matrix.Length == 0)
         {
@@ -56,7 +61,7 @@
         }
     }
 
-    public static int[][] GenerateMatrix(int columns, int rows, int minValue, int maxValue)
+    public static int[][] GenerateMatrix(in int columns, in int rows, int minValue, int maxValue)
     {
         if (columns <= 0)
         {
@@ -87,7 +92,7 @@
         return matrix;
     }
 
-    public static void GetAmountOfPositiveAndNegativeElements(int[][] matrix, out int negativesCount, out int positivesCount, out int zerosCount)
+    public static void GetAmountOfPositiveAndNegativeElements(in int[][] matrix, out int negativesCount, out int positivesCount, out int zerosCount)
     {
         if (matrix == null)
         {
@@ -117,7 +122,7 @@
         }
     }
 
-    public static void BubleSort(int[] arr, bool isDescending = false)
+    public static void BubleSort(in int[] arr, bool isDescending = false)
     {
         if (arr == null)
         {
@@ -136,7 +141,7 @@
         }
     }
 
-    public static void Reverse(int[] arr)
+    public static void Reverse(in int[] arr)
     {
         if (arr == null)
         {
