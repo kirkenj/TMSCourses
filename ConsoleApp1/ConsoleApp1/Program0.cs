@@ -1,5 +1,12 @@
 ﻿public class Programm0
 {
+    public static void Swap<T>(ref T a, ref T b)
+    {
+        T buf = a; 
+        a = b; 
+        b = buf; 
+    }
+
     public static int ReadIntFromConsole(in string msg)
     {
         if (msg == null)
@@ -150,7 +157,7 @@
 
         for (int i = 0; i < arr.Length / 2; i++)
         {
-            (arr[i], arr[^(i + 1)]) = (arr[^(i + 1)], arr[i]);
+            Swap(ref arr[i], ref arr[^(i + 1)]);
         }
     }
 
