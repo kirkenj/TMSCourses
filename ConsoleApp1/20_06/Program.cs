@@ -16,7 +16,7 @@ class Programm1
     };
 
     private static readonly char[] WORD_SEPARATORS = { '.', ',', '!', '?', ' ', ';', '>', '<', '-' };
-    private static readonly char[] SENTENCE_SEPARATOR = { '.', '!', '?' };
+    private static readonly char[] SENTENCE_SEPARATORS = { '.', '!', '?' };
     private static readonly char[] BANNED_CHARS = { ',' };
 
     static string ReverseDigitsInText(string text)
@@ -30,8 +30,8 @@ class Programm1
         int i = 0, j = arr.Length - 1;
         while (i < j)
         {
-            i += !char.IsDigit(arr[i]) ? 1 : 0;
-            j -= !char.IsDigit(arr[j]) ? 1 : 0;
+            i += char.IsDigit(arr[i]) ? 0 : 1;
+            j -= char.IsDigit(arr[j]) ? 0 : 1;
             if (char.IsDigit(arr[i]) && char.IsDigit(arr[j]))
             {
                 (arr[i], arr[j]) = (arr[j--], arr[i++]);
@@ -209,22 +209,22 @@ class Programm1
             .ToArray();
     }
 
-    static string[] GetSentencesWithSentenceSeparator(in string text, in char[] sentSeparators)
+    static string[] GetTextTrimmedByFunction(in string text, Func<char,bool> devisionFunction)
     {
         if (string.IsNullOrWhiteSpace(text))
         {
             throw new ArgumentNullException(nameof(text));
         }
 
-        if (sentSeparators == null || sentSeparators.Length == 0)
+        if (devisionFunction == null)
         {
-            throw new ArgumentNullException(nameof(sentSeparators), "Sentence separators array is null or empty");
+            throw new ArgumentNullException(nameof(devisionFunction));
         }
 
         List<string> sentences = new();
         for (int i = 0, j = i; j < text.Length; j++)
         {
-            if (sentSeparators.Contains(text[j]))
+            if (devisionFunction(text[j]))
             {
                 var sent = text[i..(j + 1)].Trim();
                 if (sent.Length > 1)
@@ -263,7 +263,6 @@ class Programm1
                             case 1:
                                 Console.WriteLine("Input text:");
                                 inpText = Console.ReadLine();
-
                                 break;
                             case 2:
                                 Console.WriteLine("Input file's path:");
@@ -295,11 +294,8 @@ class Programm1
                         break;
 
                     case 3:
-                        int count;
-                        string word;
-                        word = GetLongestWord(text, WORD_SEPARATORS);
-                        count = Count(text, word);
-                        Console.WriteLine($"The longest word - {word}; count - {count}");
+                        string word= GetLongestWord(text, WORD_SEPARATORS);
+                        Console.WriteLine($"The longest word - {word}; count - {Count(text, word)}");
                         break;
 
                     case 4:
@@ -314,32 +310,15 @@ class Programm1
                         break;
 
                     case 5:
-                        var sentences = GetSentencesWithSentenceSeparator(text, SENTENCE_SEPARATOR);
+                        var sentences = GetTextTrimmedByFunction(text, SENTENCE_SEPARATORS.Contains);
                         var interrogative = sentences.Where(sent => sent.EndsWith('?'));
                         var exclamatory = sentences.Where(sent => sent.EndsWith('!'));
-
-                        if (interrogative.Any())
-                        {
-                            Console.WriteLine("Interrogatives:\n" + string.Join("\n", interrogative));
-                        }
-                        else
-                        {
-                            Console.WriteLine("Interrogatives not found");
-                        }
-
-                        if (exclamatory.Any())
-                        {
-                            Console.WriteLine("Exclamatories:\n" + string.Join("\n", exclamatory));
-                        }
-                        else
-                        {
-                            Console.WriteLine("Exclamatories not found");
-                        }
-
+                        Console.WriteLine(interrogative.Any() ? "Interrogatives:\n" + string.Join("\n", interrogative) : "Interrogatives not found");
+                        Console.WriteLine(exclamatory.Any() ? "Exclamatories:\n" + string.Join("\n", exclamatory) : "Exclamatories not found");
                         break;
 
                     case 6:
-                        Console.WriteLine(string.Join("\n", GetSentencesWithoutChars(text, SENTENCE_SEPARATOR, BANNED_CHARS)));
+                        Console.WriteLine(string.Join("\n", GetSentencesWithoutChars(text, SENTENCE_SEPARATORS, BANNED_CHARS)));
                         break;
 
                     case 7:
