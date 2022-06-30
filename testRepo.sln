@@ -5,7 +5,7 @@ VisualStudioVersion = 17.1.32328.378
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "testRepo", "testRepo\testRepo.csproj", "{0578C31F-C472-4A15-B977-EF0FF5C37F5E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "20_06", "20_06\20_06.csproj", "{B80A01FD-5BEC-4D96-8BB4-B4AC2E6F7C1B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "class20_06", "20_06\class20_06.csproj", "{B80A01FD-5BEC-4D96-8BB4-B4AC2E6F7C1B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
