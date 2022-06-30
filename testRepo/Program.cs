@@ -212,6 +212,7 @@
                             Reverse(row);
                             Console.WriteLine("Reversed row: " + String.Join(" ", row));
                             break;
+
                         default:
                             Console.WriteLine("Bue...");
                             return;
