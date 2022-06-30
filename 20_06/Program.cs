@@ -1,6 +1,37 @@
 ﻿using static testRepo.Programm;
 class Programm1
 {
+    enum MenuItemSelection
+    {
+        InputText,
+        PrintText,
+        GetWordWithHighestDigitsAmmount,
+        GetLongestWordAndCountIntoTheText, 
+        ReplaceDigitsWithWords,
+        PrintFirstInterrogativeThanExclamatorySentences, 
+        PrintSentencesWithoutPoints,
+        PrintWordsWithSimilarFirstAndLastLetters, 
+        ReverseDigitsInWord, 
+        Quit
+    }
+
+    private static string MAIN_MENU = "0.Input text\n" +
+        "1.Print text\n" +
+        "2.Get word with highest digits ammount\n" +
+        "3.Get the longest word and count it into the text\n" +
+        "4.Replace digits with words\n" +
+        "5.Print first interrogative than exclamatory sentences\n" +
+        "6.Print sentences without points\n" +
+        "7.Print words with similar first and last letters\n" +
+        "8.Additional task: reverse digits in a word\n" +
+        "9.Quit";
+    
+    private static string TEXT_INPUT_MENU = "1.Read from console\n" +
+        "2.Read from file\n" +
+        "3.Cancel";
+
+
+
     private static readonly Dictionary<string, string> WORDS_FOR_DIGITS = new()
     {
         { "0", "zero" },
@@ -212,22 +243,22 @@ class Programm1
             .ToArray();
     }
 
-    static string[] GetTextTrimmedByFunction(in string text, Func<char, bool> devisionFunction)
+    static string[] GetTextTrimmedByFunction(in string text, Func<char, bool> ifTrueTextDevisionFunction)
     {
         if (string.IsNullOrWhiteSpace(text))
         {
             throw new ArgumentNullException(nameof(text));
         }
 
-        if (devisionFunction == null)
+        if (ifTrueTextDevisionFunction == null)
         {
-            throw new ArgumentNullException(nameof(devisionFunction));
+            throw new ArgumentNullException(nameof(ifTrueTextDevisionFunction));
         }
 
         List<string> sentences = new();
         for (int i = 0, j = i; j < text.Length; j++)
         {
-            if (devisionFunction(text[j]))
+            if (ifTrueTextDevisionFunction(text[j]))
             {
                 var sent = text[i..(j + 1)].Trim();
                 if (sent.Length > 1)
@@ -244,20 +275,28 @@ class Programm1
     public static void Main()
     {
         //../../../TextFile1.txt
-        string menu = "0.Input text\n1.Print text\n2.Get word with highest digits ammount\n3.Get the longest word and count it into the text\n4.Replace digits with words\n5.Print first interrogative than exclamatory sentences\n6.Print sentences without points\n7.Print words with similar first and last letters\n8.Additional task: reverse digits in a word\n9.Quit";
-        string textInputMenu = "1.Read from console\n2.Read from file\n3.Cancel";
         string text = string.Empty;
-        int option;
+        MenuItemSelection option;
         int textInputOption;
+        int bufferInt;
         while (true)
         {
             try
             {
-                option = PrintMessageAndChooseValue(menu, 0, 9);
+                bufferInt = PrintMessageAndChooseValue(MAIN_MENU, 0, 10);
+                if (Enum.IsDefined(typeof(MenuItemSelection), bufferInt))
+                {
+                    option = (MenuItemSelection)bufferInt;
+                }
+                else
+                {
+                    throw new ArgumentException($"Value is not defined for {typeof(MenuItemSelection)}", nameof(option));
+                }
+
                 switch (option)
                 {
-                    case 0:
-                        textInputOption = PrintMessageAndChooseValue(textInputMenu, 1, 3);
+                    case MenuItemSelection.InputText:
+                        textInputOption = PrintMessageAndChooseValue(TEXT_INPUT_MENU, 1, 3);
                         string inpText;
 
                         switch (textInputOption)
@@ -287,21 +326,21 @@ class Programm1
                         }
                         break;
 
-                    case 1:
+                    case MenuItemSelection.PrintText:
                         Console.WriteLine(text);
                         break;
 
-                    case 2:
+                    case MenuItemSelection.GetWordWithHighestDigitsAmmount:
                         var digitsWord = GetWordWithMaximalCount(text, WORD_SEPARATORS, (someText) => someText.Count(ch => char.IsDigit(ch)));
                         Console.WriteLine($"The word with the highest figits ammount is '{digitsWord}'");
                         break;
 
-                    case 3:
+                    case MenuItemSelection.GetLongestWordAndCountIntoTheText:
                         string word = GetLongestWord(text, WORD_SEPARATORS);
                         Console.WriteLine($"The longest word - {word}; count - {Count(text, word)}");
                         break;
 
-                    case 4:
+                    case MenuItemSelection.ReplaceDigitsWithWords:
                         Console.WriteLine("Dictionary:");
                         foreach (var pair in WORDS_FOR_DIGITS)
                         {
@@ -312,7 +351,7 @@ class Programm1
                         Console.WriteLine(ReplaceWithDictionary(text, WORDS_FOR_DIGITS));
                         break;
 
-                    case 5:
+                    case MenuItemSelection.PrintFirstInterrogativeThanExclamatorySentences:
                         var sentences = GetTextTrimmedByFunction(text, SENTENCE_SEPARATORS.Contains);
                         var interrogative = sentences.Where(sent => sent.EndsWith('?'));
                         var exclamatory = sentences.Where(sent => sent.EndsWith('!'));
@@ -320,11 +359,11 @@ class Programm1
                         Console.WriteLine(exclamatory.Any() ? "Exclamatories:\n" + string.Join("\n", exclamatory) : "Exclamatories not found");
                         break;
 
-                    case 6:
+                    case MenuItemSelection.PrintSentencesWithoutPoints:
                         Console.WriteLine(string.Join("\n", GetSentencesWithoutChars(text, SENTENCE_SEPARATORS, BANNED_CHARS)));
                         break;
 
-                    case 7:
+                    case MenuItemSelection.PrintWordsWithSimilarFirstAndLastLetters:
                         var dict = GetWordsWithSimilarLastAndFirstLetters(text, WORD_SEPARATORS);
                         if (!dict.Any())
                         {
@@ -338,7 +377,7 @@ class Programm1
                         }
                         break;
 
-                    case 8:
+                    case MenuItemSelection.ReverseDigitsInWord:
                         Console.WriteLine(ReverseDigitsInText(text));
                         break;
 
