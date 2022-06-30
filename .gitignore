@@ -21,6 +21,10 @@ x64/
 [Bb]in/
 [Oo]bj/
 
+#лично добавил
+.vs/
+#дада
+
 # MSTest test Results
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
