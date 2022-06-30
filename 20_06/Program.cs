@@ -15,7 +15,8 @@ class Programm1
         Quit
     }
 
-    private static string MAIN_MENU = "0.Input text\n" +
+    private static readonly string MAIN_MENU = 
+        "0.Input text\n" +
         "1.Print text\n" +
         "2.Get word with highest digits ammount\n" +
         "3.Get the longest word and count it into the text\n" +
@@ -26,11 +27,10 @@ class Programm1
         "8.Additional task: reverse digits in a word\n" +
         "9.Quit";
     
-    private static string TEXT_INPUT_MENU = "1.Read from console\n" +
+    private static readonly string TEXT_INPUT_MENU = 
+        "1.Read from console\n" +
         "2.Read from file\n" +
         "3.Cancel";
-
-
 
     private static readonly Dictionary<string, string> WORDS_FOR_DIGITS = new()
     {
@@ -221,25 +221,25 @@ class Programm1
         return dict;
     }
 
-    static string[] GetSentencesWithoutChars(string text, in char[] sentencesSeparator, char[] bannedChars)
+    static string[] GetSentencesWithoutChars(string text, (char[] sentencesSeparator, char[] bannedChars) charArraysDataTuple)
     {//i can't use parameters with in, out, ref in anonimous methods, lyambdas, queries or local function - CS1628
         if (string.IsNullOrWhiteSpace(text))
         {
             throw new ArgumentNullException(nameof(text));
         }
 
-        if (sentencesSeparator == null || sentencesSeparator.Length == 0)
+        if (charArraysDataTuple.sentencesSeparator == null || charArraysDataTuple.sentencesSeparator.Length == 0)
         {
-            throw new ArgumentNullException(nameof(sentencesSeparator), "Sentence separators array is null or empty");
+            throw new ArgumentNullException(nameof(charArraysDataTuple.sentencesSeparator), "Sentence separators array is null or empty");
         }
 
-        if (bannedChars == null || bannedChars.Length == 0)
+        if (charArraysDataTuple.bannedChars == null || charArraysDataTuple.bannedChars.Length == 0)
         {
-            throw new ArgumentNullException(nameof(bannedChars), "Banned chars array is null or empty");
+            throw new ArgumentNullException(nameof(charArraysDataTuple.bannedChars), "Banned chars array is null or empty");
         }
 
-        return text.Split(sentencesSeparator)
-            .Where(sentence => sentence.IndexOfAny(bannedChars) == -1)
+        return text.Split(charArraysDataTuple.sentencesSeparator)
+            .Where(sentence => sentence.IndexOfAny(charArraysDataTuple.bannedChars) == -1)
             .ToArray();
     }
 
@@ -272,9 +272,20 @@ class Programm1
         return sentences.ToArray();
     }
 
+    public static (IEnumerable<string> sentsForItem1, IEnumerable<string> sentsForItem2) GetSentencesEndingWithChar(string text, (char firstItem, char secondItem) charTuple)
+    {
+        if (string.IsNullOrWhiteSpace(text))
+        {
+            throw new ArgumentNullException(nameof(text));
+        }
+
+        var sentences = GetTextTrimmedByFunction(text, SENTENCE_SEPARATORS.Contains);
+        return (sentences.Where(sent => sent.EndsWith(charTuple.firstItem)), sentences.Where(sent => sent.EndsWith(charTuple.secondItem)));
+    }
+
     public static void Main()
     {
-        //../../../TextFile1.txt
+        //../../../res/TextFile1.txt
         string text = string.Empty;
         MenuItemSelection option;
         int textInputOption;
@@ -283,7 +294,7 @@ class Programm1
         {
             try
             {
-                bufferInt = PrintMessageAndChooseValue(MAIN_MENU, 0, 10);
+                bufferInt = PrintMessageAndChooseValue(MAIN_MENU, 0, 9);
                 if (Enum.IsDefined(typeof(MenuItemSelection), bufferInt))
                 {
                     option = (MenuItemSelection)bufferInt;
@@ -352,15 +363,13 @@ class Programm1
                         break;
 
                     case MenuItemSelection.PrintFirstInterrogativeThanExclamatorySentences:
-                        var sentences = GetTextTrimmedByFunction(text, SENTENCE_SEPARATORS.Contains);
-                        var interrogative = sentences.Where(sent => sent.EndsWith('?'));
-                        var exclamatory = sentences.Where(sent => sent.EndsWith('!'));
-                        Console.WriteLine(interrogative.Any() ? "Interrogatives:\n" + string.Join("\n", interrogative) : "Interrogatives not found");
-                        Console.WriteLine(exclamatory.Any() ? "Exclamatories:\n" + string.Join("\n", exclamatory) : "Exclamatories not found");
+                        var sentTuple= GetSentencesEndingWithChar(text, ('!', '?'));
+                        Console.WriteLine(sentTuple.sentsForItem1.Any() ? "Interrogatives:\n" + string.Join("\n", sentTuple.sentsForItem1) : "Interrogatives not found");
+                        Console.WriteLine(sentTuple.sentsForItem2.Any() ? "Exclamatories:\n" + string.Join("\n", sentTuple.sentsForItem2) : "Exclamatories not found");
                         break;
 
                     case MenuItemSelection.PrintSentencesWithoutPoints:
-                        Console.WriteLine(string.Join("\n", GetSentencesWithoutChars(text, SENTENCE_SEPARATORS, BANNED_CHARS)));
+                        Console.WriteLine(string.Join("\n", GetSentencesWithoutChars(text, (SENTENCE_SEPARATORS, BANNED_CHARS))));
                         break;
 
                     case MenuItemSelection.PrintWordsWithSimilarFirstAndLastLetters:
