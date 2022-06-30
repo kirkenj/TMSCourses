@@ -3,16 +3,16 @@ class Programm1
 {
     enum MenuItemSelection
     {
-        InputText,
-        PrintText,
-        GetWordWithHighestDigitsAmmount,
-        GetLongestWordAndCountIntoTheText, 
-        ReplaceDigitsWithWords,
-        PrintFirstInterrogativeThanExclamatorySentences, 
-        PrintSentencesWithoutPoints,
-        PrintWordsWithSimilarFirstAndLastLetters, 
-        ReverseDigitsInWord, 
-        Quit
+        InputText = 0,
+        PrintText = 1,
+        GetWordWithHighestDigitsAmmount = 2,
+        GetLongestWordAndCountIntoTheText = 3, 
+        ReplaceDigitsWithWords = 4,
+        PrintFirstInterrogativeThanExclamatorySentences = 5, 
+        PrintSentencesWithoutPoints = 6,
+        PrintWordsWithSimilarFirstAndLastLetters = 7, 
+        ReverseDigitsInWord = 8, 
+        Quit = 9
     }
 
     private static readonly string MAIN_MENU = 
