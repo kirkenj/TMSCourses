@@ -1,4 +1,4 @@
-﻿using static testRepo.Program;
+﻿using static testRepo.Programm;
 class Programm1
 {
     private static readonly Dictionary<string, string> WORDS_FOR_DIGITS = new()

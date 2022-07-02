@@ -1,21 +1,5 @@
-﻿using ProductInventoryProjectUsingClasses.Models;
+﻿using ProductInventoryProjectUsingStructures.Models;
 using static testRepo.Programm;
-
-string MAIN_MENU = "PRODUCT INVENTORY PROJECT - CLASSES\n" +
-    "1.Print all products\n" +
-    "2.Create product\n" +
-    "3.Print products in inventory\n" +
-    "4.Add product to inventory\n" +
-    "5.Print inventory cost\n" +
-    "6.Remove product from inventory\n" +
-    "7.quit";
-
-string PRODUCT_CREATING_MENU = "PRODUCT CREATING MENU\n"+  
-    "1.Create by title\n" +
-    "2.Create by price\n" +
-    "3.Create by default\n" +
-    "4.Create by price and title\n" +
-    "5.Cancel";
 
 List<Product> allProducts = new()
 {
@@ -24,6 +8,22 @@ List<Product> allProducts = new()
     new Product(12),
     new Product("product4", 12),
 };
+
+string MAIN_MENU = "PRODUCT INVENTORY PROJECT - STRUCTURES\n"+ 
+    "1.Print all products\n" +
+    "2.Create product\n" +
+    "3.Print products in inventory\n" +
+    "4.Add product to inventory\n" +
+    "5.Print inventory cost\n" +
+    "6.Remove product from inventory\n" +
+    "7.quit";
+
+string PRODUCT_CREATING_MENU = "PRODUCT CREATING MENU\n" + 
+    "1.Create by title\n" +
+    "2.Create by price\n" +
+    "3.Create by default\n" +
+    "4.Create by price and title\n" +
+    "5.Cancel";
 
 ProductInventory inventory = new(allProducts.ToArray());
 
@@ -69,6 +69,7 @@ while (true)
                 Console.WriteLine(string.Join("\n", (IEnumerable<Product>)inventory.Products));
                 break;
             case 4:
+                
                 productSelectionIndex = SelectItemIndexFromArray("Select item", allProducts.ToArray());
                 if (productSelectionIndex != -1)
                 {
