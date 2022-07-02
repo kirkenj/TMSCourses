@@ -1,12 +1,12 @@
 ﻿using ProductInventoryProjectUsingStructures.Models;
 using static testRepo.Programm;
 
-List<Product> allProducts = new()
+List<ProductStruct> allProducts = new()
 {
-    new Product(),
-    new Product("product2"),
-    new Product(12),
-    new Product("product4", 12),
+    new ProductStruct(),
+    new ProductStruct("product2"),
+    new ProductStruct(12),
+    new ProductStruct("product4", 12),
 };
 
 string MAIN_MENU = "PRODUCT INVENTORY PROJECT - STRUCTURES\n"+ 
@@ -25,7 +25,7 @@ string PRODUCT_CREATING_MENU = "PRODUCT CREATING MENU\n" +
     "4.Create by price and title\n" +
     "5.Cancel";
 
-ProductInventory inventory = new(allProducts.ToArray());
+ProductInventoryStruct inventory = new(allProducts.ToArray());
 
 int option;
 int productCreationOption;
@@ -48,17 +48,17 @@ while (true)
                     case 1:
                         Console.WriteLine("Input product title:");
 #pragma warning disable CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
-                        allProducts.Add(new Product(Console.ReadLine()));
+                        allProducts.Add(new ProductStruct(Console.ReadLine()));
                         break;
                     case 2:
-                        allProducts.Add(new Product(ReadIntFromConsole("Input product cost")));
+                        allProducts.Add(new ProductStruct(ReadIntFromConsole("Input product cost")));
                         break;
                     case 3:
-                        allProducts.Add(new Product());
+                        allProducts.Add(new ProductStruct());
                         break;
                     case 4:
                         Console.WriteLine("Input product title:");
-                        allProducts.Add(new Product(Console.ReadLine(), ReadIntFromConsole("Input product cost")));
+                        allProducts.Add(new ProductStruct(Console.ReadLine(), ReadIntFromConsole("Input product cost")));
 #pragma warning restore CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
                         break;
                 }
@@ -66,7 +66,7 @@ while (true)
                 Console.WriteLine($"Product added - {allProducts.Last()}");
                 break;
             case 3:
-                Console.WriteLine(string.Join("\n", (IEnumerable<Product>)inventory.Products));
+                Console.WriteLine(string.Join("\n", (IEnumerable<ProductStruct>)inventory.Products));
                 break;
             case 4:
                 

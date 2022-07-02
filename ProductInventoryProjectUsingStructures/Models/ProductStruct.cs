@@ -1,17 +1,17 @@
 ﻿namespace ProductInventoryProjectUsingStructures.Models
 {
-    internal struct Product
+    internal struct ProductStruct
     {
         private static int idCounter = 0;
         private double _price = 1;
         private string _title = "Replace me";
 
-        public Product()
+        public ProductStruct()
         {
             this.ID = ++idCounter;
         }
 
-        public Product(string title) : this()
+        public ProductStruct(string title) : this()
         {
             if (string.IsNullOrWhiteSpace(title))
             {
@@ -21,7 +21,7 @@
             this.Title = title;
         }
 
-        public Product(double price) : this()
+        public ProductStruct(double price) : this()
         {
             if (price <= 0)
             {
@@ -31,7 +31,7 @@
             this.Price = price;
         }
 
-        public Product(string title, double price) : this(price)
+        public ProductStruct(string title, double price) : this(price)
         {
             if (string.IsNullOrWhiteSpace(title))
             {
