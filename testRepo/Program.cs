@@ -1,12 +1,23 @@
 ﻿namespace testRepo
 {
-    public class Programm
+    public class Program
     {
         public static void Swap<T>(ref T a, ref T b)
         {
             T buf = a;
             a = b;
             b = buf;
+        }
+
+        public static int SelectItemIndexFromArray<T>(in string msg, T[] arr)
+        {
+            Console.WriteLine("-1. Cancel");
+            for (int i = 0; i < arr.Length; i++)
+            {
+                Console.WriteLine($"{i}. {arr[i]}");
+            }
+
+            return PrintMessageAndChooseValue(msg, -1, arr.Length - 1);
         }
 
         public static int ReadIntFromConsole(in string msg)
@@ -214,7 +225,7 @@
                             break;
 
                         default:
-                            Console.WriteLine("Bue...");
+                            Console.WriteLine("Bye...");
                             return;
                     }
                 }
