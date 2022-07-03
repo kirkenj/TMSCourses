@@ -32,18 +32,18 @@ class Programm1
         "2.Read from file\n" +
         "3.Cancel";
 
-    private static readonly Dictionary<string, string> WORDS_FOR_DIGITS = new()
+    private static readonly (string Key, string Value)[] WORDS_FOR_DIGITS = new (string, string)[]
     {
-        { "0", "zero" },
-        { "1", "one" },
-        { "2", "two" },
-        { "3", "three" },
-        { "4", "four" },
-        { "5", "five" },
-        { "6", "six" },
-        { "7", "seven" },
-        { "8", "eight" },
-        { "9", "nine" }
+        ( "0", "zero" ),
+        ( "1", "one" ),
+        ( "2", "two" ),
+        ( "3", "three" ),
+        ( "4", "four" ),
+        ( "5", "five" ),
+        ( "6", "six" ),
+        ( "7", "seven" ),
+        ( "8", "eight" ),
+        ( "9", "nine" )
     };
 
     private static readonly char[] WORD_SEPARATORS = { '.', ',', '!', '?', ' ', ';', '>', '<', '-' };
@@ -167,21 +167,21 @@ class Programm1
         return count;
     }
 
-    static string ReplaceWithDictionary(string text, in Dictionary<string, string> replaceDictionary)
+    static string ReplaceWithDictionary(string text, in (string Key, string Value)[] replaceDictionary)
     {
         if (string.IsNullOrWhiteSpace(text))
         {
             throw new ArgumentNullException(nameof(text));
         }
 
-        if (replaceDictionary == null || replaceDictionary.Count == 0)
+        if (replaceDictionary == null || replaceDictionary.Length == 0)
         {
             throw new ArgumentNullException(nameof(replaceDictionary), "Dictionary is null or empty");
         }
 
-        foreach (var q in replaceDictionary)
+        foreach (var (Key, Value) in replaceDictionary)
         {
-            text = text.Replace(q.Key, q.Value);
+            text = text.Replace(Key, Value);
         }
 
         return text;
