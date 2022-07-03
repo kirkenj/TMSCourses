@@ -110,7 +110,7 @@ class Programm1
             throw new ArgumentNullException(nameof(wordSeparators), "Words separators array is null or empty");
         }
 
-        return text.Split(wordSeparators, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+        return text.Split(wordSeparators, StringSplitOptions.RemoveEmptyEntries)
             .Distinct()
             .OrderByDescending(g => countFunc(g))
             .First();
@@ -129,7 +129,7 @@ class Programm1
         }
 
         return text
-            .Split(wordSeparators, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .Split(wordSeparators, StringSplitOptions.RemoveEmptyEntries)
             .Distinct()
             .OrderByDescending(word => word.Length).First();
     }
@@ -186,8 +186,8 @@ class Programm1
 
         return text;
     }
-
-    static Dictionary<string, IEnumerable<string>> GetWordsWithSimilarLastAndFirstLetters(string text, in char[] wordSeparators)
+    
+    static List<IGrouping<string, string>> GetWordsWithSimilarLastAndFirstLetters2(string text, in char[] wordSeparators)
     {
         if (string.IsNullOrWhiteSpace(text))
         {
@@ -199,26 +199,13 @@ class Programm1
             throw new ArgumentNullException(nameof(wordSeparators), "Words separators array is null or empty");
         }
 
-        var res = text.ToLower()
-            .Split(wordSeparators, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+        return text.ToLower()
+            .Split(wordSeparators, StringSplitOptions.RemoveEmptyEntries)
             .Distinct()
+            .GroupBy(w => w[0].ToString() + w[^1].ToString())
+            .OrderBy(p => p.Key)
+            .Where(f => f.Count() > 1)
             .ToList();
-        Dictionary<string, IEnumerable<string>> dict = new();
-        while (res.Any())
-        {
-            var word = res.First();
-            var words = res.Where(r => r[0] == word[0] && r[^1] == word[^1]).ToList();
-            if (words.Count > 1)
-            {
-                dict.Add(word[0].ToString() + word[^1].ToString(), words);
-            }
-
-            foreach (var wordIter in words)
-            {
-                res.Remove(wordIter);
-            }
-        }
-        return dict;
     }
 
     static string[] GetSentencesWithoutChars(string text, (char[] sentencesSeparator, char[] bannedChars) charArraysDataTuple)
@@ -239,7 +226,8 @@ class Programm1
         }
 
         return text.Split(charArraysDataTuple.sentencesSeparator)
-            .Where(sentence => sentence.IndexOfAny(charArraysDataTuple.bannedChars) == -1)
+            .Where(sentence => sentence
+            .IndexOfAny(charArraysDataTuple.bannedChars) == -1)
             .ToArray();
     }
 
@@ -373,16 +361,16 @@ class Programm1
                         break;
 
                     case MenuItemSelection.PrintWordsWithSimilarFirstAndLastLetters:
-                        var dict = GetWordsWithSimilarLastAndFirstLetters(text, WORD_SEPARATORS);
-                        if (!dict.Any())
+                        var dict2 = GetWordsWithSimilarLastAndFirstLetters2(text, WORD_SEPARATORS);
+                        if (!dict2.Any())
                         {
                             Console.WriteLine("No such words found");
                             continue;
                         }
 
-                        foreach (var pair in dict)
+                        foreach (var pair in dict2)
                         {
-                            Console.WriteLine($"{pair.Key}: {string.Join(", ", pair.Value)}");
+                            Console.WriteLine($"{pair.Key}: {string.Join(", ", pair)}");
                         }
                         break;
 
