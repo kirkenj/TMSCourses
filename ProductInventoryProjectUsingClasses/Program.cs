@@ -53,9 +53,11 @@ while (true)
                 
                 Console.WriteLine($"Product added - {allProducts.Last()}");
                 break;
+
             case MainMenuEnum.Print_products_in_inventory:
                 Console.WriteLine("All products:\n" + string.Join("\n", (IEnumerable<Product>)inventory.Products) + "\n");
                 break;
+
             case MainMenuEnum.Add_product_to_inventory:
                 productSelectionIndex = SelectItemIndexFromArray("Select item", allProducts.ToArray());
                 if (productSelectionIndex != -1)
@@ -65,9 +67,11 @@ while (true)
                 }
 
                 break;
+
             case MainMenuEnum.Print_inventory_cost:
                 Console.WriteLine($"Inventory cost is {inventory.Price}");
                 break;
+
             case MainMenuEnum.Remove_product_from_inventory:
                 var invProducts = inventory.Products;
                 productSelectionIndex = SelectItemIndexFromArray("Select item", invProducts);
@@ -78,10 +82,18 @@ while (true)
                 }
 
                 break;
-            default:
+
+            case MainMenuEnum.Quit:
                 Console.WriteLine("Bye...");
                 return;
+
+            default:
+                throw new NotImplementedException($"Not implemented: {option}");
         }
+    }
+    catch (NotImplementedException ex)
+    {
+        throw ex;
     }
     catch (Exception ex)
     {

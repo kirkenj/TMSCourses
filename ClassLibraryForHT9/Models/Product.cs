@@ -41,10 +41,7 @@
             this._title = title;
         }
 
-        public int ID
-        {
-            get;
-        }
+        public int ID { get; }
 
         public string Title
         {
@@ -59,6 +56,7 @@
                 _title = value.Trim();
             }
         }
+
         public double Price
         {
             get => _price;
