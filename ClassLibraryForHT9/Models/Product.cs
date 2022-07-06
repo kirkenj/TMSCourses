@@ -2,13 +2,13 @@
 {
     public class Product
     {
-        private static int idCounter = 0;
+        private static int _idCounter = 0;
         private double _price = 1;
         private string _title = "Replace me";
 
         public Product()
         {
-            this.ID = ++idCounter;
+            this.ID = ++_idCounter;
         }
 
         public Product(string title) : this()
@@ -18,7 +18,7 @@
                 throw new ArgumentNullException(nameof(title));
             }
 
-            this.Title = title;
+            this._title = title;
         }
 
         public Product(double price) : this()
@@ -28,7 +28,7 @@
                 throw new ArgumentOutOfRangeException(nameof(price), "Price can not be less or equal zero");
             }
 
-            this.Price = price;
+            this._price = price;
         }
 
         public Product(string title, double price) : this(price)
@@ -38,22 +38,25 @@
                 throw new ArgumentNullException(nameof(title));
             }
 
-            this.Title = title;
+            this._title = title;
         }
 
         public int ID
         {
-            get; private set;
+            get;
         }
+
         public string Title
         {
             get => _title;
             set
             {
-                if (!string.IsNullOrWhiteSpace(value))
+                if (string.IsNullOrWhiteSpace(value))
                 {
-                    _title = value.Trim();
+                    throw new ArgumentNullException(nameof(value));
                 }
+
+                _title = value.Trim();
             }
         }
         public double Price
@@ -61,16 +64,15 @@
             get => _price;
             set
             {
-                if (value >= 0)
+                if (value <= 0)
                 {
-                    _price = value;
+                    throw new ArgumentOutOfRangeException(nameof(value));
                 }
+
+                _price = value;
             }
         }
 
-        public override string ToString()
-        {
-            return $"ID:{this.ID}; Title:{this._title}; Price:{this._price}";
-        }
+        public override string ToString() => $"ID:{this.ID}; Title:{this._title}; Price:{this._price}";
     } 
 }

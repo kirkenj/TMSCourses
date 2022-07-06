@@ -2,7 +2,7 @@
 {
     public class ProductInventory
     {
-        private List<Product> _products;
+        private readonly List<Product> _products;
 
         public ProductInventory()
         {
@@ -42,12 +42,9 @@
             }
         }
 
-        public double Price
-        {
-            get => _products.Sum(x => x.Price);
-        }
+        public double Price => _products.Sum(x => x.Price);
 
-        public Product[] Products { get => _products.ToArray(); }
+        public Product[] Products => _products.ToArray(); 
 
         public void Remove(Product product)
         {
