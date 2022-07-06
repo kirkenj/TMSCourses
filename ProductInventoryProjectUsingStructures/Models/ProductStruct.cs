@@ -41,10 +41,7 @@
             this.Title = title;
         }
 
-        public int ID
-        {
-            get; private set;
-        }
+        public readonly int ID { get; }
         public string Title
         {
             get => _title;
