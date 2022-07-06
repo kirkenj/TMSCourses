@@ -4,29 +4,42 @@
     {
         public static void Swap<T>(ref T a, ref T b)
         {
-            T buf = a;
-            a = b;
-            b = buf;
+            (b, a) = (a, b);
         }
 
-        public static int SelectItemIndexFromArray<T>(in string msg, T[] arr)
+        public static int SelectItemIndexFromArray<T>(in string msg, T[] arr, bool doUseCancel = true, in string afterArrPrintMsg = "")
         {
-            Console.WriteLine("-1. Cancel");
+            if (arr == null || arr.Length == 0)
+            {
+                throw new ArgumentNullException(nameof(arr), "Input array in null or empty");
+            }
+
+            if (!string.IsNullOrWhiteSpace(msg))
+            {
+                Console.WriteLine(CONSOLE_SEPARATOR + msg + "\n" + CONSOLE_SEPARATOR);
+            }
+            else
+            {
+                Console.WriteLine(CONSOLE_SEPARATOR);
+            }
+
+            if (doUseCancel)
+            {
+                Console.WriteLine("-1. Cancel");
+            }
+
             for (int i = 0; i < arr.Length; i++)
             {
                 Console.WriteLine($"{i}. {arr[i]}");
             }
 
-            return PrintMessageAndChooseValue(msg, -1, arr.Length - 1);
+            Console.WriteLine(CONSOLE_SEPARATOR);
+
+            return PrintMessageAndGetValueInRange(afterArrPrintMsg, doUseCancel ? -1 : 0, arr.Length - 1);
         }
 
         public static int ReadIntFromConsole(in string msg)
         {
-            if (msg == null)
-            {
-                throw new ArgumentNullException(nameof(msg));
-            }
-
             bool isFirstIterCompleted = false;
             int ret;
             do
@@ -36,20 +49,19 @@
                     Console.WriteLine("Convertion error");
                 }
 
-                Console.WriteLine(msg);
+                if (!string.IsNullOrWhiteSpace(msg))
+                {
+                    Console.WriteLine(msg);
+                }
+
                 isFirstIterCompleted = true;
             }
             while (!int.TryParse(Console.ReadLine(), out ret));
             return ret;
         }
 
-        public static int PrintMessageAndChooseValue(in string menu, int minValue, int maxValue)
+        public static int PrintMessageAndGetValueInRange(in string menu, int minValue, int maxValue)
         {
-            if (menu == null)
-            {
-                throw new ArgumentNullException(nameof(menu));
-            }
-
             if (maxValue < minValue)
             {
                 (maxValue, minValue) = (minValue, maxValue);
@@ -58,7 +70,11 @@
             int ret;
             do
             {
-                Console.WriteLine(CONSOLE_SEPARATOR + menu + CONSOLE_SEPARATOR);
+                if (!string.IsNullOrWhiteSpace(menu))
+                {
+                    Console.WriteLine(CONSOLE_SEPARATOR + menu + CONSOLE_SEPARATOR);
+                }
+
                 ret = ReadIntFromConsole($"Input value from {minValue} to {maxValue}");
             }
             while (ret < minValue || ret > maxValue);
@@ -174,7 +190,7 @@
             }
         }
 
-        private static readonly string CONSOLE_SEPARATOR = '\n' + new string('-', 30) + '\n';
+        private static readonly string CONSOLE_SEPARATOR = new string('-', 30) + '\n';
         public static void Main()
         {
             int columnAmm = ReadIntFromConsole("Input columns amount");
@@ -192,7 +208,7 @@
             {
                 try
                 {
-                    option = PrintMessageAndChooseValue(menu, 0, 5);
+                    option = PrintMessageAndGetValueInRange(menu, 0, 5);
                     switch (option)
                     {
                         case 0:
@@ -203,21 +219,21 @@
                             Console.WriteLine($"Amount of postives - {positives}; negatives - {negatives}; zeros - {zeros}");
                             break;
                         case 2:
-                            rowNumber = PrintMessageAndChooseValue("Input row's number", 0, matrix.Length - 1);
+                            rowNumber = PrintMessageAndGetValueInRange("Input row's number", 0, matrix.Length - 1);
                             row = matrix[rowNumber];
                             Console.WriteLine("Selected row: " + String.Join(" ", row));
                             BubleSort(row);
                             Console.WriteLine("Sorted row: " + String.Join(" ", row));
                             break;
                         case 3:
-                            rowNumber = PrintMessageAndChooseValue("Input row's number", 0, matrix.Length - 1);
+                            rowNumber = PrintMessageAndGetValueInRange("Input row's number", 0, matrix.Length - 1);
                             row = matrix[rowNumber];
                             Console.WriteLine("Selected row: " + String.Join(" ", row));
                             BubleSort(row, true);
                             Console.WriteLine("Sorted row: " + String.Join(" ", row));
                             break;
                         case 4:
-                            rowNumber = PrintMessageAndChooseValue("Input row's number", 0, matrix.Length - 1);
+                            rowNumber = PrintMessageAndGetValueInRange("Input row's number", 0, matrix.Length - 1);
                             row = matrix[rowNumber];
                             Console.WriteLine("Selected row: " + String.Join(" ", row));
                             Reverse(row);

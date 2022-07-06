@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "class20_06", "20_06\class20
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductInventoryProjectUsingClasses", "ProductInventoryProjectUsingClasses\ProductInventoryProjectUsingClasses.csproj", "{3F884625-F046-467A-A63C-003BEA6C6D33}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductInventoryProjectUsingStructures", "ProductInventoryProjectUsingStructures\ProductInventoryProjectUsingStructures.csproj", "{9B1D6EFF-2476-43C1-859E-FC49C7D07FD5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductInventoryProjectUsingStructures", "ProductInventoryProjectUsingStructures\ProductInventoryProjectUsingStructures.csproj", "{9B1D6EFF-2476-43C1-859E-FC49C7D07FD5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibraryForHT9", "ClassLibraryForHT9\ClassLibraryForHT9.csproj", "{99FC217F-B97D-48FA-8D5F-E7434EC3C85D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{9B1D6EFF-2476-43C1-859E-FC49C7D07FD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9B1D6EFF-2476-43C1-859E-FC49C7D07FD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9B1D6EFF-2476-43C1-859E-FC49C7D07FD5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99FC217F-B97D-48FA-8D5F-E7434EC3C85D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99FC217F-B97D-48FA-8D5F-E7434EC3C85D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99FC217F-B97D-48FA-8D5F-E7434EC3C85D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99FC217F-B97D-48FA-8D5F-E7434EC3C85D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

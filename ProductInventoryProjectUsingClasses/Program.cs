@@ -1,21 +1,7 @@
 ﻿using ProductInventoryProjectUsingClasses.Models;
 using static testRepo.Programm;
-
-string MAIN_MENU = "PRODUCT INVENTORY PROJECT - CLASSES\n" +
-    "1.Print all products\n" +
-    "2.Create product\n" +
-    "3.Print products in inventory\n" +
-    "4.Add product to inventory\n" +
-    "5.Print inventory cost\n" +
-    "6.Remove product from inventory\n" +
-    "7.quit";
-
-string PRODUCT_CREATING_MENU = "PRODUCT CREATING MENU\n"+  
-    "1.Create by title\n" +
-    "2.Create by price\n" +
-    "3.Create by default\n" +
-    "4.Create by price and title\n" +
-    "5.Cancel";
+using Product = ClassLibraryForHT9.Product;
+using ProductInventory = ClassLibraryForHT9.ProductInventory;
 
 List<Product> allProducts = new()
 {
@@ -26,49 +12,50 @@ List<Product> allProducts = new()
 };
 
 ProductInventory inventory = new(allProducts.ToArray());
-
-int option;
-int productCreationOption;
+MainMenuEnum[] mainMenuEnumArr = Enum.GetValues(typeof(MainMenuEnum)).Cast<MainMenuEnum>().ToArray();
+ProductCreationMenuEnum[] productCreationMenuEnumArr = Enum.GetValues(typeof(ProductCreationMenuEnum)).Cast<ProductCreationMenuEnum>().ToArray();
+MainMenuEnum option;
+ProductCreationMenuEnum productCreationOption;
 int productSelectionIndex;
 
 while (true)
 {
     try
     {
-        option = PrintMessageAndChooseValue(MAIN_MENU, 1, 7);
+        option = mainMenuEnumArr[SelectItemIndexFromArray("PRODUCT INVENTORY PROJECT - CLASSES", mainMenuEnumArr, false)];
         switch (option)
         {
-            case 1:
+            case MainMenuEnum.Print_all_products:
                 Console.WriteLine(string.Join("\n", allProducts));
                 break;
-            case 2:
-                productCreationOption = PrintMessageAndChooseValue(PRODUCT_CREATING_MENU, 0, 5);
+            case MainMenuEnum.Create_product:
+                productCreationOption = productCreationMenuEnumArr[SelectItemIndexFromArray("PRODUCT CREATING MENU", productCreationMenuEnumArr, false)];
                 switch (productCreationOption)
                 {
-                    case 1:
+                    #pragma warning disable CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
+                    case ProductCreationMenuEnum.Create_by_title:
                         Console.WriteLine("Input product title:");
-#pragma warning disable CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
                         allProducts.Add(new Product(Console.ReadLine()));
                         break;
-                    case 2:
+                    case ProductCreationMenuEnum.Create_by_price:
                         allProducts.Add(new Product(ReadIntFromConsole("Input product cost")));
                         break;
-                    case 3:
+                    case ProductCreationMenuEnum.Create_by_default:
                         allProducts.Add(new Product());
                         break;
-                    case 4:
+                    case ProductCreationMenuEnum.Create_by_price_and_title:
                         Console.WriteLine("Input product title:");
                         allProducts.Add(new Product(Console.ReadLine(), ReadIntFromConsole("Input product cost")));
-#pragma warning restore CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
                         break;
+                    #pragma warning restore CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
                 }
                 
                 Console.WriteLine($"Product added - {allProducts.Last()}");
                 break;
-            case 3:
-                Console.WriteLine(string.Join("\n", (IEnumerable<Product>)inventory.Products));
+            case MainMenuEnum.Print_products_in_inventory:
+                Console.WriteLine("All products:\n" + string.Join("\n", (IEnumerable<Product>)inventory.Products) + "\n");
                 break;
-            case 4:
+            case MainMenuEnum.Add_product_to_inventory:
                 productSelectionIndex = SelectItemIndexFromArray("Select item", allProducts.ToArray());
                 if (productSelectionIndex != -1)
                 {
@@ -77,10 +64,10 @@ while (true)
                 }
 
                 break;
-            case 5:
+            case MainMenuEnum.Print_inventory_cost:
                 Console.WriteLine($"Inventory cost is {inventory.Price}");
                 break;
-            case 6:
+            case MainMenuEnum.Remove_product_from_inventory:
                 var invProducts = inventory.Products;
                 productSelectionIndex = SelectItemIndexFromArray("Select item", invProducts);
                 if (productSelectionIndex != -1)

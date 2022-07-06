@@ -1,6 +1,6 @@
-﻿namespace ProductInventoryProjectUsingClasses.Models
+﻿namespace ClassLibraryForHT9
 {
-    internal class ProductInventory
+    public class ProductInventory
     {
         private List<Product> _products;
 

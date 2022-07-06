@@ -253,11 +253,11 @@ class Programm1
         {
             try
             {
-                option = PrintMessageAndChooseValue(menu, 0, 9);
+                option = PrintMessageAndGetValueInRange(menu, 0, 9);
                 switch (option)
                 {
                     case 0:
-                        textInputOption = PrintMessageAndChooseValue(textInputMenu, 1, 3);
+                        textInputOption = PrintMessageAndGetValueInRange(textInputMenu, 1, 3);
                         string inpText;
 
                         switch (textInputOption)

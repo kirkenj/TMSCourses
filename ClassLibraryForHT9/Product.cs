@@ -1,6 +1,6 @@
-﻿namespace ProductInventoryProjectUsingClasses.Models
+﻿namespace ClassLibraryForHT9
 {
-    internal class Product
+    public class Product
     {
         private static int idCounter = 0;
         private double _price = 1;
@@ -52,7 +52,7 @@
             {
                 if (!string.IsNullOrWhiteSpace(value))
                 {
-                    _title = value;
+                    _title = value.Trim();
                 }
             }
         }

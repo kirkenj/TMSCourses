@@ -2,7 +2,7 @@
 {
     internal struct ProductInventoryStruct
     {
-        private List<ProductStruct> _products;
+        private readonly List<ProductStruct> _products;
 
         public ProductInventoryStruct()
         {
