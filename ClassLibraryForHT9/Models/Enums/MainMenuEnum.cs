@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProductInventoryProjectUsingClasses.Models
+namespace ClassLibraryForHT9.Models.Enums
 {
-    enum MainMenuEnum
+    public enum MainMenuEnum
     {
         Print_all_products = 1,
         Create_product = 2,

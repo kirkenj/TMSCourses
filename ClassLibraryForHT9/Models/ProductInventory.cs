@@ -1,4 +1,4 @@
-﻿namespace ClassLibraryForHT9
+﻿namespace ClassLibraryForHT9.Models
 {
     public class ProductInventory
     {
