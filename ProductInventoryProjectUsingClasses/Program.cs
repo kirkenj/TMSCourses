@@ -1,7 +1,7 @@
 ﻿using ProductInventoryProjectUsingClasses.Models;
 using static testRepo.Programm;
 
-string MAIN_MENU = "PRODUCT INVENTORY PROJECT - CLASSES\n" +
+const string MAIN_MENU = "PRODUCT INVENTORY PROJECT - CLASSES\n" +
     "1.Print all products\n" +
     "2.Create product\n" +
     "3.Print products in inventory\n" +
@@ -10,7 +10,7 @@ string MAIN_MENU = "PRODUCT INVENTORY PROJECT - CLASSES\n" +
     "6.Remove product from inventory\n" +
     "7.quit";
 
-string PRODUCT_CREATING_MENU = "PRODUCT CREATING MENU\n"+  
+const string PRODUCT_CREATING_MENU = "PRODUCT CREATING MENU\n"+  
     "1.Create by title\n" +
     "2.Create by price\n" +
     "3.Create by default\n" +
