@@ -3,9 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32328.378
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "testRepo", "testRepo\testRepo.csproj", "{0578C31F-C472-4A15-B977-EF0FF5C37F5E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "testRepo", "testRepo\testRepo.csproj", "{0578C31F-C472-4A15-B977-EF0FF5C37F5E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "class20_06", "20_06\class20_06.csproj", "{B80A01FD-5BEC-4D96-8BB4-B4AC2E6F7C1B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "class20_06", "20_06\class20_06.csproj", "{B80A01FD-5BEC-4D96-8BB4-B4AC2E6F7C1B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductInventoryProjectUsingClasses", "ProductInventoryProjectUsingClasses\ProductInventoryProjectUsingClasses.csproj", "{3F884625-F046-467A-A63C-003BEA6C6D33}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductInventoryProjectUsingStructures", "ProductInventoryProjectUsingStructures\ProductInventoryProjectUsingStructures.csproj", "{9B1D6EFF-2476-43C1-859E-FC49C7D07FD5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{B80A01FD-5BEC-4D96-8BB4-B4AC2E6F7C1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B80A01FD-5BEC-4D96-8BB4-B4AC2E6F7C1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B80A01FD-5BEC-4D96-8BB4-B4AC2E6F7C1B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F884625-F046-467A-A63C-003BEA6C6D33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F884625-F046-467A-A63C-003BEA6C6D33}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F884625-F046-467A-A63C-003BEA6C6D33}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F884625-F046-467A-A63C-003BEA6C6D33}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B1D6EFF-2476-43C1-859E-FC49C7D07FD5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B1D6EFF-2476-43C1-859E-FC49C7D07FD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B1D6EFF-2476-43C1-859E-FC49C7D07FD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B1D6EFF-2476-43C1-859E-FC49C7D07FD5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
