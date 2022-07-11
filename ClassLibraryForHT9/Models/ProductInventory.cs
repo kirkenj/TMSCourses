@@ -42,10 +42,12 @@
 
         public void Remove(Product product)
         {
-            if (product != null)
+            if (product == null)
             {
-                _products.Remove(product);
+                throw new ArgumentNullException(nameof(product));
             }
+
+            _products.Remove(product);
         }
     }
 }

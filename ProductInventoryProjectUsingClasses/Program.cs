@@ -1,8 +1,6 @@
 ﻿using static testRepo.Programm;
-using Product = ClassLibraryForHT9.Models.Product;
-using ProductInventory = ClassLibraryForHT9.Models.ProductInventory;
-using MainMenuEnum = ClassLibraryForHT9.Models.Enums.MainMenuEnum;
-using ProductCreationMenuEnum = ClassLibraryForHT9.Models.Enums.ProductCreationMenuEnum;
+using ClassLibraryForHT9.Models;
+using ClassLibraryForHT9.Models.Enums;
 
 List<Product> allProducts = new()
 {
