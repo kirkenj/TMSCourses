@@ -10,7 +10,7 @@
         {
         }
 
-        public Product(string title) : this()
+        public Product(string title)
         {
             if (string.IsNullOrWhiteSpace(title))
             {
@@ -20,7 +20,7 @@
             this._title = title;
         }
 
-        public Product(double price) : this()
+        public Product(double price)
         {
             if (price <= 0)
             {
@@ -30,7 +30,7 @@
             this._price = price;
         }
 
-        public Product(string title, double price) : this(price)
+        public Product(string title, double price): this(price)
         {
             if (string.IsNullOrWhiteSpace(title))
             {

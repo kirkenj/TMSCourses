@@ -1,19 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ClassLibraryForHT9.Models.Enums
+﻿namespace ClassLibraryForHT9.Models.Enums
 {
     public enum MainMenuEnum
     {
-        Print_all_products = 1,
-        Create_product = 2,
-        Print_products_in_inventory = 3,
-        Add_product_to_inventory = 4,
-        Print_inventory_cost = 5,
-        Remove_product_from_inventory = 6,
+        PrintAllProducts = 1,
+        CreateProduct = 2,
+        PrintProductsInInventory = 3,
+        AddProductToInventory = 4,
+        PrintInventoryCost = 5,
+        RemoveProductFromInventory = 6,
         Quit
+    }
+
+    public static class MainMenuEnumToStringConvertor
+    {
+        public static string ToString(MainMenuEnum value)
+        {
+            return value switch
+            {
+                MainMenuEnum.PrintAllProducts => "Print_all_products".Replace('_', ' '),
+                MainMenuEnum.CreateProduct => "Create_product".Replace('_',' '),
+                MainMenuEnum.PrintProductsInInventory => "Print_products_in_inventory".Replace('_', ' '),
+                MainMenuEnum.AddProductToInventory => "Add_product_to_inventory".Replace('_', ' '),
+                MainMenuEnum.PrintInventoryCost => "Print_inventory_cost".Replace('_', ' '),
+                MainMenuEnum.RemoveProductFromInventory => "Remove_product_from_inventory".Replace('_', ' '),
+                MainMenuEnum.Quit => "Quit",
+                _ => throw new ArgumentException("Value not supported",nameof(value))
+            };
+        }
     }
 }

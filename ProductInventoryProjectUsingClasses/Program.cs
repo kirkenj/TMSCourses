@@ -21,28 +21,28 @@ while (true)
 {
     try
     {
-        option = mainMenuEnumArr[SelectItemIndexFromArray("PRODUCT INVENTORY PROJECT - CLASSES", mainMenuEnumArr, false)];
+        option = mainMenuEnumArr[SelectItemIndexFromArray("PRODUCT INVENTORY PROJECT - CLASSES", mainMenuEnumArr.Select(e => MainMenuEnumToStringConvertor.ToString(e)).ToArray(), false)];
         switch (option)
         {
-            case MainMenuEnum.Print_all_products:
+            case MainMenuEnum.PrintAllProducts:
                 Console.WriteLine(string.Join("\n", allProducts));
                 break;
-            case MainMenuEnum.Create_product:
-                productCreationOption = productCreationMenuEnumArr[SelectItemIndexFromArray("PRODUCT CREATING MENU", productCreationMenuEnumArr, false)];
+            case MainMenuEnum.CreateProduct:
+                productCreationOption = productCreationMenuEnumArr[SelectItemIndexFromArray("PRODUCT CREATING MENU", productCreationMenuEnumArr.Select(e => ProductCreationMenuEnumConvertor.ToString(e)).ToArray(), false)];
                 switch (productCreationOption)
                 {
                     #pragma warning disable CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
-                    case ProductCreationMenuEnum.Create_by_title:
+                    case ProductCreationMenuEnum.CreateByTitle:
                         Console.WriteLine("Input product title:");
                         allProducts.Add(new Product(Console.ReadLine()));
                         break;
-                    case ProductCreationMenuEnum.Create_by_price:
+                    case ProductCreationMenuEnum.CreateByPrice:
                         allProducts.Add(new Product(ReadIntFromConsole("Input product cost")));
                         break;
-                    case ProductCreationMenuEnum.Create_by_default:
+                    case ProductCreationMenuEnum.CreateByDefault:
                         allProducts.Add(new Product());
                         break;
-                    case ProductCreationMenuEnum.Create_by_price_and_title:
+                    case ProductCreationMenuEnum.CreateByPriceAndTitle:
                         Console.WriteLine("Input product title:");
                         allProducts.Add(new Product(Console.ReadLine(), ReadIntFromConsole("Input product cost")));
                         break;
@@ -52,11 +52,11 @@ while (true)
                 Console.WriteLine($"Product added - {allProducts.Last()}");
                 break;
 
-            case MainMenuEnum.Print_products_in_inventory:
+            case MainMenuEnum.PrintProductsInInventory:
                 Console.WriteLine("All products:\n" + string.Join("\n", (IEnumerable<Product>)inventory.Products) + "\n");
                 break;
 
-            case MainMenuEnum.Add_product_to_inventory:
+            case MainMenuEnum.AddProductToInventory:
                 productSelectionIndex = SelectItemIndexFromArray("Select item", allProducts.ToArray());
                 if (productSelectionIndex != -1)
                 {
@@ -66,11 +66,11 @@ while (true)
 
                 break;
 
-            case MainMenuEnum.Print_inventory_cost:
+            case MainMenuEnum.PrintInventoryCost:
                 Console.WriteLine($"Inventory cost is {inventory.Price}");
                 break;
 
-            case MainMenuEnum.Remove_product_from_inventory:
+            case MainMenuEnum.RemoveProductFromInventory:
                 var invProducts = inventory.Products;
                 productSelectionIndex = SelectItemIndexFromArray("Select item", invProducts);
                 if (productSelectionIndex != -1)
