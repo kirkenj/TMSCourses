@@ -8,7 +8,6 @@
 
         public Product()
         {
-            this.ID = ++_idCounter;
         }
 
         public Product(string title) : this()
@@ -41,10 +40,10 @@
             this._title = title;
         }
 
-        public int ID 
+        public int ID
         {
-            get; 
-        }
+            get;
+        } = ++_idCounter;
 
         public string Title
         {
