@@ -17,12 +17,12 @@
         {
             return value switch
             {
-                MainMenuEnum.PrintAllProducts => "Print_all_products".Replace('_', ' '),
-                MainMenuEnum.CreateProduct => "Create_product".Replace('_',' '),
-                MainMenuEnum.PrintProductsInInventory => "Print_products_in_inventory".Replace('_', ' '),
-                MainMenuEnum.AddProductToInventory => "Add_product_to_inventory".Replace('_', ' '),
-                MainMenuEnum.PrintInventoryCost => "Print_inventory_cost".Replace('_', ' '),
-                MainMenuEnum.RemoveProductFromInventory => "Remove_product_from_inventory".Replace('_', ' '),
+                MainMenuEnum.PrintAllProducts => "Print all products",
+                MainMenuEnum.CreateProduct => "Create product",
+                MainMenuEnum.PrintProductsInInventory => "Print products in inventory",
+                MainMenuEnum.AddProductToInventory => "Add product to inventory",
+                MainMenuEnum.PrintInventoryCost => "Print inventory cost",
+                MainMenuEnum.RemoveProductFromInventory => "Remove product from inventory",
                 MainMenuEnum.Quit => "Quit",
                 _ => throw new ArgumentException("Value not supported",nameof(value))
             };

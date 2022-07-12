@@ -20,10 +20,10 @@ namespace ClassLibraryForHT9.Models.Enums
         {
             return value switch
             {
-                ProductCreationMenuEnum.CreateByTitle => "Create_by_title".Replace('_', ' '),
-                ProductCreationMenuEnum.CreateByPrice => "Create_by_price".Replace('_', ' '),
-                ProductCreationMenuEnum.CreateByDefault => "Create_by_default".Replace('_', ' '),
-                ProductCreationMenuEnum.CreateByPriceAndTitle => "Create_by_price_and_title".Replace('_', ' '),
+                ProductCreationMenuEnum.CreateByTitle => "Create by title",
+                ProductCreationMenuEnum.CreateByPrice => "Create by price",
+                ProductCreationMenuEnum.CreateByDefault => "Create by default",
+                ProductCreationMenuEnum.CreateByPriceAndTitle => "Create by price and title",
                 ProductCreationMenuEnum.Cancel => "Cancel",
                 _ => throw new ArgumentException("Value not supported", nameof(value))
             };
