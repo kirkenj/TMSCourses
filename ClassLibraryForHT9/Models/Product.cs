@@ -59,7 +59,7 @@
             }
         }
 
-        public double Price
+        internal double Price
         {
             get => _price;
             set
