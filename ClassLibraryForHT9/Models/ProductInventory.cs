@@ -43,7 +43,7 @@
 
         public Product? this[string? productTitle]
         {
-            get => _products.FirstOrDefault(p=>p.Title == (productTitle ?? Product.DefaultTitleValue));
+            get => _products.FirstOrDefault(p=>p.Title == (string.IsNullOrWhiteSpace(productTitle) ? Product.DefaultTitleValue : productTitle.Trim()));
             set
             {
                 var productToRemove = this[productTitle];

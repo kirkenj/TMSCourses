@@ -7,7 +7,7 @@
         /// статический счетчик для идентификаторов
         /// </summary>
         private static int _idCounter = 0;
-        public static readonly string DefaultTitleValue = "Default";
+        public static readonly string DefaultTitleValue = "Default or null";
         private double _price = 1;
         private string? _title = null;
         public Product()
@@ -16,7 +16,7 @@
 
         public Product(string? title)
         {
-            _title = title;
+            _title = string.IsNullOrWhiteSpace(title) ? null : title.Trim();
         }
 
         public Product(double price)
@@ -31,7 +31,7 @@
 
         public Product(string? title, double price): this(price)
         {
-            _title = title;
+            _title = string.IsNullOrWhiteSpace(title) ? null : title.Trim();
         }
 
         public int ID
@@ -51,7 +51,7 @@
             }
         }
 
-        public double Price
+        internal double Price
         {
             get => _price;
             set
