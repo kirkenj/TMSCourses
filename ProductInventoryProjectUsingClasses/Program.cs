@@ -1,13 +1,15 @@
 ﻿using static testRepo.Programm;
 using ClassLibraryForHT9.Models;
 using ClassLibraryForHT9.Models.Enums;
+#pragma warning disable CS8600 // Преобразование литерала, допускающего значение NULL или возможного значения NULL в тип, не допускающий значение NULL.
+#pragma warning disable CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
 
 List<Product> allProducts = new()
 {
     new Product(),
     new Product("product2"),
     new Product(12),
-    new Product("product4", 12),
+    new Product(null, 12),
 };
 
 ProductInventory inventory = new(allProducts.ToArray());
@@ -16,6 +18,9 @@ ProductCreationMenuEnum[] productCreationMenuEnumArr = Enum.GetValues(typeof(Pro
 MainMenuEnum option;
 ProductCreationMenuEnum productCreationOption;
 int productSelectionIndex;
+var m = inventory[null];
+Console.WriteLine(m);
+
 
 while (true)
 {
@@ -24,36 +29,40 @@ while (true)
         option = mainMenuEnumArr[SelectItemIndexFromArray("PRODUCT INVENTORY PROJECT - CLASSES", mainMenuEnumArr.Select(e => MainMenuEnumToStringConvertor.ToString(e)).ToArray(), false)];
         switch (option)
         {
-            case MainMenuEnum.PrintAllProducts:
-                Console.WriteLine(string.Join("\n", allProducts));
-                break;
             case MainMenuEnum.CreateProduct:
                 productCreationOption = productCreationMenuEnumArr[SelectItemIndexFromArray("PRODUCT CREATING MENU", productCreationMenuEnumArr.Select(e => ProductCreationMenuEnumConvertor.ToString(e)).ToArray(), false)];
                 switch (productCreationOption)
                 {
-                    #pragma warning disable CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
                     case ProductCreationMenuEnum.CreateByTitle:
                         Console.WriteLine("Input product title:");
-                        allProducts.Add(new Product(Console.ReadLine()));
+                        inventory.Add(new Product(Console.ReadLine()));
                         break;
                     case ProductCreationMenuEnum.CreateByPrice:
-                        allProducts.Add(new Product(ReadIntFromConsole("Input product cost")));
+                        inventory.Add(new Product(ReadIntFromConsole("Input product cost")));
                         break;
                     case ProductCreationMenuEnum.CreateByDefault:
-                        allProducts.Add(new Product());
+                        inventory.Add(new Product());
                         break;
                     case ProductCreationMenuEnum.CreateByPriceAndTitle:
                         Console.WriteLine("Input product title:");
-                        allProducts.Add(new Product(Console.ReadLine(), ReadIntFromConsole("Input product cost")));
+                        inventory.Add(new Product(Console.ReadLine(), ReadIntFromConsole("Input product cost")));
                         break;
-                    #pragma warning restore CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
                 }
                 
                 Console.WriteLine($"Product added - {allProducts.Last()}");
                 break;
 
             case MainMenuEnum.PrintProductsInInventory:
-                Console.WriteLine("All products:\n" + string.Join("\n", (IEnumerable<Product>)inventory.Products) + "\n");
+                var products = inventory.Products;
+                if (products == null)
+                {
+                    Console.WriteLine("There're no products in inventory");
+                }
+                else
+                {
+                    Console.WriteLine("All products:\n" + string.Join("\n", (IEnumerable<Product>)inventory.Products) + "\n");
+                }
+
                 break;
 
             case MainMenuEnum.AddProductToInventory:
@@ -98,3 +107,5 @@ while (true)
         Console.WriteLine(ex.Message);
     }
 }
+#pragma warning restore CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
+#pragma warning restore CS8600 // Преобразование литерала, допускающего значение NULL или возможного значения NULL в тип, не допускающий значение NULL.

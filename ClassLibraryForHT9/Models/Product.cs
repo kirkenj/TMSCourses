@@ -2,22 +2,21 @@
 {
     public class Product
     {
+        /// пример документационного комментария
+        /// <summary>
+        /// статический счетчик для идентификаторов
+        /// </summary>
         private static int _idCounter = 0;
+        public static readonly string DefaultTitleValue = "Default";
         private double _price = 1;
-        private string _title = "Replace me";
-
+        private string? _title = null;
         public Product()
         {
         }
 
-        public Product(string title)
+        public Product(string? title)
         {
-            if (string.IsNullOrWhiteSpace(title))
-            {
-                throw new ArgumentNullException(nameof(title));
-            }
-
-            this._title = title;
+            _title = title;
         }
 
         public Product(double price)
@@ -27,17 +26,12 @@
                 throw new ArgumentOutOfRangeException(nameof(price), "Price can not be less or equal zero");
             }
 
-            this._price = price;
+            _price = price;
         }
 
-        public Product(string title, double price): this(price)
+        public Product(string? title, double price): this(price)
         {
-            if (string.IsNullOrWhiteSpace(title))
-            {
-                throw new ArgumentNullException(nameof(title));
-            }
-
-            this._title = title;
+            _title = title;
         }
 
         public int ID
@@ -45,17 +39,15 @@
             get;
         } = ++_idCounter;
 
+        /// <summary>
+        /// поле названия. метод set допускает значение null. В случае, если полю присвоено значение null, get вернет значение Product.DefaultTitleValue
+        /// </summary> 
         public string Title
         {
-            get => _title;
+            get => _title ?? DefaultTitleValue;
             set
             {
-                if (string.IsNullOrWhiteSpace(value))
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
-
-                _title = value.Trim();
+                _title = string.IsNullOrWhiteSpace(value) ? null : value.Trim();
             }
         }
 
@@ -73,6 +65,6 @@
             }
         }
 
-        public override string ToString() => $"ID:{this.ID}; Title:{this._title}; Price:{this._price}";
+        public override string ToString() => $"ID:{this.ID}; Title:{this.Title}; Price:{this._price}";
     } 
 }
