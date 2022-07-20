@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductInventoryProjectUsin
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductInventoryProjectUsingStructures", "ProductInventoryProjectUsingStructures\ProductInventoryProjectUsingStructures.csproj", "{9B1D6EFF-2476-43C1-859E-FC49C7D07FD5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibraryForHT9", "ClassLibraryForHT9\ClassLibraryForHT9.csproj", "{99FC217F-B97D-48FA-8D5F-E7434EC3C85D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClassLibraryForHT9", "ClassLibraryForHT9\ClassLibraryForHT9.csproj", "{99FC217F-B97D-48FA-8D5F-E7434EC3C85D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
