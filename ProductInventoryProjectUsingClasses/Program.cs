@@ -1,9 +1,8 @@
-﻿using static testRepo.Programm;
+using static testRepo.Programm;
 using ClassLibraryForHT9.Models;
 using ClassLibraryForHT9.Models.Enums;
 #pragma warning disable CS8600 // Преобразование литерала, допускающего значение NULL или возможного значения NULL в тип, не допускающий значение NULL.
 #pragma warning disable CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
-
 List<Product> allProducts = new()
 {
     new Product(),
