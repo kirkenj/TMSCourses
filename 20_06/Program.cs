@@ -282,20 +282,11 @@ class Programm1
         {
             try
             {
-                bufferInt = PrintMessageAndChooseValue(MAIN_MENU, 0, 9);
-                if (Enum.IsDefined(typeof(MenuItemSelection), bufferInt))
-                {
-                    option = (MenuItemSelection)bufferInt;
-                }
-                else
-                {
-                    throw new ArgumentException($"Value is not defined for {typeof(MenuItemSelection)}", nameof(option));
-                }
-
+                option = PrintMessageAndGetValueInRange(menu, 0, 9);
                 switch (option)
                 {
-                    case MenuItemSelection.InputText:
-                        textInputOption = PrintMessageAndChooseValue(TEXT_INPUT_MENU, 1, 3);
+                    case 0:
+                        textInputOption = PrintMessageAndGetValueInRange(textInputMenu, 1, 3);
                         string inpText;
 
                         switch (textInputOption)

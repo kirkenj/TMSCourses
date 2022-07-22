@@ -1,86 +1,76 @@
-﻿using ProductInventoryProjectUsingClasses.Models;
 using static testRepo.Programm;
-
-const string MAIN_MENU = "PRODUCT INVENTORY PROJECT - CLASSES\n" +
-    "1.Print all products\n" +
-    "2.Create product\n" +
-    "3.Print products in inventory\n" +
-    "4.Add product to inventory\n" +
-    "5.Print inventory cost\n" +
-    "6.Remove product from inventory\n" +
-    "7.quit";
-
-const string PRODUCT_CREATING_MENU = "PRODUCT CREATING MENU\n"+  
-    "1.Create by title\n" +
-    "2.Create by price\n" +
-    "3.Create by default\n" +
-    "4.Create by price and title\n" +
-    "5.Cancel";
-
+using ClassLibraryForHT9.Models;
+using ClassLibraryForHT9.Models.Enums;
+#pragma warning disable CS8600 // Преобразование литерала, допускающего значение NULL или возможного значения NULL в тип, не допускающий значение NULL.
+#pragma warning disable CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
 List<Product> allProducts = new()
 {
     new Product(),
     new Product("product2"),
     new Product(12),
-    new Product("product4", 12),
+    new Product(null, 12),
 };
 
+Product forNewProductBuffer;
+Product forRemoveProductBuffer;
 ProductInventory inventory = new(allProducts.ToArray());
-
-int option;
-int productCreationOption;
+MainMenuEnum[] mainMenuEnumArr = Enum.GetValues(typeof(MainMenuEnum)).Cast<MainMenuEnum>().ToArray();
+ProductCreationMenuEnum[] productCreationMenuEnumArr = Enum.GetValues(typeof(ProductCreationMenuEnum)).Cast<ProductCreationMenuEnum>().ToArray();
+MainMenuEnum option;
+ProductCreationMenuEnum productCreationOption;
 int productSelectionIndex;
+var m = inventory[null];
+Console.WriteLine(m);
+
 
 while (true)
 {
     try
     {
-        option = PrintMessageAndChooseValue(MAIN_MENU, 1, 7);
+        option = mainMenuEnumArr[SelectItemIndexFromArray("PRODUCT INVENTORY PROJECT - CLASSES", mainMenuEnumArr.Select(e => MainMenuEnumToStringConvertor.ToString(e)).ToArray(), false)];
         switch (option)
         {
-            case 1:
-                Console.WriteLine(string.Join("\n", allProducts));
-                break;
-            case 2:
-                productCreationOption = PrintMessageAndChooseValue(PRODUCT_CREATING_MENU, 0, 5);
+            case MainMenuEnum.CreateProduct:
+                productCreationOption = productCreationMenuEnumArr[SelectItemIndexFromArray("PRODUCT CREATING MENU", productCreationMenuEnumArr.Select(e => ProductCreationMenuEnumConvertor.ToString(e)).ToArray(), false)];
                 switch (productCreationOption)
                 {
-                    case 1:
-                        Console.WriteLine("Input product title:");
-#pragma warning disable CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
-                        allProducts.Add(new Product(Console.ReadLine()));
+                    case ProductCreationMenuEnum.CreateByTitle:
+                        Console.WriteLine("Input product title\n(if you leave the string empty, the value will be null):");
+                        inventory.Add(new Product(Console.ReadLine()));
                         break;
-                    case 2:
-                        allProducts.Add(new Product(ReadIntFromConsole("Input product cost")));
+                    case ProductCreationMenuEnum.CreateByPrice:
+                        inventory.Add(new Product(ReadIntFromConsole("Input product cost")));
                         break;
-                    case 3:
-                        allProducts.Add(new Product());
+                    case ProductCreationMenuEnum.CreateByDefault:
+                        inventory.Add(new Product());
                         break;
-                    case 4:
-                        Console.WriteLine("Input product title:");
-                        allProducts.Add(new Product(Console.ReadLine(), ReadIntFromConsole("Input product cost")));
-#pragma warning restore CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
+                    case ProductCreationMenuEnum.CreateByPriceAndTitle:
+                        Console.WriteLine("Input product title\n(if you leave the string empty, the value will be null)::");
+                        inventory.Add(new Product(Console.ReadLine(), ReadIntFromConsole("Input product cost")));
                         break;
                 }
                 
                 Console.WriteLine($"Product added - {allProducts.Last()}");
                 break;
-            case 3:
-                Console.WriteLine(string.Join("\n", (IEnumerable<Product>)inventory.Products));
-                break;
-            case 4:
-                productSelectionIndex = SelectItemIndexFromArray("Select item", allProducts.ToArray());
-                if (productSelectionIndex != -1)
+
+            case MainMenuEnum.PrintProductsInInventory:
+                var products = inventory.Products;
+                if (products == null)
                 {
-                    inventory.Add(allProducts[productSelectionIndex]);
-                    Console.WriteLine("Product added to inventory");
+                    Console.WriteLine("There're no products in inventory");
+                }
+                else
+                {
+                    Console.WriteLine("All products:\n" + string.Join("\n", (IEnumerable<Product>)inventory.Products) + "\n");
                 }
 
-                break;
-            case 5:
+                break; 
+
+            case MainMenuEnum.PrintInventoryCost:
                 Console.WriteLine($"Inventory cost is {inventory.Price}");
                 break;
-            case 6:
+
+            case MainMenuEnum.RemoveProductFromInventory:
                 var invProducts = inventory.Products;
                 productSelectionIndex = SelectItemIndexFromArray("Select item", invProducts);
                 if (productSelectionIndex != -1)
@@ -90,13 +80,64 @@ while (true)
                 }
 
                 break;
-            default:
+
+            case MainMenuEnum.FindProductByID:
+                Console.WriteLine(inventory[ReadIntFromConsole("Input products ID")]?.ToString() ?? "Not found");
+
+                break;
+
+            case MainMenuEnum.ReplaceFoundProductByIDWithNew:
+                var theID = ReadIntFromConsole("Input products ID");
+                forRemoveProductBuffer = inventory[theID];
+                if (forRemoveProductBuffer == null)
+                {
+                    Console.WriteLine("Not found");
+                    continue;
+                }
+
+                forNewProductBuffer = new Product();
+                Console.WriteLine($"Product {inventory[theID]} was replaced with {forNewProductBuffer}");
+                inventory[theID] = forNewProductBuffer;
+                break;
+
+            case MainMenuEnum.ReplaceFoundProductByTitleWithNew:
+                Console.WriteLine("Input product's title");
+                var theTitle = Console.ReadLine();
+                forRemoveProductBuffer = inventory[theTitle];
+                if (forRemoveProductBuffer == null)
+                {
+                    Console.WriteLine("Not found");
+                    continue;
+                }
+
+                forNewProductBuffer = new Product();
+                Console.WriteLine($"Product {inventory[theTitle]} was replaced with {forNewProductBuffer}");
+                inventory[theTitle] = forNewProductBuffer;
+                break;
+
+            case MainMenuEnum.FindProductByTitle:
+                Console.WriteLine("Input product's title");
+                var titile = Console.ReadLine();
+                Console.WriteLine(inventory[titile]?.ToString() ?? "Not found");
+
+                break;
+
+            case MainMenuEnum.Quit:
                 Console.WriteLine("Bye...");
                 return;
+
+            default:
+                throw new NotImplementedException($"Not implemented: {option}");
         }
+    }
+    catch (NotImplementedException ex)
+    {
+        throw ex;
     }
     catch (Exception ex)
     {
         Console.WriteLine(ex.Message);
     }
 }
+#pragma warning restore CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
+#pragma warning restore CS8600 // Преобразование литерала, допускающего значение NULL или возможного значения NULL в тип, не допускающий значение NULL.

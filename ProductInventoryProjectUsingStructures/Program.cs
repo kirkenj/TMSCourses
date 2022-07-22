@@ -35,14 +35,14 @@ while (true)
 {
     try
     {
-        option = PrintMessageAndChooseValue(MAIN_MENU, 1, 7);
+        option = PrintMessageAndGetValueInRange(MAIN_MENU, 1, 7);
         switch (option)
         {
             case 1:
                 Console.WriteLine(string.Join("\n", allProducts));
                 break;
             case 2:
-                productCreationOption = PrintMessageAndChooseValue(PRODUCT_CREATING_MENU, 0, 5);
+                productCreationOption = PrintMessageAndGetValueInRange(PRODUCT_CREATING_MENU, 0, 5);
                 switch (productCreationOption)
                 {
                     case 1:
