@@ -1,4 +1,4 @@
-﻿using static testRepo.Programm;
+using static testRepo.Programm;
 using ClassLibraryForHT9.Models;
 using ClassLibraryForHT9.Models.Enums;
 
