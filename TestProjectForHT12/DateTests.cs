@@ -83,7 +83,7 @@ namespace TestProjectForHT12
         [TestCase(10, true, ExpectedResult = 274)]
         [TestCase(11, true, ExpectedResult = 305)]
         [TestCase(12, true, ExpectedResult = 335)]        
-        public int DateGetDaysAmmInPrevMonth_Returnsvalue(int monthNumber, bool isLeap) => Date.GetDaysAmmInPrevMonth(monthNumber, isLeap);
+        public int DateGetDaysAmmInPrevMonth_Returnsvalue(int monthNumber, bool isLeap) => Date.GetDaysAmmSumInPrevMonths(monthNumber, isLeap);
  
         [TestCase(1, false)]
         [TestCase(2, false)]
@@ -109,7 +109,7 @@ namespace TestProjectForHT12
         [TestCase(12, true)]        
         public void DateGetMonthAmm_TestVia_DateGetDaysAmmInPrevMonth(int monthNumber, bool isLeap)
         {
-            var days = Date.GetDaysAmmInPrevMonth(monthNumber, isLeap) + 15;
+            var days = Date.GetDaysAmmSumInPrevMonths(monthNumber, isLeap) + 15;
             Assert.AreEqual(monthNumber, Date.GetMonthNumberByPassedDays(days, isLeap));
         }
 
@@ -130,8 +130,11 @@ namespace TestProjectForHT12
         [TestCase(1460, ExpectedResult = 4)]
         public int DateGetCurrentYearByPassedDaysAmm_Returnsvalue(int dayAmm) => Date.GetCurrentYearNumberByPassedDaysAmm(dayAmm);
 
+        /// <summary>
+        /// Actually this test checks the code for every situation
+        /// </summary>
         [TestCase(ExpectedResult = true)]
-        public bool MegaTest()
+        public bool MegaTestViaAddDays()
         {
             DateTime date = new (1,1,1);
             Date dateUser = new (1,1,1);
@@ -144,6 +147,84 @@ namespace TestProjectForHT12
                 date = date.AddDays(1);
                 dateUser.AddDays(1);
             }
+            return true;
+        }
+
+
+        /// <summary>
+        /// Actually this test checks the code for every situation
+        /// </summary>
+        [TestCase(ExpectedResult = true)]
+        public bool MegaTestConstructor()
+        {
+            DateTime date = new(1, 1, 1);
+            Date dateUser;
+            for (int i = 0; i < (date - DateTime.MaxValue).Days; i++)
+            {
+                dateUser = new(date.Day, date.Month, date.Year, true);
+                if (!(date.Year == dateUser.Year && date.Month == dateUser.Month && date.Day == dateUser.Day))
+                {
+                    return false;
+                }
+                date = date.AddDays(1);
+            }
+            return true;
+        }
+
+
+        [Test]
+        public void DateOperator_Equality_ValidObject_To_Null()
+        {
+            Assert.False(new Date(1, 1, 1) == null);
+        }
+
+        [Test]
+        public void DateOperator_Equality_Null_To_Null()
+        {
+            Assert.True(null == null);
+        }
+
+        [Test]
+        public void DateOperator_Equality_Null_To_ValidObject()
+        {
+            Assert.False(null == new Date(1, 1, 1));
+        }
+
+        [TestCase(ExpectedResult = true)]
+        public bool DateOperator_Equality_ValidObject_To_ValidObject_ReturnsTrue()
+        {
+            var date1 = new Date(1, 1, 1);
+            var date2 = new Date(1, 1, 1);
+            for (int i = 0; i < 99999; i++)
+            {
+                if (date1 != date2)
+                {
+                    return false;
+                }
+
+                date2.AddDays(1);
+                date1.AddDays(1);
+            }
+
+            return true;
+        }
+
+        [TestCase(ExpectedResult = true)]
+        public bool DateOperator_Equality_ValidObject_To_ValidObject_ReturnsFalse()
+        {
+            var date1 = new Date(1, 1, 1);
+            var date2 = new Date(2, 1, 1);
+            for (int i = 0; i < 99999; i++)
+            {
+                if (date1 == date2)
+                {
+                    return false;
+                }
+
+                date2.AddDays(1);
+                date1.AddDays(1);
+            }
+
             return true;
         }
     }

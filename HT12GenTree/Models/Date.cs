@@ -8,12 +8,11 @@
         private int _dayNumber;
 
         private const int DAYS_AMM_NOT_LEAP_YEAR = 365;
-        private const int DAYS_AMM_LEAP_YEAR = DAYS_AMM_NOT_LEAP_YEAR + 1;
         private const int DAYS_AMM_4_YEARS_SINCE_DATE_START = DAYS_AMM_NOT_LEAP_YEAR * 4 + 1;
         private const int DAYS_AMM_100_YEARS_SINCE_DATE_START = 36524;
         private const int DAYS_AMM_400_YEARS_SINCE_DATE_START = 146097;
 
-        public Date(int dayNumber, int monthNumber, int yearNumber)
+        public Date(int dayNumber, int monthNumber, int yearNumber, bool updateAfterCreation = false)
         {
             if (yearNumber <= 0)
             {
@@ -29,31 +28,34 @@
                 throw new ArgumentOutOfRangeException(nameof(monthNumber));
             }
 
-            _fullDaysAmm += GetDaysAmmInPrevMonth(monthNumber, isLeapYear);
+            _fullDaysAmm += GetDaysAmmSumInPrevMonths(monthNumber, isLeapYear);
             _monthNumber = monthNumber;
-        
-            if (dayNumber < 1 || dayNumber > GetDaysAmmInMonthByNumber(monthNumber, isLeapYear)) 
+
+            if (dayNumber < 1 || dayNumber > GetDaysAmmInMonthByNumber(monthNumber, isLeapYear))
             {
                 throw new ArgumentOutOfRangeException(nameof(dayNumber));
             }
 
             _fullDaysAmm += dayNumber - 1;
             _dayNumber = dayNumber;
+            if (updateAfterCreation)
+            {
+                UpdateAll();
+            }
         }
 
         private void UpdateAll()
         {
             var days = _fullDaysAmm;
             _yearNumber = GetCurrentYearNumberByPassedDaysAmm(days);
-            var viaYears = GetDaysAmmInPrevYears(_yearNumber);
-            days -= viaYears;
+            days -= GetDaysAmmInPrevYears(_yearNumber);
             _monthNumber = GetMonthNumberByPassedDays(days, IsLeapYear(_yearNumber));
-            days -= GetDaysAmmInPrevMonth(_monthNumber, IsLeapYear(_yearNumber));
+            days -= GetDaysAmmSumInPrevMonths(_monthNumber, IsLeapYear(_yearNumber));
             _dayNumber = days + 1;
         }
 
-        public int Year 
-        { 
+        public int Year
+        {
             get => _yearNumber;
         }
 
@@ -97,7 +99,7 @@
             _ => throw new ArgumentOutOfRangeException(nameof(monthNumber)),
         };
 
-        public static int GetDaysAmmInPrevMonth(int monthNumber, bool isLeapYear) => monthNumber switch
+        public static int GetDaysAmmSumInPrevMonths(int monthNumber, bool isLeapYear) => monthNumber switch
         {
             1 => 0,
             2 => 31,
@@ -145,32 +147,32 @@
             {
                 return 5;
             }
-            
+
             if (daysAmm <= 180 + (isLeapYear ? 1 : 0))
             {
                 return 6;
             }
-            
+
             if (daysAmm <= 211 + (isLeapYear ? 1 : 0))
             {
                 return 7;
             }
-            
+
             if (daysAmm <= 242 + (isLeapYear ? 1 : 0))
             {
                 return 8;
             }
-            
+
             if (daysAmm <= 272 + (isLeapYear ? 1 : 0))
             {
                 return 9;
             }
-            
+
             if (daysAmm <= 303 + (isLeapYear ? 1 : 0))
             {
                 return 10;
             }
-            
+
             if (daysAmm <= 333 + (isLeapYear ? 1 : 0))
             {
                 return 11;
@@ -187,7 +189,6 @@
             }
 
             var yearsAmm = yearNumber - 1;
-
             int ret = (yearsAmm / 400) * DAYS_AMM_400_YEARS_SINCE_DATE_START;
             yearsAmm %= 400;
             ret += (yearsAmm / 100) * DAYS_AMM_100_YEARS_SINCE_DATE_START;
@@ -227,6 +228,132 @@
             buffDev = dayAmm / DAYS_AMM_NOT_LEAP_YEAR;
             ret += buffDev == 4 ? 3 : buffDev;
             return ret;
+        }
+
+        public static bool operator <(Date? left, Date? right)
+        {
+            if (left == null)
+            {
+                throw new ArgumentNullException(nameof(left));
+            }
+
+            if (right == null)
+            {
+                throw new ArgumentNullException(nameof(left));
+            }
+
+            return left._fullDaysAmm < right._fullDaysAmm;
+        }
+
+        public static bool operator >(Date? left, Date? right)
+        {
+            if (left == null)
+            {
+                throw new ArgumentNullException(nameof(left));
+            }
+
+            if (right == null)
+            {
+                throw new ArgumentNullException(nameof(left));
+            }
+
+            return left._fullDaysAmm > right._fullDaysAmm;
+        }
+        public static bool operator ==(Date? left, Date? right)
+        {
+            if (left is null && right is null)
+            {
+                return true;
+            }
+
+            if (left is null)
+            {
+                return false;
+            }
+
+            if (right is null)
+            {
+                return false;
+            }
+
+            return left._fullDaysAmm == right._fullDaysAmm;
+        }
+
+        public static bool operator !=(Date? left, Date? right) => !(left == right);
+        public static bool operator <=(Date? left, Date? right) => left == right || (left < right);
+        public static bool operator >=(Date? left, Date? right) => left == right || (left > right);
+
+        public static DateDiff operator -(Date? date1, Date? date2)
+        {
+            return new DateDiff(date1, date2);
+        }
+
+        public class DateDiff
+        {
+            public int Days { get; }
+
+            public int Weeks
+            {
+                get => Days / 7;
+            }
+
+            public int Months
+            {
+                get => Days / 30;
+            }
+
+            public int Years
+            {
+                get => Days / DAYS_AMM_NOT_LEAP_YEAR;
+            }
+
+
+            public DateDiff(Date? date1, Date? date2)
+            {
+                if (date1 == null)
+                {
+                    throw new ArgumentNullException(nameof(date1));
+                }
+
+                if (date2 == null)
+                {
+                    throw new ArgumentNullException(nameof(date2));
+                }
+
+
+                Days = date1 > date2 ? date1._fullDaysAmm - date2._fullDaysAmm : date2._fullDaysAmm - date1._fullDaysAmm;
+            }
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            if (obj is null)
+            {
+                return false;
+            }
+
+            throw new NotImplementedException();
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        public override string ToString() => $"{Day}.{Month}.{Year}";
+
+        public static Date Now
+        {
+            get
+            {
+                var dateTimeNow = DateTime.Now;
+                return new Date(dateTimeNow.Day, dateTimeNow.Month, dateTimeNow.Year);
+            }
         }
     }
 }
