@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HT12GenTree.Models
 {
-    internal class Man : Adult
+    public class Man : Adult
     {
         public Man(string? name, Date birthDay, Man? father, Woman? mother) : base(name, true, birthDay, father, mother)
         {

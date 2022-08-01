@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HT12GenTree.Models
 {
-    internal class Child : Person
+    public class Child : Person
     {
         Man? _father;
         Woman? _mother;
@@ -42,12 +42,12 @@ namespace HT12GenTree.Models
             if (doSetOnFather) 
             {
                 exParent = _father;
-                _father = newParent == null ? null : (Man)newParent;
+                _father = newParent as Man;
             }
             else 
             {
                 exParent= _mother;
-                _mother = newParent == null ? null : (Woman)newParent;
+                _mother = newParent as Woman;
             }
 
             if (exParent != null)

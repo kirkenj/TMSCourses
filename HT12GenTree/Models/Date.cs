@@ -1,16 +1,16 @@
 ﻿namespace HT12GenTree.Models
 {
-    public class Date
+    public class Date : IComparable
     {
-        private int _fullDaysAmm = 0;
-        private int _yearNumber;
-        private int _monthNumber;
-        private int _dayNumber;
-
         private const int DAYS_AMM_NOT_LEAP_YEAR = 365;
         private const int DAYS_AMM_4_YEARS_SINCE_DATE_START = DAYS_AMM_NOT_LEAP_YEAR * 4 + 1;
         private const int DAYS_AMM_100_YEARS_SINCE_DATE_START = 36524;
         private const int DAYS_AMM_400_YEARS_SINCE_DATE_START = 146097;
+
+        private int _fullDaysAmm = 0;
+        private int _yearNumber;
+        private int _monthNumber;
+        private int _dayNumber;
 
         public Date(int dayNumber, int monthNumber, int yearNumber, bool updateAfterCreation = false)
         {
@@ -41,6 +41,15 @@
             if (updateAfterCreation)
             {
                 UpdateAll();
+            }
+        }
+
+        public static Date Now
+        {
+            get
+            {
+                var dateTimeNow = DateTime.Now;
+                return new Date(dateTimeNow.Day, dateTimeNow.Month, dateTimeNow.Year);
             }
         }
 
@@ -283,6 +292,17 @@
         public static bool operator <=(Date? left, Date? right) => left == right || (left < right);
         public static bool operator >=(Date? left, Date? right) => left == right || (left > right);
 
+        public override bool Equals(object? obj) => this._fullDaysAmm.Equals(obj);
+
+        public override int GetHashCode() => _fullDaysAmm.GetHashCode();
+
+        public override string ToString() => $"{Day}.{Month}.{Year}";
+
+        public int CompareTo(object? obj)
+        {
+            return _fullDaysAmm.CompareTo(obj);
+        }
+
         public static DateDiff operator -(Date? date1, Date? date2)
         {
             return new DateDiff(date1, date2);
@@ -322,37 +342,6 @@
 
 
                 Days = date1 > date2 ? date1._fullDaysAmm - date2._fullDaysAmm : date2._fullDaysAmm - date1._fullDaysAmm;
-            }
-        }
-
-        public override bool Equals(object? obj)
-        {
-            if (ReferenceEquals(this, obj))
-            {
-                return true;
-            }
-
-            if (obj is null)
-            {
-                return false;
-            }
-
-            throw new NotImplementedException();
-        }
-
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
-
-        public override string ToString() => $"{Day}.{Month}.{Year}";
-
-        public static Date Now
-        {
-            get
-            {
-                var dateTimeNow = DateTime.Now;
-                return new Date(dateTimeNow.Day, dateTimeNow.Month, dateTimeNow.Year);
             }
         }
     }

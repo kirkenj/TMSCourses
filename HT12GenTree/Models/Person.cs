@@ -1,6 +1,6 @@
 ﻿namespace HT12GenTree.Models
 {
-    internal abstract class Person
+    public abstract class Person
     {
         public const int MINIMAL_AGE_FOR_PARENTIONG = 14; 
         private Date _birthDate;

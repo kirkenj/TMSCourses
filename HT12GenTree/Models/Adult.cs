@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HT12GenTree.Models
 {
-    internal abstract class Adult : Child
+    public abstract class Adult : Child
     {
         private readonly List<Child> _children;
 
@@ -34,6 +34,7 @@ namespace HT12GenTree.Models
 
             _children.Add(child);
         }
+
         public void RemoveChild(Child child) 
         {
             if (child != null)
@@ -52,9 +53,6 @@ namespace HT12GenTree.Models
             }
         }
 
-        public override string ToString()
-        {
-            return base.ToString() + $"Childern: {_children.Count}.";
-        }
+        public override string ToString() => base.ToString() + $"Childern: {_children.Count}.";
     }
 }
