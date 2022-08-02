@@ -8,18 +8,18 @@ namespace HT13.Models
 {
     internal class Animal
     {
-        Species species { get; }
+        Species Species { get; }
         string Name { get; set; }
 
         public Animal(string name, Species species)
         {
-            this.species = species;
+            this.Species = species;
             Name = name;
         }
 
         public override string ToString()
         {
-            return species.ToString() + $"Animal name - {Name}.";
+            return Species.ToString() + $"Animal name - {Name}.";
         }
     }
 }
