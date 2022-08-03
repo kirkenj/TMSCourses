@@ -33,21 +33,21 @@ namespace HT12GenTree.Models
 
         private void SetParent(Adult? newParent, bool doSetOnFather)
         {
-            if (newParent != null && (this.BirthDate - newParent.BirthDate).Years < Person.MINIMAL_AGE_FOR_PARENTIONG)
+            if (newParent != null && (this.BirthDate - newParent.BirthDate).Years < Person.MINIMAL_AGE_FOR_PARENTING)
             {
-                throw new ArgumentException("This person is too young", nameof(newParent));
+                throw new ArgumentException("This person is too young for being a parent", nameof(newParent));
             }
 
             Adult? exParent;
             if (doSetOnFather) 
             {
                 exParent = _father;
-                _father = newParent as Man;
+                _father = newParent == null ? null : (Man)newParent;
             }
-            else 
+            else
             {
                 exParent= _mother;
-                _mother = newParent as Woman;
+                _mother = newParent == null ? null : (Woman)newParent;
             }
 
             if (exParent != null)

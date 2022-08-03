@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace HT12GenTree.Models
 {
     public class Woman : Adult
@@ -14,11 +9,10 @@ namespace HT12GenTree.Models
 
         public Woman(Child child) : base(child.Name, false, child.BirthDate, child.Father, child.Mother) 
         {
-        }
-
-        public override string ToString()
-        {
-            return base.ToString();
+            if (child.IsMan)
+            {
+                throw new ArgumentException("It's a boy!", nameof(child));
+            }
         }
     }
 }

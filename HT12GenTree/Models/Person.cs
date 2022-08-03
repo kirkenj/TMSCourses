@@ -2,7 +2,7 @@
 {
     public abstract class Person
     {
-        public const int MINIMAL_AGE_FOR_PARENTIONG = 14; 
+        public const int MINIMAL_AGE_FOR_PARENTING = 14; 
         private Date _birthDate;
         private string? _name;
         private Date? _death;
@@ -61,6 +61,6 @@
             }
         }
 
-        public override string ToString() => $"Name - {(_name ?? "Null or empty")}. BirthDay - {_birthDate}. Death - {(_death == null ? "No data" : _death.ToString())}. ";
+        public override string ToString() => $"Name - {(string.IsNullOrEmpty(_name) ? "Null or empty" : _name)}. BirthDay - {_birthDate}. Death - {(_death == null ? "No data" : _death.ToString())}. ";
     }
 }
