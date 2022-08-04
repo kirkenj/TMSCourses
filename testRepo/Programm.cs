@@ -72,7 +72,7 @@
             {
                 if (!string.IsNullOrWhiteSpace(menu))
                 {
-                    Console.WriteLine(CONSOLE_SEPARATOR + menu + CONSOLE_SEPARATOR);
+                    Console.WriteLine(CONSOLE_SEPARATOR + menu + '\n' + CONSOLE_SEPARATOR);
                 }
 
                 ret = ReadIntFromConsole($"Input value from {minValue} to {maxValue}");

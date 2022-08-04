@@ -40,13 +40,36 @@ namespace HT14.Models
             }
         }
 
-        public override void Fill(Employee? employee)
+        public override Posts Post => Posts.HourlyEmployee;
+        public override void Fill() => Fill(this);
+        public override string ToString() => base.ToString() + $", Hours: {_workHoursAmm}, Salary per hour: {_salaryPerHour}";
+        public override void CopyFrom(Employee employee) => CopyAndFillGaps(employee, this);
+
+        public static void Fill(HourlyEmployee employee)
         {
-            SalaryPerHour = PrintMessageAndGetValueInRange("Input hourly worker's salary per hour", 0, int.MaxValue);
-            WorkHoursAmm = PrintMessageAndGetValueInRange("Input hourly worker's current work hours", 0, int.MaxValue);
-            base.Fill(employee);
+            if (employee == null)
+            {
+                throw new ArgumentNullException(nameof(employee));
+            }
+
+            Employee.Fill(employee);
+            employee.SalaryPerHour = PrintMessageAndGetValueInRange("Input hourly worker's salary per hour", 0, int.MaxValue);
+            employee.WorkHoursAmm = PrintMessageAndGetValueInRange("Input hourly worker's current work hours", 0, int.MaxValue);
         }
 
-        public override string ToString() => base.ToString() + $", Salary type: Hourly employee, Hours: {_workHoursAmm}, Salary per hour: {_salaryPerHour}";
+        protected static void CopyAndFillGaps(Employee source, HourlyEmployee destination)
+        {
+            if (source is not HourlyEmployee houredSource)
+            {
+                Copy(source, destination);
+                destination.SalaryPerHour = PrintMessageAndGetValueInRange("Input hourly worker's salary per hour", 0, int.MaxValue);
+                destination.WorkHoursAmm = PrintMessageAndGetValueInRange("Input hourly worker's current work hours", 0, int.MaxValue);
+            }
+            else
+            {
+                destination.WorkHoursAmm = houredSource.WorkHoursAmm;
+                destination.SalaryPerHour = houredSource.SalaryPerHour;
+            }
+        }
     }
 }

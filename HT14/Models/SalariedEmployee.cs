@@ -8,6 +8,7 @@ namespace HT14.Models
         private int _salaryPerWeek = 0;
 
         public override int Salary => _workWeeksAmm * _salaryPerWeek;
+        public override Posts Post => Posts.HourlyEmployee;
 
         public int WorkWeeksAmm
         {
@@ -37,13 +38,35 @@ namespace HT14.Models
             }
         }
 
-        public new virtual void Fill(Employee? employee)
+        public override void Fill() => Fill(this);
+        public override string ToString()=> base.ToString() + $", Weekly pay: {SalaryPerWeek}, Worked weeks: {WorkWeeksAmm}";
+        public override void CopyFrom(Employee employee) => CopyAndFillGaps(employee, this);
+
+        public static void Fill(SalariedEmployee employee)
         {
-            SalaryPerWeek = PrintMessageAndGetValueInRange("Input worker's weekly pay", 0, int.MaxValue);
-            WorkWeeksAmm = PrintMessageAndGetValueInRange("Input employee's worked weeks", 0, int.MaxValue);
-            base.Fill(employee);
+            if (employee == null)
+            {
+                throw new ArgumentNullException(nameof(employee));
+            }
+
+            Employee.Fill(employee);
+            employee.SalaryPerWeek = PrintMessageAndGetValueInRange("Input employee's weekly pay", 0, int.MaxValue);
+            employee.WorkWeeksAmm = PrintMessageAndGetValueInRange("Input employee's worked weeks", 0, int.MaxValue);
         }
 
-        public override string ToString()=> base.ToString() + $", Weekly pay: {SalaryPerWeek}, Worked weeks: {WorkWeeksAmm}";
+        protected static void CopyAndFillGaps(Employee source, SalariedEmployee destination)
+        {
+            if (source is not SalariedEmployee salariedSource)
+            {
+                Copy(source, destination);
+                destination.SalaryPerWeek = PrintMessageAndGetValueInRange("Input employee's weekly pay", 0, int.MaxValue);
+                destination.WorkWeeksAmm = PrintMessageAndGetValueInRange("Input employee's worked weeks", 0, int.MaxValue);
+            }
+            else
+            {
+                destination.SalaryPerWeek = salariedSource.SalaryPerWeek;
+                destination.WorkWeeksAmm = salariedSource.WorkWeeksAmm;
+            }
+        }
     }
 }
