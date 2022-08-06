@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 
 namespace HT14.Models
 {
-    public enum Posts
+    public enum MainMenuPositions
     {
-        HourlyEmployee = 1,
-        SalariedEmpployee, 
-        Manager,
-        Executive
+        PrintEmployees = 1,
+        AddEmployee,
+        EditEmployee,
+        SetPost,
+        FireEmployee
     }
 }

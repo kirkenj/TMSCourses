@@ -39,9 +39,9 @@ namespace HT14.Models
         public override void Fill() => Fill(this);
         public override int Salary => base.Salary + _totalProjectsTurnover * _turnoverPercentForManager / 100;
         public override string ToString() => base.ToString() + $", Total projects turnover {_totalProjectsTurnover}, Manager's pay percent: {_turnoverPercentForManager}";
-        public override void CopyFrom(Employee employee) => CopyAndFillGaps(employee, this);
+        public override void CopyFromEmployeeAndFeelGaps(Employee employee) => CopyAndFillGaps(employee, this);
 
-        public static void Fill(Manager manager)
+        public static void Fill(Manager manager) 
         {
             if (manager == null)
             {
@@ -53,18 +53,19 @@ namespace HT14.Models
             manager.TotalProjectsTurnover = PrintMessageAndGetValueInRange("Input manager's projects turnover", 0, int.MaxValue);
         }
 
-        protected static void CopyAndFillGaps(Manager destination, Employee source)
+        protected static void CopyAndFillGaps(Employee source, Manager destination)
         {
-            if (source is not Manager managerSource)
-            {
-                CopyAndFillGaps(source, destination);
-                destination.ManagersFee = PrintMessageAndGetValueInRange("Input manager's fee percent", 0, 100);
-                destination.TotalProjectsTurnover = PrintMessageAndGetValueInRange("Input manager's projects turnover", 0, int.MaxValue);
-            }
-            else
+            SalariedEmployee.CopyAndFillGaps(source, destination);
+            if (source is Manager managerSource)
             {
                 destination.TotalProjectsTurnover = managerSource.TotalProjectsTurnover;
                 destination.ManagersFee = managerSource.ManagersFee;
+            }
+            else
+            {
+                Console.WriteLine($"Input values for: {destination}");
+                destination.ManagersFee = PrintMessageAndGetValueInRange("Input manager's fee percent", 0, 100);
+                destination.TotalProjectsTurnover = PrintMessageAndGetValueInRange("Input manager's projects turnover", 0, int.MaxValue);
             }
         } 
     }

@@ -1,6 +1,32 @@
 ﻿using HT14.Models;
+using static testRepo.Programm;
 
-Employee executive = new Executive() { Name = "Manager", SalaryPerWeek = 300, TotalProjectsTurnover = 10^6, ManagersFee = 13, WorkWeeksAmm = 30};
-Employee hourlyPaid = new HourlyEmployee() { Name = "Meow", SalaryPerHour = 12, WorkHoursAmm = 30};
-executive.CopyFrom(hourlyPaid);
-Console.WriteLine(executive);
+var company = new Company();
+var menuPositions = Enum.GetValues(typeof(MainMenuPositions)).Cast<MainMenuPositions>().ToArray();
+Dictionary<MainMenuPositions, Action> menu = new()
+{
+    {MainMenuPositions.SetPost, company.ShowSetPostMenu },
+    {MainMenuPositions.PrintEmployees, company.PrintEmployees },
+    {MainMenuPositions.FireEmployee, company.ShowFireMenu },
+    {MainMenuPositions.AddEmployee, company.ShowAddEmployeeMenu },
+    {MainMenuPositions.EditEmployee, company.ShowEmployeeEditMenu }
+};
+
+while (true)
+{
+    var selection = SeletctItemFromArray("Select option", menuPositions);
+    if (selection == default)
+    {
+        Console.WriteLine("Bye");
+        break;
+    }
+
+    try
+    {
+        menu[selection]();
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine(ex.Message);
+    }
+}

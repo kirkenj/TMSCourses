@@ -17,10 +17,10 @@
 
             Console.Write("Input worker's name:");
             var buffName = Console.ReadLine();
-            employee.Name = string.IsNullOrEmpty(buffName) ? string.Empty : buffName.Trim();
+            employee.Name = buffName?.Trim() ?? "NULL";
         }
 
-        public virtual void CopyFrom(Employee employee) => Copy(employee, this);
+        public virtual void CopyFromEmployeeAndFeelGaps(Employee employee) => Copy(employee, this);
         
         protected static void Copy(Employee source, Employee destination)
         {

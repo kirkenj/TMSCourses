@@ -8,7 +8,7 @@ namespace HT14.Models
         private int _salaryPerWeek = 0;
 
         public override int Salary => _workWeeksAmm * _salaryPerWeek;
-        public override Posts Post => Posts.HourlyEmployee;
+        public override Posts Post => Posts.SalariedEmpployee;
 
         public int WorkWeeksAmm
         {
@@ -40,7 +40,7 @@ namespace HT14.Models
 
         public override void Fill() => Fill(this);
         public override string ToString()=> base.ToString() + $", Weekly pay: {SalaryPerWeek}, Worked weeks: {WorkWeeksAmm}";
-        public override void CopyFrom(Employee employee) => CopyAndFillGaps(employee, this);
+        public override void CopyFromEmployeeAndFeelGaps(Employee employee) => CopyAndFillGaps(employee, this);
 
         public static void Fill(SalariedEmployee employee)
         {
@@ -56,16 +56,17 @@ namespace HT14.Models
 
         protected static void CopyAndFillGaps(Employee source, SalariedEmployee destination)
         {
-            if (source is not SalariedEmployee salariedSource)
-            {
-                Copy(source, destination);
-                destination.SalaryPerWeek = PrintMessageAndGetValueInRange("Input employee's weekly pay", 0, int.MaxValue);
-                destination.WorkWeeksAmm = PrintMessageAndGetValueInRange("Input employee's worked weeks", 0, int.MaxValue);
-            }
-            else
+            Copy(source, destination);
+            if (source is SalariedEmployee salariedSource)
             {
                 destination.SalaryPerWeek = salariedSource.SalaryPerWeek;
                 destination.WorkWeeksAmm = salariedSource.WorkWeeksAmm;
+            }
+            else
+            {
+                Console.WriteLine($"Input values for: {destination}");
+                destination.SalaryPerWeek = PrintMessageAndGetValueInRange("Input employee's weekly pay", 0, int.MaxValue);
+                destination.WorkWeeksAmm = PrintMessageAndGetValueInRange("Input employee's worked weeks", 0, int.MaxValue);
             }
         }
     }
