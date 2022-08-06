@@ -43,7 +43,7 @@ namespace HT14.Models
         public override Posts Post => Posts.HourlyEmployee;
         public override void Fill() => Fill(this);
         public override string ToString() => base.ToString() + $", Hours: {_workHoursAmm}, Salary per hour: {_salaryPerHour}";
-        public override void CopyFromEmployeeAndFeelGaps(Employee employee) => CopyAndFillGaps(employee, this);
+        public override void CopyFromEmployeeAndFillGaps(Employee employee) => CopyAndFillGaps(employee, this);
 
         public static void Fill(HourlyEmployee employee)
         {

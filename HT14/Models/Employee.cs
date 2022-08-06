@@ -20,7 +20,7 @@
             employee.Name = buffName?.Trim() ?? "NULL";
         }
 
-        public virtual void CopyFromEmployeeAndFeelGaps(Employee employee) => Copy(employee, this);
+        public virtual void CopyFromEmployeeAndFillGaps(Employee employee) => Copy(employee, this);
         
         protected static void Copy(Employee source, Employee destination)
         {

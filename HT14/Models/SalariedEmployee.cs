@@ -40,7 +40,7 @@ namespace HT14.Models
 
         public override void Fill() => Fill(this);
         public override string ToString()=> base.ToString() + $", Weekly pay: {SalaryPerWeek}, Worked weeks: {WorkWeeksAmm}";
-        public override void CopyFromEmployeeAndFeelGaps(Employee employee) => CopyAndFillGaps(employee, this);
+        public override void CopyFromEmployeeAndFillGaps(Employee employee) => CopyAndFillGaps(employee, this);
 
         public static void Fill(SalariedEmployee employee)
         {

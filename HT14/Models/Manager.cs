@@ -39,7 +39,7 @@ namespace HT14.Models
         public override void Fill() => Fill(this);
         public override int Salary => base.Salary + _totalProjectsTurnover * _turnoverPercentForManager / 100;
         public override string ToString() => base.ToString() + $", Total projects turnover {_totalProjectsTurnover}, Manager's pay percent: {_turnoverPercentForManager}";
-        public override void CopyFromEmployeeAndFeelGaps(Employee employee) => CopyAndFillGaps(employee, this);
+        public override void CopyFromEmployeeAndFillGaps(Employee employee) => CopyAndFillGaps(employee, this);
 
         public static void Fill(Manager manager) 
         {

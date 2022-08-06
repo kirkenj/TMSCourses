@@ -15,7 +15,6 @@ namespace HT14.Models
 
         }
 
-
         public void ShowEmployeeEditMenu()
         {
             var emp = SeletctItemFromArray("Select employee", _employees.ToArray());
@@ -87,14 +86,11 @@ namespace HT14.Models
                 Posts.Executive => new Executive(),
                 _ => throw new ArgumentException("Invalid selection", nameof(newPost)),
             };
-            modificatedEmployee.CopyFromEmployeeAndFeelGaps(emp);
+            modificatedEmployee.CopyFromEmployeeAndFillGaps(emp);
             _employees.Remove(emp);
             _employees.Add(modificatedEmployee);
         }
 
-        public void PrintEmployees()
-        {
-            Console.WriteLine(string.Join("\n", _employees));
-        }
+        public void PrintEmployees() => Console.WriteLine(string.Join("\n", _employees));
     }
 }
