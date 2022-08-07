@@ -2,10 +2,7 @@
 {
     public class Programm
     {
-        public static void Swap<T>(ref T a, ref T b)
-        {
-            (b, a) = (a, b);
-        }
+        public static void Swap<T>(ref T a, ref T b) => (b, a) = (a, b);
 
         public static int SelectItemIndexFromArray<T>(in string msg, T[] arr, bool doUseCancel = true, in string afterArrPrintMsg = "")
         {
@@ -41,7 +38,7 @@
         public static T? SeletctItemFromArray<T>(in string msg, T[] arr)
         {
             var index = SelectItemIndexFromArray<T>(msg, arr, true);
-            return index == -1 ? default(T) : arr[index];
+            return index == -1 ? default : arr[index];
         }
 
         public static int ReadIntFromConsole(in string msg)

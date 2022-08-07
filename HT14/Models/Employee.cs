@@ -16,8 +16,7 @@
             }
 
             Console.Write("Input worker's name:");
-            var buffName = Console.ReadLine();
-            employee.Name = buffName?.Trim() ?? "NULL";
+            employee.Name = Console.ReadLine()?.Trim() ?? string.Empty;
         }
 
         public virtual void CopyFromEmployeeAndFillGaps(Employee employee) => Copy(employee, this);

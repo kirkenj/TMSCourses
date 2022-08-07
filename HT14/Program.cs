@@ -14,7 +14,7 @@ Dictionary<MainMenuPositions, Action> menu = new()
 
 while (true)
 {
-    var selection = SeletctItemFromArray("Select option", menuPositions);
+    var selection = SeletctItemFromArray("MAIN MENU\nselect option", menuPositions);
     if (selection == default)
     {
         Console.WriteLine("Bye");

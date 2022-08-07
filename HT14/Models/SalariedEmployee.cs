@@ -6,10 +6,8 @@ namespace HT14.Models
     {
         private int _workWeeksAmm = 0;
         private int _salaryPerWeek = 0;
-
         public override int Salary => _workWeeksAmm * _salaryPerWeek;
         public override Posts Post => Posts.SalariedEmpployee;
-
         public int WorkWeeksAmm
         {
             get => _workWeeksAmm;
@@ -23,7 +21,6 @@ namespace HT14.Models
                 _workWeeksAmm = value;
             }
         }
-
         public int SalaryPerWeek
         {
             get => _salaryPerWeek;
@@ -37,11 +34,9 @@ namespace HT14.Models
                 _salaryPerWeek = value;
             }
         }
-
         public override void Fill() => Fill(this);
         public override string ToString()=> base.ToString() + $", Weekly pay: {SalaryPerWeek}, Worked weeks: {WorkWeeksAmm}";
         public override void CopyFromEmployeeAndFillGaps(Employee employee) => CopyAndFillGaps(employee, this);
-
         public static void Fill(SalariedEmployee employee)
         {
             if (employee == null)

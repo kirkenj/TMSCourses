@@ -5,18 +5,23 @@ namespace HT14.Models
     public class Company
     {
         private static readonly Posts[] posts = Enum.GetValues(typeof(Posts)).Cast<Posts>().ToArray();
-        private readonly List<Employee> _employees = new ()
+        private readonly List<Employee> _employees = new()
         {
             new SalariedEmployee() { Name = "Nick", SalaryPerWeek = 900, WorkWeeksAmm = 30 }
         };
 
         public Company()
         {
-
         }
 
         public void ShowEmployeeEditMenu()
         {
+            if (!_employees.Any())
+            {
+                Console.WriteLine("No employees hired");
+                return;
+            }
+
             var emp = SeletctItemFromArray("Select employee", _employees.ToArray());
             if (emp == null)
             {
@@ -29,6 +34,12 @@ namespace HT14.Models
 
         public void ShowFireMenu()
         {
+            if (!_employees.Any())
+            {
+                Console.WriteLine("No employees hired");
+                return;
+            }
+
             var emp = SeletctItemFromArray("Select employee", _employees.ToArray());
             if (emp == null)
             {
@@ -41,10 +52,10 @@ namespace HT14.Models
 
         public void ShowAddEmployeeMenu()
         {
-            var newPost = SeletctItemFromArray("Select new post", posts);
+            var newPost = SeletctItemFromArray("Select post for new employee", posts);
             if (newPost == default)
             {
-                Console.WriteLine("New post hasn't been chosen");
+                Console.WriteLine("The post hasn't been chosen");
                 return;
             }
 
@@ -62,6 +73,12 @@ namespace HT14.Models
 
         public void ShowSetPostMenu()
         {
+            if (!_employees.Any())
+            {
+                Console.WriteLine("No employees hired");
+                return;
+            }
+
             var emp = SeletctItemFromArray("Select employee", _employees.ToArray());
             if (emp == null)
             {
@@ -91,6 +108,6 @@ namespace HT14.Models
             _employees.Add(modificatedEmployee);
         }
 
-        public void PrintEmployees() => Console.WriteLine(string.Join("\n", _employees));
+        public void PrintEmployees() => Console.WriteLine(_employees.Any() ? string.Join("\n", _employees) : "No employees");
     }
 }

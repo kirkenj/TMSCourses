@@ -6,12 +6,7 @@ namespace HT14.Models
     {
         private int _workHoursAmm = 0;
         private int _salaryPerHour = 0;
-
-        public override int Salary 
-        { 
-            get => _workHoursAmm * _salaryPerHour;
-        }
-
+        public override int Salary => _workHoursAmm * _salaryPerHour;
         public int WorkHoursAmm
         {
             get => _workHoursAmm;
@@ -25,7 +20,6 @@ namespace HT14.Models
                 _workHoursAmm = value;
             }
         }
-
         public int SalaryPerHour
         {
             get => _salaryPerHour;

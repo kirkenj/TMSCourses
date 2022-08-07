@@ -8,7 +8,7 @@ namespace HT14.Models
 {
     public enum Posts
     {
-        HourlyEmployee = 1,
+        HourlyEmployee = 1, //почему 1 см в MainMenuPositions
         SalariedEmpployee, 
         Manager,
         Executive
