@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductInventoryProjectUsin
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClassLibraryForHT9", "ClassLibraryForHT9\ClassLibraryForHT9.csproj", "{99FC217F-B97D-48FA-8D5F-E7434EC3C85D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HT14", "HT14\HT14.csproj", "{A6BFD893-6743-4D74-A7A6-C8252EBDD677}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HT14", "HT14\HT14.csproj", "{A6BFD893-6743-4D74-A7A6-C8252EBDD677}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "15", "15\15.csproj", "{B782E2CF-76E2-464A-A244-7E516BB799A2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{A6BFD893-6743-4D74-A7A6-C8252EBDD677}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A6BFD893-6743-4D74-A7A6-C8252EBDD677}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A6BFD893-6743-4D74-A7A6-C8252EBDD677}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B782E2CF-76E2-464A-A244-7E516BB799A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B782E2CF-76E2-464A-A244-7E516BB799A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B782E2CF-76E2-464A-A244-7E516BB799A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B782E2CF-76E2-464A-A244-7E516BB799A2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
