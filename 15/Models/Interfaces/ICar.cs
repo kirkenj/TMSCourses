@@ -10,6 +10,5 @@ namespace _15.Models.Interfaces
         public int FuelLevel { get; }
         public int FillTank(Fuel fuel, int volume);
         public void Ride();
-
     }
 }

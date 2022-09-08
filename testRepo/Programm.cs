@@ -32,7 +32,7 @@
 
             Console.WriteLine(CONSOLE_SEPARATOR);
 
-            return PrintMessageAndGetValueInRange(afterArrPrintMsg, doUseCancel ? -1 : 0, arr.Length - 1);
+            return ReadIntFromConsole(afterArrPrintMsg, doUseCancel ? -1 : 0, arr.Length - 1);
         }
 
         public static T? SeletctItemFromArray<T>(in string msg, T[] arr)
@@ -63,7 +63,7 @@
             return ret;
         }
 
-        public static int PrintMessageAndGetValueInRange(in string menu, int minValue, int maxValue)
+        public static int ReadIntFromConsole(in string menu, int minValue, int maxValue)
         {
             if (maxValue < minValue)
             {
@@ -211,7 +211,7 @@
             {
                 try
                 {
-                    option = PrintMessageAndGetValueInRange(menu, 0, 5);
+                    option = ReadIntFromConsole(menu, 0, 5);
                     switch (option)
                     {
                         case 0:
@@ -222,21 +222,21 @@
                             Console.WriteLine($"Amount of postives - {positives}; negatives - {negatives}; zeros - {zeros}");
                             break;
                         case 2:
-                            rowNumber = PrintMessageAndGetValueInRange("Input row's number", 0, matrix.Length - 1);
+                            rowNumber = ReadIntFromConsole("Input row's number", 0, matrix.Length - 1);
                             row = matrix[rowNumber];
                             Console.WriteLine("Selected row: " + String.Join(" ", row));
                             BubleSort(row);
                             Console.WriteLine("Sorted row: " + String.Join(" ", row));
                             break;
                         case 3:
-                            rowNumber = PrintMessageAndGetValueInRange("Input row's number", 0, matrix.Length - 1);
+                            rowNumber = ReadIntFromConsole("Input row's number", 0, matrix.Length - 1);
                             row = matrix[rowNumber];
                             Console.WriteLine("Selected row: " + String.Join(" ", row));
                             BubleSort(row, true);
                             Console.WriteLine("Sorted row: " + String.Join(" ", row));
                             break;
                         case 4:
-                            rowNumber = PrintMessageAndGetValueInRange("Input row's number", 0, matrix.Length - 1);
+                            rowNumber = ReadIntFromConsole("Input row's number", 0, matrix.Length - 1);
                             row = matrix[rowNumber];
                             Console.WriteLine("Selected row: " + String.Join(" ", row));
                             Reverse(row);

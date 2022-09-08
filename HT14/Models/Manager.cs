@@ -41,8 +41,8 @@ namespace HT14.Models
         public static void Fill(Manager manager) 
         {
             SalariedEmployee.Fill(manager);
-            manager.ManagersFee = PrintMessageAndGetValueInRange("Input manager's fee percent", 0, 100);
-            manager.TotalProjectsTurnover = PrintMessageAndGetValueInRange("Input manager's projects turnover", 0, int.MaxValue);
+            manager.ManagersFee = ReadIntFromConsole("Input manager's fee percent", 0, 100);
+            manager.TotalProjectsTurnover = ReadIntFromConsole("Input manager's projects turnover", 0, int.MaxValue);
         }
 
         protected static void CopyAndFillGaps(Employee source, Manager destination)
@@ -50,7 +50,7 @@ namespace HT14.Models
             SalariedEmployee.CopyAndFillGaps(source, destination);
             (destination.TotalProjectsTurnover, destination.ManagersFee) = source is Manager managerSource ? 
                 (managerSource.TotalProjectsTurnover, managerSource.ManagersFee) :
-                (PrintMessageAndGetValueInRange("Input manager's projects turnover", 0, int.MaxValue), PrintMessageAndGetValueInRange("Input manager's fee percent", 0, 100));
+                (ReadIntFromConsole("Input manager's projects turnover", 0, int.MaxValue), ReadIntFromConsole("Input manager's fee percent", 0, 100));
         } 
     }
 }

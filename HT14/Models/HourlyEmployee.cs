@@ -47,8 +47,8 @@ namespace HT14.Models
             }
 
             Employee.Fill(employee);
-            employee.SalaryPerHour = PrintMessageAndGetValueInRange("Input hourly worker's salary per hour", 0, int.MaxValue);
-            employee.WorkHoursAmm = PrintMessageAndGetValueInRange("Input hourly worker's current work hours", 0, int.MaxValue);
+            employee.SalaryPerHour = ReadIntFromConsole("Input hourly worker's salary per hour", 0, int.MaxValue);
+            employee.WorkHoursAmm = ReadIntFromConsole("Input hourly worker's current work hours", 0, int.MaxValue);
         }
 
         protected static void CopyAndFillGaps(Employee source, HourlyEmployee destination)
@@ -62,8 +62,8 @@ namespace HT14.Models
             else
             {
                 Console.WriteLine($"Input values for: {destination}");
-                destination.SalaryPerHour = PrintMessageAndGetValueInRange("Input hourly worker's salary per hour", 0, int.MaxValue);
-                destination.WorkHoursAmm = PrintMessageAndGetValueInRange("Input hourly worker's current work hours", 0, int.MaxValue);
+                destination.SalaryPerHour = ReadIntFromConsole("Input hourly worker's salary per hour", 0, int.MaxValue);
+                destination.WorkHoursAmm = ReadIntFromConsole("Input hourly worker's current work hours", 0, int.MaxValue);
             }
         }
     }
