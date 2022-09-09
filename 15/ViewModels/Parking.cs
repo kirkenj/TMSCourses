@@ -23,13 +23,13 @@ namespace _15.ViewModels
             );
             dict.Add(ParkingMenu.SortCarsByDefault, () =>
             {
-                var arr = _cars.ToArray();
-                Array.Sort(arr);
-                if (arr == null)
+                if (!_cars.Any())
                 {
                     return;
                 }
 
+                var arr = _cars.ToArray();
+                Array.Sort(arr);
                 Console.WriteLine(String.Join("\n", arr.ToList()));
             });
             dict.Add(ParkingMenu.PrintCars, PrintCars);
