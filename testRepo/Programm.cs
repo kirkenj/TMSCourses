@@ -2,16 +2,13 @@
 {
     public class Programm
     {
-        public static void Swap<T>(ref T a, ref T b)
-        {
-            (b, a) = (a, b);
-        }
+        public static void Swap<T>(ref T a, ref T b) => (b, a) = (a, b);
 
         public static int SelectItemIndexFromArray<T>(in string msg, T[] arr, bool doUseCancel = true, in string afterArrPrintMsg = "")
         {
             if (arr == null || arr.Length == 0)
             {
-                throw new ArgumentNullException(nameof(arr), "Input array in null or empty");
+                return -1;
             }
 
             if (!string.IsNullOrWhiteSpace(msg))
@@ -36,6 +33,12 @@
             Console.WriteLine(CONSOLE_SEPARATOR);
 
             return PrintMessageAndGetValueInRange(afterArrPrintMsg, doUseCancel ? -1 : 0, arr.Length - 1);
+        }
+
+        public static T? SeletctItemFromArray<T>(in string msg, T[] arr)
+        {
+            var index = SelectItemIndexFromArray<T>(msg, arr, true);
+            return index == -1 ? default : arr[index];
         }
 
         public static int ReadIntFromConsole(in string msg)
@@ -72,7 +75,7 @@
             {
                 if (!string.IsNullOrWhiteSpace(menu))
                 {
-                    Console.WriteLine(CONSOLE_SEPARATOR + menu + CONSOLE_SEPARATOR);
+                    Console.WriteLine(CONSOLE_SEPARATOR + menu + '\n' + CONSOLE_SEPARATOR);
                 }
 
                 ret = ReadIntFromConsole($"Input value from {minValue} to {maxValue}");
