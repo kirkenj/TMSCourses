@@ -103,7 +103,7 @@ namespace _15.Models.Classes
             }
 
             this.Engine = engine;
-            this.FuelTankCapacity = ReadIntFromConsole("Input tank's capacity (liters)", 0, 1000);
+            this.FuelTankCapacity = ReadIntFromConsole("Input tank's capacity", 0, 1000);
             Console.WriteLine("Input car's identifier");
             this.Identifier = Console.ReadLine() ?? "";
             this.FuelLevel = 0;
