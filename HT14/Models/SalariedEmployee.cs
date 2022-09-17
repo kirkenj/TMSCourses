@@ -45,8 +45,8 @@ namespace HT14.Models
             }
 
             Employee.Fill(employee);
-            employee.SalaryPerWeek = PrintMessageAndGetValueInRange("Input employee's weekly pay", 0, int.MaxValue);
-            employee.WorkWeeksAmm = PrintMessageAndGetValueInRange("Input employee's worked weeks", 0, int.MaxValue);
+            employee.SalaryPerWeek = ReadIntFromConsole("Input employee's weekly pay", 0, int.MaxValue);
+            employee.WorkWeeksAmm = ReadIntFromConsole("Input employee's worked weeks", 0, int.MaxValue);
         }
 
         protected static void CopyAndFillGaps(Employee source, SalariedEmployee destination)
@@ -60,8 +60,8 @@ namespace HT14.Models
             else
             {
                 Console.WriteLine($"Input values for: {destination}");
-                destination.SalaryPerWeek = PrintMessageAndGetValueInRange("Input employee's weekly pay", 0, int.MaxValue);
-                destination.WorkWeeksAmm = PrintMessageAndGetValueInRange("Input employee's worked weeks", 0, int.MaxValue);
+                destination.SalaryPerWeek = ReadIntFromConsole("Input employee's weekly pay", 0, int.MaxValue);
+                destination.WorkWeeksAmm = ReadIntFromConsole("Input employee's worked weeks", 0, int.MaxValue);
             }
         }
     }
