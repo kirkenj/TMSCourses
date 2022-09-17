@@ -13,6 +13,7 @@ namespace _15.Models.Enums
         RemoveCar,
         SortCarsByDefault,
         SortCarsByPower,
-        PrintCars
+        PrintCars,
+        FillCarTank
     }
 }

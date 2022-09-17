@@ -41,7 +41,7 @@ namespace _15.Models.Classes
             }
 
             int freeTankVolume = FuelTankCapacity - FuelLevel;
-            if (freeTankVolume < fuelVolume)
+            if (freeTankVolume > fuelVolume)
             {
                 FuelLevel += fuelVolume;
                 return 0;

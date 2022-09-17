@@ -7,7 +7,7 @@ namespace _15.ViewModels
     internal class Parking
     {
         private readonly List<Car> _cars = new();
-        readonly Dictionary<ParkingMenu, Action> dict = new();
+        private readonly Dictionary<ParkingMenu, Action> dict = new();
 
         public Parking()
         {
@@ -33,6 +33,7 @@ namespace _15.ViewModels
                 Console.WriteLine(String.Join("\n", arr.ToList()));
             });
             dict.Add(ParkingMenu.PrintCars, PrintCars);
+            dict.Add(ParkingMenu.FillCarTank, FillCarTank);
 
             _cars.Add(new Car(Fuel.Petrol, 3000, 500, "1020 BH-4"));
             _cars.Add(new Car(Fuel.Disel, 2000, 900, "1050 AM-4"));
@@ -76,7 +77,11 @@ namespace _15.ViewModels
                 return;
             }
 
-            car.FillTank(car.Fuel, ReadIntFromConsole("Input fuel volume", 0, int.MaxValue));
+            var extraFuel = car.FillTank(car.Fuel, ReadIntFromConsole("Input fuel volume", 0, int.MaxValue));
+            if (extraFuel > 0)
+            {
+                Console.WriteLine($"Extra fuel: {extraFuel}");
+            }
         }
 
         public void PrintCars() => Console.WriteLine(string.Join("\n", _cars));
