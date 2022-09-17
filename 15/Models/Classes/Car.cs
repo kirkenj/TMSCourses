@@ -8,6 +8,9 @@ namespace _15.Models.Classes
     internal class Car : ICar<IEngine>, ICloneable, IComparable
     {
         private static readonly Random _random = new();
+        private static int _idCounter = 0;
+
+        public int ID { get; } = _idCounter++;
         public IEngine? Engine { get; private set; }
 
         public int FuelTankCapacity { get; private set; }
@@ -66,6 +69,8 @@ namespace _15.Models.Classes
             FuelLevel -= _random.Next(0, FuelLevel);
         }
 
+        private Car() { }
+
         public Car(Fuel fuel, int enginePower, int tankCapacity, string identifier) : this(new Engine(fuel, enginePower), tankCapacity, identifier) { }
 
         public Car(IEngine engine, int tankCapacity, string identifier)
@@ -85,20 +90,32 @@ namespace _15.Models.Classes
             Identifier = identifier.Trim();
         }
 
-        public override string ToString() => $"Identifier: \"{Identifier}\", {Engine}, Fuel tank capacity: {FuelTankCapacity}, Fuel level: {FuelLevel}";
-
-        public static Car? CreateCarByUser()
+        /// <summary>
+        /// Return true if edition was NOT cancelled
+        /// </summary>
+        /// <returns></returns>
+        public bool EditByUser()
         {
             var engine = Classes.Engine.CreateEngineByUser();
             if (engine == default)
             {
-                return null;
+                return false;
             }
 
-            var tankCapacity = ReadIntFromConsole("Input tank's capacity (liters)", 0, 1000);
+            this.Engine = engine;
+            this.FuelTankCapacity = ReadIntFromConsole("Input tank's capacity (liters)", 0, 1000);
             Console.WriteLine("Input car's identifier");
-            string identifier = Console.ReadLine() ?? "";
-            return new Car(engine, tankCapacity, identifier);
+            this.Identifier = Console.ReadLine() ?? "";
+            this.FuelLevel = 0;
+            return true;
+        }
+
+        public override string ToString() => $"ID: {ID}, Identifier: \"{Identifier}\", {Engine}, Fuel tank capacity: {FuelTankCapacity}, Fuel level: {FuelLevel}";
+
+        public static Car? CreateCarByUser()
+        {
+            var car = new Car();
+            return car.EditByUser() ? car : null;
         }
     }
 }

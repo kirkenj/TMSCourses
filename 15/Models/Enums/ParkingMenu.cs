@@ -9,11 +9,13 @@ namespace _15.Models.Enums
     public enum ParkingMenu
     {
         AddCar = 1,
-        SendCarForARide,
+        EditCar,
         RemoveCar,
+        SendCarForARide,
         SortCarsByDefault,
         SortCarsByPower,
         PrintCars,
-        FillCarTank
+        FillCarTank,
+        PrintLogs,
     }
 }
