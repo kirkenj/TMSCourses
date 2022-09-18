@@ -5,20 +5,18 @@ using static testRepo.Programm;
 
 namespace _15.Models.Classes
 {
-    internal class Car : ICar<IEngine>, ICloneable, IComparable
+    [Serializable]
+    internal struct Car : ICar<IEngine>, ICloneable, IComparable
     {
         private static readonly Random _random = new();
-        private static int _idCounter = 0;
 
-        public int ID { get; } = _idCounter++;
-        public IEngine? Engine { get; private set; }
+        public IEngine? Engine { get; set; } = default;
 
-        public int FuelTankCapacity { get; private set; }
+        public int FuelTankCapacity { get; set; } = 0;
+        public string Identifier { get; set; } = string.Empty;
 
-        public string Identifier { get; private set; } = string.Empty;
-
-        public int FuelLevel { get; private set; }
-
+        public int FuelLevel { get; set; } = 0;
+        
         public Fuel Fuel => Engine?.Fuel ?? throw new ArgumentNullException(nameof(Engine));
 
         public int EnginePower => Engine?.Power ?? throw new ArgumentNullException(nameof(Engine));
@@ -69,7 +67,7 @@ namespace _15.Models.Classes
             FuelLevel -= _random.Next(0, FuelLevel);
         }
 
-        private Car() { }
+        public Car() { }
 
         public Car(Fuel fuel, int enginePower, int tankCapacity, string identifier) : this(new Engine(fuel, enginePower), tankCapacity, identifier) { }
 
@@ -89,33 +87,33 @@ namespace _15.Models.Classes
 
             Identifier = identifier.Trim();
         }
+        public override string ToString() => $"Identifier: \"{Identifier}\", {Engine}, Fuel tank capacity: {FuelTankCapacity}, Fuel level: {FuelLevel}";
 
         /// <summary>
         /// Return true if edition was NOT cancelled
         /// </summary>
         /// <returns></returns>
-        public bool EditByUser()
-        {
-            var engine = Classes.Engine.CreateEngineByUser();
-            if (engine == default)
-            {
-                return false;
-            }
+        //public bool EditByUser()
+        //{
+        //    var engine = Classes.Engine.CreateEngineByUser();
+        //    if (engine.Equals(default))
+        //    {
+        //        return false;
+        //    }
 
-            this.Engine = engine;
-            this.FuelTankCapacity = ReadIntFromConsole("Input tank's capacity", 0, 1000);
-            Console.WriteLine("Input car's identifier");
-            this.Identifier = Console.ReadLine() ?? "";
-            this.FuelLevel = 0;
-            return true;
-        }
+        //    this.Engine = engine;
+        //    this.FuelTankCapacity = ReadIntFromConsole("Input tank's capacity", 0, 1000);
+        //    Console.WriteLine("Input car's identifier");
+        //    this.Identifier = Console.ReadLine() ?? "";
+        //    this.FuelLevel = 0;
+        //    return true;
+        //}
 
-        public override string ToString() => $"ID: {ID}, Identifier: \"{Identifier}\", {Engine}, Fuel tank capacity: {FuelTankCapacity}, Fuel level: {FuelLevel}";
 
-        public static Car? CreateCarByUser()
-        {
-            var car = new Car();
-            return car.EditByUser() ? car : null;
-        }
+        //public static Car? CreateCarByUser()
+        //{
+        //    var car = new Car();
+        //    return car.EditByUser() ? car : default;
+        //}
     }
 }

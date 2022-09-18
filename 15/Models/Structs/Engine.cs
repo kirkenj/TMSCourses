@@ -4,13 +4,15 @@ using static testRepo.Programm;
 
 namespace _15.Models.Classes
 {
-    internal class Engine : IEngine
+    [Serializable]
+    internal struct Engine : IEngine
     {
+        [NonSerialized]
         private static readonly Fuel[] _fuelTypes = Enum.GetValues(typeof(Fuel)).Cast<Fuel>().ToArray();
 
-        public Fuel Fuel { get; private set; }
+        public Fuel Fuel { get; set; } = 0;
 
-        public int Power { get; private set; }
+        public int Power { get; set; } = 0;
 
         public Engine(Fuel fuel, int power)
         {
@@ -21,6 +23,11 @@ namespace _15.Models.Classes
 
             Power = power;
             Fuel = fuel;
+        }
+
+        public Engine()
+        {
+
         }
 
         public override string ToString() => $"Power: {Power}, Fuel: {Fuel}";

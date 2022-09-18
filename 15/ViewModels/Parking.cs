@@ -1,135 +1,74 @@
 ﻿using _15.Models.Classes;
 using _15.Models.Enums;
+using System.Runtime.Serialization.Formatters.Binary;
 using static testRepo.Programm;
 
 namespace _15.ViewModels
 {
+    [Serializable]
     internal class Parking
     {
-        private readonly List<Car> _cars = new();
-        private readonly Dictionary<ParkingMenu, UserAction> dict = new();
-        private readonly Stack<string> loggs = new();
-        private event MessagePrinting Notify;
+        private List<Car> _cars = new();
+        public Car[] Cars
+        {
+            get => _cars.ToArray();
+            set 
+            {
+                _cars = value.ToList();
+            }
+        }
+        public event CarValueChanged? NotifyCarValueChanged = null;
+
         public Parking()
         {
-            Notify += Console.WriteLine;
-            Notify += loggs.Push;
-            dict.Add(ParkingMenu.AddCar, AddCar);
-            dict.Add(ParkingMenu.EditCar, EditCar);
-            dict.Add(ParkingMenu.RemoveCar, RemoveCar);
-            dict.Add(ParkingMenu.SendCarForARide, SendCarForARide);
-            dict.Add
-            (
-                ParkingMenu.SortCarsByPower, () =>
-                {
-                    Console.WriteLine(String.Join("\n", _cars.OrderBy(c => c.EnginePower)));
-                }
-            );
-            dict.Add(ParkingMenu.SortCarsByDefault, () =>
-            {
-                if (!_cars.Any())
-                {
-                    return;
-                }
-
-                var arr = _cars.ToArray();
-                Array.Sort(arr);
-                Console.WriteLine(String.Join("\n", arr.ToList()));
-            });
-            dict.Add(ParkingMenu.PrintCars, PrintCars);
-            dict.Add(ParkingMenu.FillCarTank, FillCarTank);
-            dict.Add(ParkingMenu.PrintLogs, () => Console.WriteLine(string.Join("\n", loggs)));
-
-
-            _cars.Add(new Car(Fuel.Petrol, 3000, 500, "1020 BH-4"));
-            _cars.Add(new Car(Fuel.Disel, 2000, 900, "1050 AM-4"));
-            _cars.Add(new Car(Fuel.Electricity, 8000, 1000, "8999 QF-4"));
-            Notify(DateTime.Now.ToString() + $": Parking was creeated with:\n{string.Join("\n", _cars)}");
+            
         }
 
-
-        public void AddCar()
+        public void AddCar(Car car)
         {
-            Car? car = Car.CreateCarByUser();
-            if (car != null)
+            if (!car.Equals(default))
             {
-                Notify(DateTime.Now.ToString() + $": Car added:{car}");
                 _cars.Add(car);
+                NotifyCarValueChanged?.Invoke(default, car);
             }
         }
 
-        public void EditCar()
+        public void RemoveCar(Car car)
         {
-            var car = SeletctItemFromArray("Select a car", _cars.ToArray());
+            if (!car.Equals(default))
+            {
+                _cars.Remove(car); 
+                NotifyCarValueChanged?.Invoke(car, default);
+            }
+        }
 
-            if (car == default)
+        public void SendCarForARide(Car car)
+        {
+            if (car.Equals(default) || !_cars.Contains(car))
             {
                 return;
             }
 
-            string prevStr = car.ToString();
-            if (car.EditByUser())
-            {
-                Notify(DateTime.Now.ToString() + $": Car: {prevStr}\nwas edited and got values:\n{car}");
-            }
+            var prevValue = car;
+            car.Ride(); 
+            NotifyCarValueChanged?.Invoke(prevValue, car);
         }
 
-        public void RemoveCar()
+        public int FillCarTank(Car car, int volume)
         {
-            var car = SeletctItemFromArray("Select car to remove", _cars.ToArray());
-            if (car != null)
+            if (car.Equals(default))
             {
-                _cars.Remove(car);
-                Notify(DateTime.Now.ToString() + $":Car removed:{car}");
-            }
-        }
-
-        public void SendCarForARide()
-        {
-            var car = SeletctItemFromArray("Select a car", _cars.ToArray());
-
-            if (car == default)
-            {
-                return;
+                return volume;
             }
 
-            var prevLevel = car.FuelLevel;
-            car.Ride();
-            Notify(DateTime.Now.ToString() + $": Car (ID = {car.ID}) was sent for a ride. Car's fuel level reduced from {prevLevel} to {car.FuelLevel}");
-        }
-
-        public void FillCarTank()
-        {
-            var car = SeletctItemFromArray("Select a car", _cars.ToArray());
-
-            if (car == default)
-            {
-                return;
-            }
-
-            var volume = ReadIntFromConsole("Input fuel volume", 0, int.MaxValue);
+            var prevValue = car;
             var extraFuel = car.FillTank(car.Fuel, volume);
-            Notify(DateTime.Now.ToString() + $": Car: {car}. Tank filled with {volume} fuel" + (extraFuel > 0 ? $"Extra fuel: {extraFuel}" : string.Empty));
+            var newValue = car;
+            NotifyCarValueChanged?.Invoke(prevValue, car);
+            return extraFuel;
         }
 
-        public void PrintCars() => Console.WriteLine(string.Join("\n", _cars));
-
-        public void Start()
-        {
-            while (true)
-            {
-                var keys = dict.Keys.ToArray();
-                var option = SeletctItemFromArray("Parking menu:", keys);
-                if (option == default)
-                {
-                    return;
-                }
-
-                dict[option]();
-            }
-        }
+        public override string ToString() => string.Join("\n", _cars);
+        public delegate void CarValueChanged(Car prevValue, Car newValue);
     }
-
-    delegate void UserAction();
-    delegate void MessagePrinting(string msg);
 }
