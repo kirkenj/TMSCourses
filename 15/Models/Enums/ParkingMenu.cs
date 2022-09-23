@@ -17,5 +17,7 @@ namespace _15.Models.Enums
         PrintCars,
         FillCarTank,
         PrintLogs,
+        SerializeJson,
+        SerializeXML,
     }
 }

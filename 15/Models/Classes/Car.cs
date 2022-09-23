@@ -1,24 +1,19 @@
 ﻿using _15.Models.Enums;
-using _15.Models.Interfaces;
 using static testRepo.Programm;
-
+using _15.Models.Interfaces;
+using _15.Models.Structs;
 
 namespace _15.Models.Classes
 {
     [Serializable]
-    internal struct Car : ICar<IEngine>, ICloneable, IComparable
+    public class Car :  ICar<Engine>, ICloneable, IComparable
     {
         private static readonly Random _random = new();
-
-        public IEngine? Engine { get; set; } = default;
-
+        public Engine? Engine { get; set; } = default;
         public int FuelTankCapacity { get; set; } = 0;
         public string Identifier { get; set; } = string.Empty;
-
-        public int FuelLevel { get; set; } = 0;
-        
+        public int FuelLevel { get; set; } = 0;        
         public Fuel Fuel => Engine?.Fuel ?? throw new ArgumentNullException(nameof(Engine));
-
         public int EnginePower => Engine?.Power ?? throw new ArgumentNullException(nameof(Engine));
 
         public object Clone() => new Car(Fuel, EnginePower, FuelTankCapacity, Identifier);
@@ -71,7 +66,27 @@ namespace _15.Models.Classes
 
         public Car(Fuel fuel, int enginePower, int tankCapacity, string identifier) : this(new Engine(fuel, enginePower), tankCapacity, identifier) { }
 
-        public Car(IEngine engine, int tankCapacity, string identifier)
+        public Car(CarStruct carStruct) : this(new Engine(carStruct.Fuel, carStruct.EnginePower), carStruct.FuelTankCapacity, carStruct.Identifier) { }
+
+        public Car(Engine engine, int tankCapacity, string identifier)
+        {
+            Engine = engine ?? throw new ArgumentNullException(nameof(engine));
+            if (tankCapacity < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(tankCapacity));
+            }
+
+            FuelTankCapacity = tankCapacity;
+            if (string.IsNullOrWhiteSpace(identifier))
+            {
+                throw new ArgumentNullException(nameof(identifier));
+            }
+
+            FuelLevel = 0;
+            Identifier = identifier.Trim();
+        }
+
+        public void Edit(Engine engine, int tankCapacity, string identifier)
         {
             Engine = engine ?? throw new ArgumentNullException(nameof(engine));
             if (tankCapacity < 0)
@@ -87,33 +102,10 @@ namespace _15.Models.Classes
 
             Identifier = identifier.Trim();
         }
-        public override string ToString() => $"Identifier: \"{Identifier}\", {Engine}, Fuel tank capacity: {FuelTankCapacity}, Fuel level: {FuelLevel}";
 
-        /// <summary>
-        /// Return true if edition was NOT cancelled
-        /// </summary>
-        /// <returns></returns>
-        //public bool EditByUser()
-        //{
-        //    var engine = Classes.Engine.CreateEngineByUser();
-        //    if (engine.Equals(default))
-        //    {
-        //        return false;
-        //    }
-
-        //    this.Engine = engine;
-        //    this.FuelTankCapacity = ReadIntFromConsole("Input tank's capacity", 0, 1000);
-        //    Console.WriteLine("Input car's identifier");
-        //    this.Identifier = Console.ReadLine() ?? "";
-        //    this.FuelLevel = 0;
-        //    return true;
-        //}
-
-
-        //public static Car? CreateCarByUser()
-        //{
-        //    var car = new Car();
-        //    return car.EditByUser() ? car : default;
-        //}
+        public void Edit(Fuel fuel, int enginePower, int tankCapacity, string identifier) => Edit(new Engine(fuel, enginePower), tankCapacity, identifier);
+        public void Edit(CarStruct carStruct) => Edit(carStruct.Fuel, carStruct.EnginePower, carStruct.FuelTankCapacity, carStruct.Identifier);
+        public CarStruct GetStruct() => new() { Engine = Engine?.GetStruct() ?? throw new ArgumentNullException(nameof(Engine)), FuelLevel = FuelLevel, FuelTankCapacity = FuelTankCapacity, Identifier = Identifier }; 
+        public override string ToString() => $"Identifier: \"{Identifier}\", {Engine ?? throw new ArgumentNullException(nameof(Engine))}, Fuel tank capacity: {FuelTankCapacity}, Fuel level: {FuelLevel}";
     }
 }
