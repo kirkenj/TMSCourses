@@ -1,5 +1,4 @@
 ﻿using _15.Models.Enums;
-using _15.Models.Structs;
 
 namespace _15.Models.Interfaces
 {

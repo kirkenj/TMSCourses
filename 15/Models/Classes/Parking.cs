@@ -116,6 +116,5 @@ namespace _15.Models.Classes
             BinaryFormatter binaryFormatter = new();
             return (Parking)binaryFormatter.Deserialize(fileStream);
         }
-    
     }
 }

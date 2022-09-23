@@ -1,8 +1,6 @@
 ﻿using _15.Models.Classes;
 using _15.ViewModels;
 
-
-
 Parking parking;
 string serPath = "meow.txt";
 string logPath = "meowLog.txt";
@@ -27,6 +25,3 @@ parking.CarValueChangedEvent += (prev, car) =>
 
 var menu = new MainMenu(parking, new FileStream(logPath, FileMode.OpenOrCreate));
 menu.Start();
-
-
-
