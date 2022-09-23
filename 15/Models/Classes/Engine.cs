@@ -8,9 +8,6 @@ namespace _15.Models.Classes
     [Serializable]
     public class Engine : IEngine
     {
-        [NonSerialized]
-        private static readonly Fuel[] _fuelTypes = Enum.GetValues(typeof(Fuel)).Cast<Fuel>().ToArray();
-
         public Fuel Fuel { get; set; } = 0;
 
         public int Power { get; set; } = 0;
@@ -31,7 +28,7 @@ namespace _15.Models.Classes
 
         }
 
-        public EngineStruct GetStruct() => new EngineStruct() { Fuel = this.Fuel, Power = this.Power };
+        public EngineStruct GetStruct() => new() { Fuel = this.Fuel, Power = this.Power };
         public override string ToString() => $"Power: {Power}, Fuel: {Fuel}";
     }
 }

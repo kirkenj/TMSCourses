@@ -66,7 +66,17 @@ namespace _15.Models.Classes
 
         public Car(Fuel fuel, int enginePower, int tankCapacity, string identifier) : this(new Engine(fuel, enginePower), tankCapacity, identifier) { }
 
-        public Car(CarStruct carStruct) : this(new Engine(carStruct.Fuel, carStruct.EnginePower), carStruct.FuelTankCapacity, carStruct.Identifier) { }
+        public Car(CarStruct? carStruct) 
+        {
+            if (carStruct == null)
+            {
+                throw new ArgumentNullException(nameof(carStruct));
+            }
+
+            Engine = new Engine(carStruct.Value.Fuel, carStruct.Value.EnginePower);
+            FuelTankCapacity = carStruct.Value.FuelTankCapacity;
+            Identifier = carStruct.Value.Identifier;
+        }
 
         public Car(Engine engine, int tankCapacity, string identifier)
         {
@@ -104,7 +114,15 @@ namespace _15.Models.Classes
         }
 
         public void Edit(Fuel fuel, int enginePower, int tankCapacity, string identifier) => Edit(new Engine(fuel, enginePower), tankCapacity, identifier);
-        public void Edit(CarStruct carStruct) => Edit(carStruct.Fuel, carStruct.EnginePower, carStruct.FuelTankCapacity, carStruct.Identifier);
+        public void Edit(CarStruct? carStruct)
+        {
+            if (carStruct == null) 
+            {
+                throw new ArgumentNullException(nameof(carStruct)); 
+            }
+
+            Edit(carStruct.Value.Fuel, carStruct.Value.EnginePower, carStruct.Value.FuelTankCapacity, carStruct.Value.Identifier);
+        }
         public CarStruct GetStruct() => new() { Engine = Engine?.GetStruct() ?? throw new ArgumentNullException(nameof(Engine)), FuelLevel = FuelLevel, FuelTankCapacity = FuelTankCapacity, Identifier = Identifier }; 
         public override string ToString() => $"Identifier: \"{Identifier}\", {Engine ?? throw new ArgumentNullException(nameof(Engine))}, Fuel tank capacity: {FuelTankCapacity}, Fuel level: {FuelLevel}";
     }

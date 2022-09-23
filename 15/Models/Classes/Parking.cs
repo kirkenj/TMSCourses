@@ -37,7 +37,7 @@ namespace _15.Models.Classes
         }
 
         #region EditCar
-        public void EditCar(Car car, CarStruct values)
+        public void EditCar(Car car, CarStruct? values)
         {
             var prevVal = car.GetStruct();
             car.Edit(values);
@@ -107,7 +107,7 @@ namespace _15.Models.Classes
         public void SerializeJson(FileStream fileStream) => JsonSerializer.Serialize(fileStream, this);
         public void SerializeXML(FileStream fileStream)
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(Parking));
+            XmlSerializer serializer = new (typeof(Parking));
             serializer.Serialize(fileStream, this);
         }
 

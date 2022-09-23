@@ -196,12 +196,12 @@ namespace _15.ViewModels
             }
         }
 
-        public static CarStruct InputCarValues()
+        public static CarStruct? InputCarValues()
         {
             var fuel = SeletctItemFromArray("Select fuel", _fuels);
             if (fuel == default)
             {
-                return default;
+                return null;
             }
 
             var power = ReadIntFromConsole("Input engine's power", 0, int.MaxValue);
@@ -215,6 +215,11 @@ namespace _15.ViewModels
         private void AddCar()
         {
             var values = InputCarValues();
+            if (values == null)
+            {
+                return;
+            }
+
             var car = new Car(values);
             parking.AddCar(car);
         }
