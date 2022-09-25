@@ -94,7 +94,7 @@ namespace _15.Models.Classes
 
         public override string ToString() => string.Join("\n", _cars);
         public delegate void CarValueChanged(CarStruct? prevValue, Car? newValue);
-    
+
         public void SerializeBin(FileStream fileStream)
         {
             BinaryFormatter binaryFormatter = new();

@@ -1,0 +1,39 @@
+﻿@using _15.Models.Classes
+@{
+    ViewData["Title"] = "Home Page";
+    var cars = (Car[])ViewData["Cars"] ?? new Car[] {};
+    var exception = ViewData["exception"] == null ? null : (Exception)ViewData["exception"];
+}
+
+@{
+    if (exception != null)
+    {
+        <b>@exception.Message</b>
+        ViewData["exception"] = null;
+     }
+}
+
+<table>
+    <tr>
+        <th>Index</th>
+        <th>Identifier</th>
+        <th>Engine power</th>
+        <th>Fuel</th>
+        <th>Tank capacity</th>
+        <th>Fuel level</th>
+    </tr>
+    @{
+        for (int i = 0; i < cars.Length; i++)
+        {
+            var car = cars[i];
+            <tr>
+                <td>@i</td>
+                <td>@car.Identifier</td>
+                <td>@car.EnginePower</td>
+                <td>@car.Fuel</td>
+                <td>@car.FuelTankCapacity</td>
+                <td>@car.FuelLevel</td>
+            </tr>
+        }
+    }
+</table>
