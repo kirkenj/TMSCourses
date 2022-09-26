@@ -21,6 +21,10 @@
         <th>Fuel</th>
         <th>Tank capacity</th>
         <th>Fuel level</th>
+        <th>Edit car</th>
+        <th>Remove car</th>
+        <th>Send for a ride</th>
+        <th>Fill tank</th>
     </tr>
     @{
         for (int i = 0; i < cars.Length; i++)
@@ -33,6 +37,10 @@
                 <td>@car.Fuel</td>
                 <td>@car.FuelTankCapacity</td>
                 <td>@car.FuelLevel</td>
+                <td>@Html.ActionLink("Edit", "EditCar", new{index = i}, null)</td>
+                <td>@Html.ActionLink("Remove", "RemoveCar", new{index = i}, null)</td>
+                <td>@Html.ActionLink("Send", "SendCarForARide", new{index = i}, null)</td>
+                <td>@Html.ActionLink("Fill", "FillCarTank", new{index = i}, null)</td>
             </tr>
         }
     }

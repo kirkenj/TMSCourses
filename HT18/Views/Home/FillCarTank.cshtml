@@ -1,0 +1,32 @@
+﻿@using _15.Models.Enums
+@model _15.Models.Classes.Car
+
+@{
+    <table>
+        <tr>
+            <td><input name = "index" hidden="hidden" value = @ViewData["index"]></td>
+        </tr>
+        <tr>
+            <td>Fuel - @Model.Fuel</td>
+        </tr>
+        <tr>
+            <td>Engine Power - @Model.EnginePower</td>
+        </tr>
+        <tr>
+            <td>Identifier - @Model.Identifier</td>
+        </tr>
+        <tr>
+            <td>Fuel tank capacity - @Model.FuelTankCapacity</td>
+        </tr>
+        <tr>
+            <td>Fuel level - @Model.FuelLevel</td>
+        </tr>
+    </table>
+<form method = "post">
+
+    Add volume 
+    <input name = "volume"/>
+    <button type = "submit">Save</button>
+</form>
+}
+

@@ -23,7 +23,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HT12GenTree", "HT12GenTree\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestProjectForHT12", "TestProjectForHT12\TestProjectForHT12.csproj", "{E348AE0E-3A03-40FF-95A4-B675138F5997}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HT18", "HT18\HT18.csproj", "{3FE05EF2-B112-4F87-B57E-34DB30B8E19E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HT18", "HT18\HT18.csproj", "{3FE05EF2-B112-4F87-B57E-34DB30B8E19E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

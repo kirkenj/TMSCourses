@@ -1,5 +1,4 @@
 ﻿using _15.Models.Enums;
-using static testRepo.Programm;
 using _15.Models.Interfaces;
 using _15.Models.Structs;
 
@@ -12,7 +11,27 @@ namespace _15.Models.Classes
         public Engine? Engine { get; set; } = default;
         public int FuelTankCapacity { get; set; } = 0;
         public string Identifier { get; set; } = string.Empty;
-        public int FuelLevel { get; set; } = 0;        
+        public int FuelLevel 
+        { 
+            get => _fuelLevel; 
+            set 
+            {
+                if (value < 0)
+                {
+                    throw new ArgumentException(nameof(value));
+                }
+
+                if (value > FuelTankCapacity) 
+                {
+                    _fuelLevel = FuelTankCapacity;
+                }
+                else
+                {
+                    _fuelLevel = value;
+                }
+            } 
+        }
+        private int _fuelLevel = 0;
         public Fuel Fuel => Engine?.Fuel ?? throw new ArgumentNullException(nameof(Engine));
         public int EnginePower => Engine?.Power ?? throw new ArgumentNullException(nameof(Engine));
 
@@ -96,7 +115,7 @@ namespace _15.Models.Classes
             Identifier = identifier.Trim();
         }
 
-        public void Edit(Engine engine, int tankCapacity, string identifier)
+        public void Edit(Engine engine, int tankCapacity, string identifier, int fuelLevel = 0)
         {
             Engine = engine ?? throw new ArgumentNullException(nameof(engine));
             if (tankCapacity < 0)
@@ -111,9 +130,10 @@ namespace _15.Models.Classes
             }
 
             Identifier = identifier.Trim();
+            FuelLevel = fuelLevel;
         }
 
-        public void Edit(Fuel fuel, int enginePower, int tankCapacity, string identifier) => Edit(new Engine(fuel, enginePower), tankCapacity, identifier);
+        public void Edit(Fuel fuel, int enginePower, int tankCapacity, string identifier, int fuelLevel = 0) => Edit(new Engine(fuel, enginePower), tankCapacity, identifier, fuelLevel);
         public void Edit(CarStruct? carStruct)
         {
             if (carStruct == null) 
@@ -121,7 +141,7 @@ namespace _15.Models.Classes
                 throw new ArgumentNullException(nameof(carStruct)); 
             }
 
-            Edit(carStruct.Value.Fuel, carStruct.Value.EnginePower, carStruct.Value.FuelTankCapacity, carStruct.Value.Identifier);
+            Edit(new Engine(carStruct.Value.Fuel, carStruct.Value.EnginePower), carStruct.Value.FuelTankCapacity, carStruct.Value.Identifier, carStruct.Value.FuelLevel);
         }
         public CarStruct GetStruct() => new() { Engine = Engine?.GetStruct() ?? throw new ArgumentNullException(nameof(Engine)), FuelLevel = FuelLevel, FuelTankCapacity = FuelTankCapacity, Identifier = Identifier }; 
         public override string ToString() => $"Identifier: \"{Identifier}\", {Engine ?? throw new ArgumentNullException(nameof(Engine))}, Fuel tank capacity: {FuelTankCapacity}, Fuel level: {FuelLevel}";

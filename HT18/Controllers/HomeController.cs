@@ -1,5 +1,6 @@
 ﻿using _15.Models.Classes;
 using _15.Models.Enums;
+using _15.Models.Structs;
 using HT18.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -32,7 +33,14 @@ namespace HT18.Controllers
             return View();
         }
 
-        public IActionResult AddCar(string identifier, Fuel fuel, int enginePower, int tankCapacity)
+        [HttpGet]
+        public IActionResult CreateCar() 
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult CreateCar(string identifier, Fuel fuel, int enginePower, int tankCapacity)
         {
             try
             {
@@ -61,6 +69,61 @@ namespace HT18.Controllers
             return Redirect("Index");
         }
 
+        [HttpGet]
+        public IActionResult EditCar(int index)
+        {
+            try
+            {
+                ViewData["index"] = index;
+                return View(_parking.Cars[index]);
+            }
+            catch (Exception ex)
+            {
+                currentException = ex;
+            }
+
+            return Redirect("Index");
+        }
+
+        [HttpPost]
+        public IActionResult EditCar(int index, string identifier, Fuel fuel, int enginePower, int tankCapacity, int fuelLevel)
+        {
+            try
+            {
+                var strct = new CarStruct()
+                {
+                    Engine = new EngineStruct() { Fuel = fuel, Power = enginePower },
+                    Identifier = identifier,
+                    FuelTankCapacity = tankCapacity,
+                    FuelLevel = fuelLevel,
+                };
+                _parking.EditCar(_parking.Cars[index], strct);
+            }
+            catch (Exception ex)
+            {
+                currentException = ex;
+            }
+
+            return Redirect("Index");
+        }
+
+        [HttpGet]
+        public IActionResult FIllCarTank(int index)
+        {
+            try
+            {
+                ViewData["index"] = index;
+                return View(_parking.Cars[index]);
+            }
+            catch (Exception ex)
+            {
+                currentException = ex;
+            }
+
+            return Redirect("Index");
+        }
+
+        [HttpPost]
         public IActionResult FillCarTank(int index, int volume)
         {
             try
