@@ -40,11 +40,12 @@ namespace HT18.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateCar(string identifier, Fuel fuel, int enginePower, int tankCapacity)
+        public IActionResult CreateCar(string identifier, Fuel fuel, int enginePower, int tankCapacity, int fuelLevel)
         {
             try
             {
                 var car = new Car(fuel, enginePower, tankCapacity, identifier);
+                car.FuelLevel = fuelLevel;
                 _parking.AddCar(car);
             }
             catch (Exception ex)

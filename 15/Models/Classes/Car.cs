@@ -83,7 +83,7 @@ namespace _15.Models.Classes
 
         public Car() { }
 
-        public Car(Fuel fuel, int enginePower, int tankCapacity, string identifier) : this(new Engine(fuel, enginePower), tankCapacity, identifier) { }
+        public Car(Fuel fuel, int enginePower, int tankCapacity, string identifier, int fuelLevel = 0) : this(new Engine(fuel, enginePower), tankCapacity, identifier, fuelLevel) { }
 
         public Car(CarStruct? carStruct) 
         {
@@ -95,9 +95,10 @@ namespace _15.Models.Classes
             Engine = new Engine(carStruct.Value.Fuel, carStruct.Value.EnginePower);
             FuelTankCapacity = carStruct.Value.FuelTankCapacity;
             Identifier = carStruct.Value.Identifier;
+            FuelLevel = carStruct.Value.FuelLevel;
         }
 
-        public Car(Engine engine, int tankCapacity, string identifier)
+        public Car(Engine engine, int tankCapacity, string identifier, int fuelLevel = 0)
         {
             Engine = engine ?? throw new ArgumentNullException(nameof(engine));
             if (tankCapacity < 0)
@@ -111,7 +112,7 @@ namespace _15.Models.Classes
                 throw new ArgumentNullException(nameof(identifier));
             }
 
-            FuelLevel = 0;
+            FuelLevel = fuelLevel;
             Identifier = identifier.Trim();
         }
 
