@@ -10,7 +10,6 @@ namespace HT18.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private static Exception? currentException;
         private static readonly Parking _parking = new()
         {
             Cars = new[] {new Car(Fuel.Disel, 2000, 3000, "Mercedes"), new Car(Fuel.Disel, 1000, 3000, "Toyota"), new Car(Fuel.Disel, 4000, 3000, "BMW") } 
@@ -23,12 +22,6 @@ namespace HT18.Controllers
 
         public IActionResult Index()
         {
-            if (currentException != null)
-            {
-                ViewData["exception"] = currentException;
-                currentException = null;
-            }
-
             ViewData["Cars"] = _parking.Cars;
             return View();
         }
@@ -42,8 +35,10 @@ namespace HT18.Controllers
         [HttpPost]
         public IActionResult CreateCar(string identifier, Fuel fuel, int enginePower, int tankCapacity, int fuelLevel)
         {
-            var car = new Car(fuel, enginePower, tankCapacity, identifier);
-            car.FuelLevel = fuelLevel;
+            var car = new Car(fuel, enginePower, tankCapacity, identifier)
+            {
+                FuelLevel = fuelLevel
+            };
             _parking.AddCar(car);
             return Redirect("Index");
         }
