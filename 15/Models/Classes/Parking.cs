@@ -20,6 +20,7 @@ namespace _15.Models.Classes
             }
         }
 
+        [field: NonSerialized]
         public event CarValueChanged? CarValueChangedEvent;
 
         public Parking()
@@ -98,12 +99,9 @@ namespace _15.Models.Classes
         public void SerializeBin(FileStream fileStream)
         {
             BinaryFormatter binaryFormatter = new();
-            var events = this.CarValueChangedEvent;
-            this.CarValueChangedEvent = null;
             binaryFormatter.Serialize(fileStream, this);
-            this.CarValueChangedEvent = events;
         }
-    
+
         public void SerializeJson(FileStream fileStream) => JsonSerializer.Serialize(fileStream, this);
         public void SerializeXML(FileStream fileStream)
         {
