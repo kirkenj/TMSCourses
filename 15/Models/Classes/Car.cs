@@ -18,7 +18,7 @@ namespace _15.Models.Classes
             {
                 if (value < 0)
                 {
-                    throw new ArgumentException(nameof(value));
+                    throw new ArgumentException("Value can not be less 0",nameof(value));
                 }
 
                 if (value > FuelTankCapacity) 
@@ -53,6 +53,11 @@ namespace _15.Models.Classes
             if (fuel != this.Engine.Fuel)
             {
                 throw new ArgumentException("Invalid Fuel");
+            }
+
+            if (fuelVolume < 0)
+            {
+                throw new ArgumentException("Value can not be less 0", nameof(fuelVolume));
             }
 
             int freeTankVolume = FuelTankCapacity - FuelLevel;

@@ -42,114 +42,56 @@ namespace HT18.Controllers
         [HttpPost]
         public IActionResult CreateCar(string identifier, Fuel fuel, int enginePower, int tankCapacity, int fuelLevel)
         {
-            try
-            {
-                var car = new Car(fuel, enginePower, tankCapacity, identifier);
-                car.FuelLevel = fuelLevel;
-                _parking.AddCar(car);
-            }
-            catch (Exception ex)
-            {
-                currentException = ex;
-            }
-
+            var car = new Car(fuel, enginePower, tankCapacity, identifier);
+            car.FuelLevel = fuelLevel;
+            _parking.AddCar(car);
             return Redirect("Index");
         }
 
         public IActionResult RemoveCar(int index)
         {
-            try
-            {
-                _parking.RemoveCar(_parking.Cars[index]);
-            }
-            catch (Exception ex)
-            {
-                currentException = ex;
-            }
-
+            _parking.RemoveCar(_parking.Cars[index]);
             return Redirect("Index");
         }
 
         [HttpGet]
         public IActionResult EditCar(int index)
         {
-            try
-            {
-                ViewData["index"] = index;
-                return View(_parking.Cars[index]);
-            }
-            catch (Exception ex)
-            {
-                currentException = ex;
-            }
-
-            return Redirect("Index");
+            ViewData["index"] = index;
+            return View(_parking.Cars[index]);
         }
 
         [HttpPost]
         public IActionResult EditCar(int index, string identifier, Fuel fuel, int enginePower, int tankCapacity, int fuelLevel)
         {
-            try
+            var strct = new CarStruct()
             {
-                var strct = new CarStruct()
-                {
-                    Engine = new EngineStruct() { Fuel = fuel, Power = enginePower },
-                    Identifier = identifier,
-                    FuelTankCapacity = tankCapacity,
-                    FuelLevel = fuelLevel,
-                };
-                _parking.EditCar(_parking.Cars[index], strct);
-            }
-            catch (Exception ex)
-            {
-                currentException = ex;
-            }
-
+                Engine = new EngineStruct() { Fuel = fuel, Power = enginePower },
+                Identifier = identifier,
+                FuelTankCapacity = tankCapacity,
+                FuelLevel = fuelLevel,
+            };
+            _parking.EditCar(_parking.Cars[index], strct);
             return Redirect("Index");
         }
 
         [HttpGet]
         public IActionResult FIllCarTank(int index)
         {
-            try
-            {
-                ViewData["index"] = index;
-                return View(_parking.Cars[index]);
-            }
-            catch (Exception ex)
-            {
-                currentException = ex;
-            }
-
-            return Redirect("Index");
+            ViewData["index"] = index;
+            return View(_parking.Cars[index]);
         }
 
         [HttpPost]
         public IActionResult FillCarTank(int index, int volume)
         {
-            try
-            {
-                _parking.FillCarTank(_parking.Cars[index], volume);
-            }
-            catch (Exception ex)
-            {
-                currentException = ex;
-            }
-
+            _parking.FillCarTank(_parking.Cars[index], volume);
             return Redirect("Index");
         }
 
         public IActionResult SendCarForARide(int index)
         {
-            try
-            {
-                _parking.SendCarForARide(_parking.Cars[index]);
-            }
-            catch (Exception ex)
-            {
-                currentException = ex;
-            }
-
+            _parking.SendCarForARide(_parking.Cars[index]);
             return Redirect("Index");
         }
 
