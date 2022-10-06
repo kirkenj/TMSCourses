@@ -1,12 +1,13 @@
-﻿using System.Text;
+﻿using _15.Models.Exceptions;
+using System.Text;
 
 namespace HT18.Middlewares
 {
-    public class ArgumentExceptionMiddleware
+    public class MissingValueExceptionMiddleware
     {
         private readonly RequestDelegate _next;
 
-        public ArgumentExceptionMiddleware(RequestDelegate next)
+        public MissingValueExceptionMiddleware(RequestDelegate next)
         {
             _next = next;
         }
@@ -18,9 +19,9 @@ namespace HT18.Middlewares
             {
                 await _next(context);
             }
-            catch (ArgumentException ex)
+            catch (MissingValueException ex)
             {
-                context.Response.Body.Write(Encoding.UTF8.GetBytes("ArgumentException:\n" + ex.Message));
+                context.Response.Body.Write(Encoding.UTF8.GetBytes("MissingValueException:\n" + ex.Message));
             }
         }
     }

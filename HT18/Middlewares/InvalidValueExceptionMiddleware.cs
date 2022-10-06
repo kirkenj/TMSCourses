@@ -1,12 +1,13 @@
-﻿using System.Text;
+﻿using _15.Models.Exceptions;
+using System.Text;
 
 namespace HT18.Middlewares
 {
-    public class ArgumentNullExceptionMiddleware
+    public class InvalidValueExceptionMiddleware
     {
         private readonly RequestDelegate _next;
 
-        public ArgumentNullExceptionMiddleware(RequestDelegate next)
+        public InvalidValueExceptionMiddleware(RequestDelegate next)
         {
             _next = next;
         }
@@ -18,9 +19,9 @@ namespace HT18.Middlewares
             {
                 await _next(context);
             }
-            catch (ArgumentNullException ex)
+            catch (InvalidValueException ex)
             {
-                context.Response.Body.Write(Encoding.UTF8.GetBytes("ArgumentNullException:\n" + ex.Message));
+                context.Response.Body.Write(Encoding.UTF8.GetBytes("InvalidValueException:\n" + ex.Message));
             }
         }
     }

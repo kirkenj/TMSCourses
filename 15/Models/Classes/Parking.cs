@@ -30,7 +30,7 @@ namespace _15.Models.Classes
 
         public void AddCar(Car car)
         {
-            if (!car.Equals(default))
+            if (car != null)
             {
                 _cars.Add(car);
                 CarValueChangedEvent?.Invoke(null, car);
@@ -40,6 +40,11 @@ namespace _15.Models.Classes
         #region EditCar
         public void EditCar(Car car, CarStruct? values)
         {
+            if (car == null)
+            {
+                return;
+            }
+
             var prevVal = car.GetStruct();
             car.Edit(values);
             CarValueChangedEvent?.Invoke(prevVal, car);
@@ -47,7 +52,7 @@ namespace _15.Models.Classes
 
         public void EditCar(Car car, Fuel fuel, int enginePower, int tankCapacity, string identifier)
         {
-            if (car.Equals(default))
+            if (car == null)
             {
                 return;
             }
@@ -60,7 +65,7 @@ namespace _15.Models.Classes
 
         public void RemoveCar(Car car)
         {
-            if (!car.Equals(null))
+            if (car != null)
             {
                 _cars.Remove(car); 
                 CarValueChangedEvent?.Invoke(car.GetStruct(), null);
@@ -69,7 +74,7 @@ namespace _15.Models.Classes
 
         public void SendCarForARide(Car car)
         {
-            if (car.Equals(default) || !_cars.Contains(car))
+            if (car == null || !_cars.Contains(car))
             {
                 return;
             }
@@ -81,7 +86,7 @@ namespace _15.Models.Classes
 
         public int FillCarTank(Car car, int volume)
         {
-            if (car.Equals(default))
+            if (car == null)
             {
                 return volume;
             }

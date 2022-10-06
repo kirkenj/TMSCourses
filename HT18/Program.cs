@@ -15,9 +15,9 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseMiddleware<ArgumentExceptionMiddleware>();
-app.UseMiddleware<ArgumentNullExceptionMiddleware>();
-app.UseMiddleware<ArgumentOutOfRangeExceptionMiddleware>();
+app.UseMiddleware<InvalidValueExceptionMiddleware>();
+app.UseMiddleware<MissingValueExceptionMiddleware>();
+app.UseMiddleware<FuelExceptionMiddleware>();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 

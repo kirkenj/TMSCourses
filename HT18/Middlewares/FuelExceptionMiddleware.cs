@@ -1,12 +1,13 @@
-﻿using System.Text;
+﻿using _15.Models.Exceptions;
+using System.Text;
 
 namespace HT18.Middlewares
 {
-    public class ArgumentOutOfRangeExceptionMiddleware
+    public class FuelExceptionMiddleware
     {
         private readonly RequestDelegate _next;
 
-        public ArgumentOutOfRangeExceptionMiddleware(RequestDelegate next)
+        public FuelExceptionMiddleware(RequestDelegate next)
         {
             _next = next;
         }
@@ -18,9 +19,9 @@ namespace HT18.Middlewares
             {
                 await _next(context);
             }
-            catch (ArgumentOutOfRangeException ex)
+            catch (FuelException ex)
             {
-                context.Response.Body.Write(Encoding.UTF8.GetBytes("ArgumentOutOfRangeException:\n" + ex.Message));
+                context.Response.Body.Write(Encoding.UTF8.GetBytes("FuelException:\n" + ex.Message));
             }
         }
     }
