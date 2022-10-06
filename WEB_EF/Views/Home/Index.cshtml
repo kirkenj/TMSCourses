@@ -1,0 +1,17 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome to the autopark</h1>
+    <p><b>Clients</b></p>    
+    @{
+        if (ViewData["Names"] != null && ViewData["Names"] is List<string> names)
+        {
+            foreach (var name in names)
+            {
+                <p>@name</p>    
+            }
+        }
+    }
+</div>

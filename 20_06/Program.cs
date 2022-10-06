@@ -282,11 +282,11 @@ class Programm1
         {
             try
             {
-                option = (MenuItemSelection)PrintMessageAndGetValueInRange(MAIN_MENU, 0, 9);
+                option = (MenuItemSelection)ReadIntFromConsole(MAIN_MENU, 0, 9);
                 switch (option)
                 {
                     case 0:
-                        textInputOption = PrintMessageAndGetValueInRange(TEXT_INPUT_MENU, 1, 3);
+                        textInputOption = ReadIntFromConsole(TEXT_INPUT_MENU, 1, 3);
                         string inpText;
 
                         switch (textInputOption)
