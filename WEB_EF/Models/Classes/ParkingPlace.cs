@@ -11,6 +11,7 @@ namespace WEB_EF.Models.Classes
         }
 
         public int Id { get; set; }
+        public bool IsDeleted { get; set; }
         public int CarType { get; set; }
 
         public virtual CarType CarTypeNavigation { get; set; } = null!;

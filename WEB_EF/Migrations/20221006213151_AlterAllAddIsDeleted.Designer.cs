@@ -12,8 +12,8 @@ using WEB_EF.Models.DBContexts;
 namespace WEB_EF.Migrations
 {
     [DbContext(typeof(AutoparkContext))]
-    [Migration("20221006210146_AlterUserAddPhoneNumber")]
-    partial class AlterUserAddPhoneNumber
+    [Migration("20221006213151_AlterAllAddIsDeleted")]
+    partial class AlterAllAddIsDeleted
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -39,6 +39,12 @@ namespace WEB_EF.Migrations
                     b.Property<int>("ClientId")
                         .HasColumnType("int")
                         .HasColumnName("ClientID");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false)
+                        .HasColumnName("IsDeleted");
 
                     b.Property<string>("RegNumber")
                         .IsRequired()
@@ -67,6 +73,12 @@ namespace WEB_EF.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false)
+                        .HasColumnName("IsDeleted");
+
                     b.Property<string>("TypeName")
                         .IsRequired()
                         .HasMaxLength(10)
@@ -88,6 +100,12 @@ namespace WEB_EF.Migrations
                         .HasColumnName("ID");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false)
+                        .HasColumnName("IsDeleted");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -134,6 +152,12 @@ namespace WEB_EF.Migrations
                     b.Property<DateTime?>("DepartureDate")
                         .HasColumnType("datetime");
 
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false)
+                        .HasColumnName("IsDeleted");
+
                     b.Property<int>("ParkingPlace")
                         .HasColumnType("int");
 
@@ -157,6 +181,12 @@ namespace WEB_EF.Migrations
 
                     b.Property<int>("CarType")
                         .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false)
+                        .HasColumnName("IsDeleted");
 
                     b.HasKey("Id");
 

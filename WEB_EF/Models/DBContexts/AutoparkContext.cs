@@ -28,7 +28,7 @@ namespace WEB_EF.Models.DBContexts
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=DESKTOP-9VGHPR7\\SQLEXPRESS;Database=Autopark;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("Server=DESKTOP-9VGHPR7\\SQLEXPRESS;Database=AutoparkCF;Trusted_Connection=True;");
             }
         }
 
@@ -53,6 +53,7 @@ namespace WEB_EF.Models.DBContexts
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Cars_CarTypes");
 
+                entity.Property(e => e.IsDeleted).HasColumnName("IsDeleted").HasDefaultValue(false);
                 entity.HasOne(d => d.Client)
                     .WithMany(p => p.Cars)
                     .HasForeignKey(d => d.ClientId)
@@ -67,6 +68,7 @@ namespace WEB_EF.Models.DBContexts
 
                 entity.Property(e => e.Id).HasColumnName("ID");
 
+                entity.Property(e => e.IsDeleted).HasColumnName("IsDeleted").HasDefaultValue(false);
                 entity.Property(e => e.TypeName).HasMaxLength(10);
             });
 
@@ -82,6 +84,7 @@ namespace WEB_EF.Models.DBContexts
                 entity.Property(e => e.Name).HasMaxLength(50);
 
                 entity.Property(e => e.Surname).HasMaxLength(50);
+                entity.Property(e => e.IsDeleted).HasColumnName("IsDeleted").HasDefaultValue(false);
             });
 
             modelBuilder.Entity<Journal>(entity =>
@@ -95,6 +98,7 @@ namespace WEB_EF.Models.DBContexts
                 entity.Property(e => e.ComingDate).HasColumnType("datetime");
 
                 entity.Property(e => e.DepartureDate).HasColumnType("datetime");
+                entity.Property(e => e.IsDeleted).HasColumnName("IsDeleted").HasDefaultValue(false);
 
                 entity.HasOne(d => d.Car)
                     .WithMany(p => p.Journals)
@@ -112,6 +116,7 @@ namespace WEB_EF.Models.DBContexts
             modelBuilder.Entity<ParkingPlace>(entity =>
             {
                 entity.Property(e => e.Id).HasColumnName("ID");
+                entity.Property(e => e.IsDeleted).HasColumnName("IsDeleted").HasDefaultValue(false);
 
                 entity.HasOne(d => d.CarTypeNavigation)
                     .WithMany(p => p.ParkingPlaces)
