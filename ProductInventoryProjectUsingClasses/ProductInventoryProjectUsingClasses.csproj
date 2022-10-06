@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ClassLibraryForHT9\ClassLibraryForHT9.csproj" />
-    <ProjectReference Include="..\testRepo\testRepo.csproj" />
+    <ProjectReference Include="..\testRepo\HT1.csproj" />
   </ItemGroup>
 
 </Project>
