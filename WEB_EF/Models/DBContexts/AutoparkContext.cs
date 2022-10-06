@@ -77,6 +77,8 @@ namespace WEB_EF.Models.DBContexts
 
                 entity.Property(e => e.Id).HasColumnName("ID");
 
+                entity.Property(e => e.PhoneNumber).HasMaxLength(10).HasColumnName("PhoneNumber").HasDefaultValue("Undefined");
+
                 entity.Property(e => e.Name).HasMaxLength(50);
 
                 entity.Property(e => e.Surname).HasMaxLength(50);
