@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using WEB_EF.Models.Classes;
 using WEB_EF.Models.DBContexts;
 
 namespace WEB_EF.Controllers
@@ -11,6 +12,8 @@ namespace WEB_EF.Controllers
         // GET: ClientsController
         public ActionResult Index()
         {
+            Dictionary<string, (string, int)> dict = context.CarTypes.Where(c => !c.IsDeleted).Select(c => new { c.TypeName, c.ParkingPlaces.Where(p=>!p.IsDeleted).ToList().Count }).ToList().Select(c => ( c.TypeName, c.Count)).ToList().ToDictionary(d => d.TypeName);
+            ViewData["dict"] = dict;
             return View(context.CarTypes.Where(j => !j.IsDeleted));
         }
 
@@ -68,7 +71,7 @@ namespace WEB_EF.Controllers
             {
                 var obj = context.CarTypes.First(ct => !ct.IsDeleted && ct.Id == id);
                 var tName = collection["TypeName"].ToString().Trim();
-                if (context.CarTypes.Any(ct=>ct.TypeName == collection["TypeName"].ToString().Trim()))
+                if (context.CarTypes.Any(ct=>ct.Id != id && ct.TypeName == collection["TypeName"].ToString().Trim()))
                 {
                     ViewData["Message"] = $"This value({tName}) already excists";
                     return View(obj);

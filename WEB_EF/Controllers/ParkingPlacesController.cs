@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WEB_EF.Models.DBContexts;
+using WEB_EF.Models.Classes;
 
 namespace WEB_EF.Controllers
 {
@@ -11,18 +12,14 @@ namespace WEB_EF.Controllers
         // GET: ClientsController
         public ActionResult Index()
         {
+            ViewData["CarTypes"] = context.CarTypes.Where(ct => !ct.IsDeleted).ToList();
             return View(context.ParkingPlaces.Where(j => !j.IsDeleted).ToList());
-        }
-
-        // GET: ClientsController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
         }
 
         // GET: ClientsController/Create
         public ActionResult Create()
         {
+            ViewData["CarTypes"] = context.CarTypes.Where(ct=>!ct.IsDeleted).ToList();
             return View();
         }
 
@@ -33,18 +30,32 @@ namespace WEB_EF.Controllers
         {
             try
             {
+                var carTypeStr = collection["CarType"];
+                if (string.IsNullOrEmpty(carTypeStr) || !int.TryParse(carTypeStr, out int carTypeId))
+                {
+                    ViewData["Message"] = "Invalid car type";
+                    return Create();
+                }
+
+                var parkingPlace = new ParkingPlace();
+                var carType = context.CarTypes.First(ct => !ct.IsDeleted && ct.Id == carTypeId);
+                parkingPlace.CarType = carType.Id;
+                parkingPlace.CarTypeNavigation = carType;
+                context.ParkingPlaces.Add(parkingPlace);
+                context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View();
+                return Create();
             }
         }
 
         // GET: ClientsController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            ViewData["CarTypes"] = context.CarTypes.Where(ct => !ct.IsDeleted).ToList();
+            return View(context.ParkingPlaces.First(p=>!p.IsDeleted && p.Id == id));
         }
 
         // POST: ClientsController/Edit/5
@@ -54,27 +65,33 @@ namespace WEB_EF.Controllers
         {
             try
             {
+                var carTypeStr = collection["CarType"];
+                if (string.IsNullOrEmpty(carTypeStr) || !int.TryParse(carTypeStr, out int carTypeId))
+                {
+                    ViewData["Message"] = "Invalid car type";
+                    return Edit(id);
+                }
+
+                var parkingPlace = context.ParkingPlaces.First(p => !p.IsDeleted && p.Id == id);
+                var carType = context.CarTypes.First(ct => !ct.IsDeleted && ct.Id == carTypeId);
+                parkingPlace.CarType = carType.Id;
+                parkingPlace.CarTypeNavigation = carType;
+                context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View();
+                return Edit(id);
             }
         }
 
-        // GET: ClientsController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: ClientsController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)
         {
             try
             {
+                var parkingPlace = context.ParkingPlaces.First(p => !p.IsDeleted && p.Id == id);
+                context.ParkingPlaces.Remove(context.ParkingPlaces.First(p=>!p.IsDeleted && p.Id == id));
+                context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
             catch

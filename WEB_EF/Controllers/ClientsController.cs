@@ -69,11 +69,11 @@ namespace WEB_EF.Controllers
             {
                 var name = collection["Name"].ToString();
                 var surname = collection["Surname"].ToString();
-                var fc = context.Clients.FirstOrDefault(c => c.Name == name && surname == c.Surname);
+                var fc = context.Clients.FirstOrDefault(c => c.Id != id && c.Name == name && surname == c.Surname);
                 if (fc != null)
                 {
                     ViewData["Message"] = $"Client {name} {surname} already excists";
-                    return View(fc);
+                    return Edit(id);
                 }
 
                 var obj = context.Clients.First(cl => !cl.IsDeleted && cl.Id == id);
@@ -97,10 +97,11 @@ namespace WEB_EF.Controllers
                 context.Clients.Remove(obj);
                 context.SaveChanges();
                 return RedirectToAction(nameof(Index));
+
             }
             catch
             {
-                return View();
+                return Index();
             }
         }
     }
