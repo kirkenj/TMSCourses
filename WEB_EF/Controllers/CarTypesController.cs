@@ -51,15 +51,13 @@ namespace WEB_EF.Controllers
         // GET: ClientsController/Edit/5
         public ActionResult Edit(int id)
         {
-            try
-            {
-                var obj = context.CarTypes.First(ct => ct.Id == id && !ct.IsDeleted);
-                return View(obj);
-            }
-            catch
+            var obj = context.CarTypes.FirstOrDefault(ct => ct.Id == id && !ct.IsDeleted);
+            if (obj == null)
             {
                 return RedirectToAction("Index");
             }
+
+            return View(obj);
         }
 
         // POST: ClientsController/Edit/5
@@ -69,7 +67,13 @@ namespace WEB_EF.Controllers
         {
             try
             {
-                var obj = context.CarTypes.First(ct => !ct.IsDeleted && ct.Id == id);
+                var obj = context.CarTypes.FirstOrDefault(ct => !ct.IsDeleted && ct.Id == id);
+                if (obj == null)
+                {
+                    ViewData["Message"] = $"Car not found";
+                    return View(obj);
+                }
+
                 var tName = collection["TypeName"].ToString().Trim();
                 if (context.CarTypes.Any(ct=>ct.Id != id && ct.TypeName == collection["TypeName"].ToString().Trim()))
                 {
@@ -93,9 +97,13 @@ namespace WEB_EF.Controllers
         {
             try
             {
-                var obj = context.CarTypes.First(ct => !ct.IsDeleted && ct.Id == id);
-                context.CarTypes.Remove(obj);
-                context.SaveChanges();
+                var obj = context.CarTypes.FirstOrDefault(ct => !ct.IsDeleted && ct.Id == id);
+                if (obj != null)
+                {
+                    context.CarTypes.Remove(obj);
+                    context.SaveChanges();
+                }
+
                 return RedirectToAction(nameof(Index));
             }
             catch

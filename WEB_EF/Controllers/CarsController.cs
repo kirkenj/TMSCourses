@@ -78,17 +78,15 @@ namespace WEB_EF.Controllers
 
         public ActionResult Edit(int id)
         {
-            try
-            {
-                var obj = context.Cars.First(ct => ct.Id == id && !ct.IsDeleted);
-                ViewData["Clients"] = context.Clients.Where(c => !c.IsDeleted).ToList();
-                ViewData["CarTypes"] = context.CarTypes.Where(c => !c.IsDeleted).ToList();
-                return View(obj);
-            }
-            catch
+            var obj = context.Cars.FirstOrDefault(ct => ct.Id == id && !ct.IsDeleted);
+            if (obj == null)
             {
                 return RedirectToAction("Index");
             }
+
+            ViewData["Clients"] = context.Clients.Where(c => !c.IsDeleted).ToList();
+            ViewData["CarTypes"] = context.CarTypes.Where(c => !c.IsDeleted).ToList();
+            return View(obj);
         }
 
         // POST: ClientsController/Edit/5

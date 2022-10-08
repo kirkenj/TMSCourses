@@ -12,6 +12,7 @@
     <h1 class="display-4">Car types</h1>    
 </div>
 @Html.ActionLink("Add", "Create")
+@(ViewData["Message"] ?? string.Empty)
     <table>
             <tr>
                 <th>ID</th>

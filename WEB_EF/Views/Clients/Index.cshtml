@@ -10,6 +10,8 @@
       
 </div>
 @Html.ActionLink("Add", "Create")
+@(ViewData["Message"] ?? string.Empty)
+
 <table>
     <tr>
         <th>Name</th>

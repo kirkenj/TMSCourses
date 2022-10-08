@@ -38,7 +38,13 @@ namespace WEB_EF.Controllers
                 }
 
                 var parkingPlace = new ParkingPlace();
-                var carType = context.CarTypes.First(ct => !ct.IsDeleted && ct.Id == carTypeId);
+                var carType = context.CarTypes.FirstOrDefault(ct => !ct.IsDeleted && ct.Id == carTypeId);
+                if (carType == null)
+                {
+                    ViewData["Message"] = "Car type not found";
+                    return Create();
+                }
+
                 parkingPlace.CarType = carType.Id;
                 parkingPlace.CarTypeNavigation = carType;
                 context.ParkingPlaces.Add(parkingPlace);
@@ -55,7 +61,13 @@ namespace WEB_EF.Controllers
         public ActionResult Edit(int id)
         {
             ViewData["CarTypes"] = context.CarTypes.Where(ct => !ct.IsDeleted).ToList();
-            return View(context.ParkingPlaces.First(p=>!p.IsDeleted && p.Id == id));
+            var place = context.ParkingPlaces.FirstOrDefault(p => !p.IsDeleted && p.Id == id);
+            if (place == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(place);
         }
 
         // POST: ClientsController/Edit/5
@@ -72,8 +84,20 @@ namespace WEB_EF.Controllers
                     return Edit(id);
                 }
 
-                var parkingPlace = context.ParkingPlaces.First(p => !p.IsDeleted && p.Id == id);
-                var carType = context.CarTypes.First(ct => !ct.IsDeleted && ct.Id == carTypeId);
+                var parkingPlace = context.ParkingPlaces.FirstOrDefault(p => !p.IsDeleted && p.Id == id);
+                if (parkingPlace == null)
+                {
+                    ViewData["Message"] = "Parking place not found";
+                    return Create();
+                }
+
+                var carType = context.CarTypes.FirstOrDefault(ct => !ct.IsDeleted && ct.Id == carTypeId); 
+                if (carType == null)
+                {
+                    ViewData["Message"] = "Car type not found";
+                    return Create();
+                }
+
                 parkingPlace.CarType = carType.Id;
                 parkingPlace.CarTypeNavigation = carType;
                 context.SaveChanges();
@@ -89,9 +113,13 @@ namespace WEB_EF.Controllers
         {
             try
             {
-                var parkingPlace = context.ParkingPlaces.First(p => !p.IsDeleted && p.Id == id);
-                context.ParkingPlaces.Remove(context.ParkingPlaces.First(p=>!p.IsDeleted && p.Id == id));
-                context.SaveChanges();
+                var parkingPlace = context.ParkingPlaces.FirstOrDefault(p => !p.IsDeleted && p.Id == id);
+                if (parkingPlace != null)
+                {
+                    context.ParkingPlaces.Remove(parkingPlace);
+                    context.SaveChanges();
+                }
+
                 return RedirectToAction(nameof(Index));
             }
             catch

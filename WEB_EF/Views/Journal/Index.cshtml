@@ -5,27 +5,51 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Journal</h1>    
-    @if (Model == null)
+@if (Model == null)
+{
+    throw new ArgumentNullException(nameof(Model));
+}
+@{
+    if (!(ViewData["Cars"] != null && ViewData["Cars"] is List<Car> cars))
     {
-        throw new ArgumentNullException(nameof(Model));
+        throw new ArgumentException("Cars");
     }
-    <table>
-            <tr>
-                <th>Registration number</th>
-                <th>Coming date</th>
-                <th>Parking place</th>
-                <th>Departure date</th>
-            </tr>
-            @for (int i = 0; i < Model.Count; i++)
-            {
-                <tr>
-                    <td>@Model[i].Car.RegNumber</td>
-                    <td>@Model[i].ComingDate</td>
-                    <td>@Model[i].ParkingPlaceNavigation.Id</td>
-                    <td>@Model[i].DepartureDate?.ToString() ?? ""</td>
-                </tr>
-            }
-    </table>    
+
+    if (!(ViewData["ParkingPlaces"] != null && ViewData["ParkingPlaces"] is List<ParkingPlace> parkingPlaces))
+    {
+        throw new ArgumentException("ParkingPlaces");
+    }
+
+    if (!(ViewData["CarTypes"] != null && ViewData["CarTypes"] is List<CarType> carTypes))
+    {
+        throw new ArgumentException("CarTypes");
+    }
+}
+
+<div class="text-center">
+    <h1 class="display-4">Journal</h1>         
 </div>
+
+@Html.ActionLink("Add", "Create")
+@(ViewData["Message"] ?? string.Empty)
+<table>
+    <tr>
+        <th>Registration number</th>
+        <th>Coming date</th>
+        <th>Parking place</th>
+        <th>Departure date</th>
+        <th>Edit</th>
+        <th>Delete</th>
+    </tr>
+    @for (int i = 0; i < Model.Count; i++)
+    {
+        <tr>
+            <td>@Html.DisplayFor(m=> Model[i].Car.RegNumber)</td>
+            <td>@Html.DisplayFor(m=> Model[i].ComingDate)</td>
+            <td>@Html.DisplayFor(m=> Model[i].ParkingPlaceNavigation.Id)</td>
+            <td>@Html.DisplayFor(m=> Model[i].DepartureDate)</td>
+            <td>@Html.ActionLink("Edit", "Edit", "Journal", new {id = Model[i].Id}, null)</td>
+            <td>@Html.ActionLink("Delete", "Delete", "Journal", new {id = Model[i].Id}, null)</td>
+        </tr>
+    }
+</table>   

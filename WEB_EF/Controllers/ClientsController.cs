@@ -49,15 +49,13 @@ namespace WEB_EF.Controllers
         // GET: ClientsController/Edit/5
         public ActionResult Edit(int id)
         {
-            try
-            {
-                var obj = context.Clients.First(ct => ct.Id == id && !ct.IsDeleted);
-                return View(obj);
-            }
-            catch
+            var obj = context.Clients.FirstOrDefault(ct => ct.Id == id && !ct.IsDeleted);
+            if (obj == null)
             {
                 return RedirectToAction("Index");
             }
+
+            return View(obj);
         }
 
         // POST: ClientsController/Edit/5
@@ -69,14 +67,18 @@ namespace WEB_EF.Controllers
             {
                 var name = collection["Name"].ToString();
                 var surname = collection["Surname"].ToString();
-                var fc = context.Clients.FirstOrDefault(c => c.Id != id && c.Name == name && surname == c.Surname);
-                if (fc != null)
+                if (context.Clients.Any(c => c.Id != id && c.Name == name && surname == c.Surname))
                 {
                     ViewData["Message"] = $"Client {name} {surname} already excists";
                     return Edit(id);
                 }
 
-                var obj = context.Clients.First(cl => !cl.IsDeleted && cl.Id == id);
+                var obj = context.Clients.FirstOrDefault(cl => !cl.IsDeleted && cl.Id == id);
+                if (obj == null)
+                {
+                    ViewData["Message"] = $"Client not found";
+                    return Edit(id);
+                }
                 obj.Name = name;
                 obj.Surname = surname;
                 context.SaveChanges();
@@ -93,11 +95,14 @@ namespace WEB_EF.Controllers
         {
             try
             {
-                var obj = context.Clients.First(ct => !ct.IsDeleted && ct.Id == id);
-                context.Clients.Remove(obj);
-                context.SaveChanges();
-                return RedirectToAction(nameof(Index));
+                var obj = context.Clients.FirstOrDefault(ct => !ct.IsDeleted && ct.Id == id);
+                if (obj != null)
+                {
+                    context.Clients.Remove(obj);
+                    context.SaveChanges();
+                }
 
+                return RedirectToAction(nameof(Index));
             }
             catch
             {
