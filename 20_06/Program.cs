@@ -277,7 +277,6 @@ class Programm1
         string text = string.Empty;
         MenuItemSelection option;
         int textInputOption;
-        int bufferInt;
         while (true)
         {
             try

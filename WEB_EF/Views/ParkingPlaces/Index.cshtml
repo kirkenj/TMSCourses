@@ -1,0 +1,23 @@
+﻿@using WEB_EF.Models.Classes;
+@model List<ParkingPlace>;
+
+@if(Model == null)
+{
+    throw new ArgumentNullException(nameof(Model));
+}
+<div class="text-center">
+    <h1 class="display-4">Parking places</h1>    
+    <table>
+            <tr>
+                <th>ID</th>
+                <th>Car type</th>
+            </tr>
+            @foreach (var type in Model)
+            {
+                <tr>
+                    <td>@type.Id</td>
+                    <td>@type.CarType</td>
+                </tr>
+            }
+    </table>   
+</div>

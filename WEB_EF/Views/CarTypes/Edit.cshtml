@@ -1,0 +1,14 @@
+﻿@using WEB_EF.Models.Classes
+@model CarType
+<form method = "post">
+    <table>
+        <tr>
+            @(ViewData["Message"] ?? string.Empty)
+        </tr>
+        <tr>
+            @Html.HiddenFor(m => m.Id)
+            <td>Title</td> <td><input name = "TypeName" value = @Model.TypeName></td>
+        </tr>
+    </table>   
+    <button type = "submit">Save</button>
+</form>

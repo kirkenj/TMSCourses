@@ -1,7 +1,14 @@
+using Microsoft.EntityFrameworkCore;
+using System.Configuration;
+using WEB_EF.Models.DBContexts;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<AutoparkContext>(options =>
+       options.UseSqlServer(builder.Configuration.GetConnectionString("BloggingDatabase")));
 
 var app = builder.Build();
 
@@ -22,7 +29,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Journal}/{action=Index}/{id?}");
 
 app.Run();
 //Scaffold-DbContext "Server=DESKTOP-9VGHPR7\SQLEXPRESS;Database=Autopark;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer

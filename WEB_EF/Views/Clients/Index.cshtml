@@ -1,0 +1,29 @@
+﻿@using WEB_EF.Models.Classes;
+@model List<Client>;
+
+@if(Model == null)
+{
+    throw new ArgumentNullException(nameof(Model));
+}
+<div class="text-center">
+    <h1 class="display-4">Clients</h1>    
+      
+</div>
+@Html.ActionLink("Add", "Create")
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Surname</th>
+        <th>Edit</th>
+        <th>Delete</th>
+    </tr>
+    @foreach (var type in Model)
+    {
+        <tr>
+            <td>@type.Name</td>
+            <td>@type.Surname</td>
+            <td>@Html.ActionLink("Edit", "Edit", "Clients", new {id = type.Id}, null)</td>
+            <td>@Html.ActionLink("Delete", "Delete", "Clients", new {id = type.Id}, null)</td>
+        </tr>
+    }
+</table> 

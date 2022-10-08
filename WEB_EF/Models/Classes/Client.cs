@@ -12,7 +12,6 @@ namespace WEB_EF.Models.Classes
 
         public string Name { get; set; } = null!;
         public string Surname { get; set; } = null!;
-        public string PhoneNumber { get; set; } = null!;
         public bool IsDeleted { get; set; }
         public int Id { get; set; }
 

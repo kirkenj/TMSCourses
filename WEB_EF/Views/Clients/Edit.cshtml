@@ -1,0 +1,17 @@
+﻿@using WEB_EF.Models.Classes
+@model Client
+<form method = "post">
+    <table>
+        <tr>
+            @(ViewData["Message"] ?? string.Empty)
+        </tr>
+        <tr>
+            @Html.HiddenFor(m => m.Id)
+            <td>@Html.LabelFor(m=>m.Name)</td> <td>@Html.TextBoxFor(m=>m.Name)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(m=>m.Surname)</td> <td>@Html.TextBoxFor(m=>m.Surname)</td>    
+        </tr>
+    </table>   
+    <button type = "submit">Save</button>
+</form>

@@ -1,0 +1,31 @@
+﻿@using WEB_EF.Models.Classes
+@using System;
+@model List<Journal>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Journal</h1>    
+    @if (Model == null)
+    {
+        throw new ArgumentNullException(nameof(Model));
+    }
+    <table>
+            <tr>
+                <th>Registration number</th>
+                <th>Coming date</th>
+                <th>Parking place</th>
+                <th>Departure date</th>
+            </tr>
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <tr>
+                    <td>@Model[i].Car.RegNumber</td>
+                    <td>@Model[i].ComingDate</td>
+                    <td>@Model[i].ParkingPlaceNavigation.Id</td>
+                    <td>@Model[i].DepartureDate?.ToString() ?? ""</td>
+                </tr>
+            }
+    </table>    
+</div>
