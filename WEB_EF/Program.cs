@@ -1,14 +1,7 @@
-using Microsoft.EntityFrameworkCore;
-using System.Configuration;
-using WEB_EF.Models.DBContexts;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
-builder.Services.AddDbContext<AutoparkContext>(options =>
-       options.UseSqlServer(builder.Configuration.GetConnectionString("BloggingDatabase")));
 
 var app = builder.Build();
 
