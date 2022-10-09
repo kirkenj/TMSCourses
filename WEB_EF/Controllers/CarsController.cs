@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using WEB_EF.Models.Classes;
 using WEB_EF.Models.DBContexts;
+using Microsoft.EntityFrameworkCore;
 
 namespace WEB_EF.Controllers
 {
@@ -12,9 +13,7 @@ namespace WEB_EF.Controllers
         // GET: ClientsController
         public ActionResult Index()
         {
-            ViewData["Clients"] = context.Clients.ToList();
-            ViewData["CarTypes"] = context.CarTypes.ToList();
-            return View(context.Cars.Where(j => !j.IsDeleted).ToList());
+            return View(context.Cars.Include(c => c.Client).Include(c => c.CarTypeNavigation).Where(j => !j.IsDeleted).ToList());
         }
 
         public ActionResult Create()

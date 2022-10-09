@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
 using WEB_EF.Models.Classes;
@@ -13,11 +13,7 @@ namespace WEB_EF.Controllers
         // GET: JournalController
         public ActionResult Index()
         {
-
-            ViewData["Cars"] = context.Cars.Where(c => !c.IsDeleted).ToList();
-            ViewData["ParkingPlaces"] = context.ParkingPlaces.Where(c => !c.IsDeleted).ToList();
-            ViewData["CarTypes"] = context.CarTypes.Where(c => !c.IsDeleted).ToList();
-            return View(context.Journals.Where(j=>!j.IsDeleted).ToList());
+            return View(context.Journals.Where(j => !j.IsDeleted).Include(j=>j.Car).Include(j=>j.ParkingPlaceNavigation).ToList());
         }
 
         // GET: JournalController/Create

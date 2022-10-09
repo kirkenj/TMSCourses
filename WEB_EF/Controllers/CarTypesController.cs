@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WEB_EF.Models.Classes;
 using WEB_EF.Models.DBContexts;
 
@@ -12,9 +13,7 @@ namespace WEB_EF.Controllers
         // GET: ClientsController
         public ActionResult Index()
         {
-            Dictionary<string, (string, int)> dict = context.CarTypes.Where(c => !c.IsDeleted).Select(c => new { c.TypeName, c.ParkingPlaces.Where(p=>!p.IsDeleted).ToList().Count }).ToList().Select(c => ( c.TypeName, c.Count)).ToList().ToDictionary(d => d.TypeName);
-            ViewData["dict"] = dict;
-            return View(context.CarTypes.Where(j => !j.IsDeleted));
+            return View(context.CarTypes.Where(ct => !ct.IsDeleted).Include(c => c.Cars.Where(c=>!c.IsDeleted)).Include(c => c.ParkingPlaces.Where(c => !c.IsDeleted)).ToList());
         }
 
         // GET: ClientsController/Create

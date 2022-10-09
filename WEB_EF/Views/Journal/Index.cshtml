@@ -9,22 +9,6 @@
 {
     throw new ArgumentNullException(nameof(Model));
 }
-@{
-    if (!(ViewData["Cars"] != null && ViewData["Cars"] is List<Car> cars))
-    {
-        throw new ArgumentException("Cars");
-    }
-
-    if (!(ViewData["ParkingPlaces"] != null && ViewData["ParkingPlaces"] is List<ParkingPlace> parkingPlaces))
-    {
-        throw new ArgumentException("ParkingPlaces");
-    }
-
-    if (!(ViewData["CarTypes"] != null && ViewData["CarTypes"] is List<CarType> carTypes))
-    {
-        throw new ArgumentException("CarTypes");
-    }
-}
 
 <div class="text-center">
     <h1 class="display-4">Journal</h1>         

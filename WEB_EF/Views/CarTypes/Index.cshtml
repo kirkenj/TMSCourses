@@ -1,13 +1,6 @@
 ﻿@using WEB_EF.Models.Classes;
 @model IEnumerable<CarType>;
 
-           
-
-@if(!(ViewData["dict"] != null && ViewData["dict"] is Dictionary<string, (string typeName, int count)> dict))
-{
-    throw new ArgumentNullException(nameof(dict));
-}
-
 <div class="text-center">
     <h1 class="display-4">Car types</h1>    
 </div>
@@ -17,6 +10,7 @@
             <tr>
                 <th>ID</th>
                 <th>Title</th>
+                <th>Cars amm</th>
                 <th>Places amm</th>
                 <th>Edit</th>
                 <th>Delete</th>
@@ -26,7 +20,8 @@
                 <tr>
                     <td>@type.Id</td>
                     <td>@type.TypeName</td>
-                    <td>@dict[type.TypeName].count</td>
+                    <td>@type.Cars.Count()</td>
+                    <td>@type.ParkingPlaces.Count()</td>
                     <td>@Html.ActionLink("Edit", "Edit", "CarTypes", new {id = type.Id}, null)</td>
                     <td>@Html.ActionLink("Delete", "Delete", "CarTypes", new {id = type.Id}, null)</td>
                 </tr>
