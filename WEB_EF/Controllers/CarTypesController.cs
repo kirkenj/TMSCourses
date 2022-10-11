@@ -8,12 +8,17 @@ namespace WEB_EF.Controllers
 {
     public class CarTypesController : Controller
     {
-        private static readonly AutoparkContext context = new();
+        private readonly AutoparkContext _context;
+
+        public CarTypesController(AutoparkContext context)
+        {
+            _context = context;
+        }
 
         // GET: ClientsController
         public ActionResult Index()
         {
-            return View(context.CarTypes.Where(ct => !ct.IsDeleted).Include(c => c.Cars.Where(c=>!c.IsDeleted)).Include(c => c.ParkingPlaces.Where(c => !c.IsDeleted)).ToList());
+            return View(_context.CarTypes.Where(ct => !ct.IsDeleted).Include(c => c.Cars.Where(c=>!c.IsDeleted)).Include(c => c.ParkingPlaces.Where(c => !c.IsDeleted)).ToList());
         }
 
         // GET: ClientsController/Create
@@ -29,14 +34,14 @@ namespace WEB_EF.Controllers
         {
             try
             {
-                if (context.CarTypes.Any(ct => ct.TypeName == typeName))
+                if (_context.CarTypes.Any(ct => ct.TypeName == typeName))
                 {
                     ViewData["Message"] = $"This value({typeName}) already excists";
                     return View();
                 }
 
-                context.CarTypes.Add(new() { TypeName = typeName });
-                context.SaveChanges();
+                _context.CarTypes.Add(new() { TypeName = typeName });
+                _context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
             catch(Exception ex)
@@ -49,7 +54,7 @@ namespace WEB_EF.Controllers
         // GET: ClientsController/Edit/5
         public ActionResult Edit(int id)
         {
-            var obj = context.CarTypes.FirstOrDefault(ct => ct.Id == id && !ct.IsDeleted);
+            var obj = _context.CarTypes.FirstOrDefault(ct => ct.Id == id && !ct.IsDeleted);
             if (obj == null)
             {
                 return RedirectToAction("Index");
@@ -65,7 +70,7 @@ namespace WEB_EF.Controllers
         {
             try
             {
-                var obj = context.CarTypes.FirstOrDefault(ct => !ct.IsDeleted && ct.Id == id);
+                var obj = _context.CarTypes.FirstOrDefault(ct => !ct.IsDeleted && ct.Id == id);
                 if (obj == null)
                 {
                     ViewData["Message"] = $"Car not found";
@@ -73,14 +78,14 @@ namespace WEB_EF.Controllers
                 }
 
                 typeName = typeName.Trim();
-                if (context.CarTypes.Any(ct=>ct.Id != id && ct.TypeName == collection["TypeName"].ToString().Trim()))
+                if (_context.CarTypes.Any(ct=>ct.Id != id && ct.TypeName == collection["TypeName"].ToString().Trim()))
                 {
                     ViewData["Message"] = $"This value({typeName}) already excists";
                     return View(obj);
                 }
 
                 obj.TypeName = typeName;
-                context.SaveChanges();
+                _context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -95,11 +100,11 @@ namespace WEB_EF.Controllers
         {
             try
             {
-                var obj = context.CarTypes.FirstOrDefault(ct => !ct.IsDeleted && ct.Id == id);
+                var obj = _context.CarTypes.FirstOrDefault(ct => !ct.IsDeleted && ct.Id == id);
                 if (obj != null)
                 {
-                    context.CarTypes.Remove(obj);
-                    context.SaveChanges();
+                    _context.CarTypes.Remove(obj);
+                    _context.SaveChanges();
                 }
 
                 return RedirectToAction(nameof(Index));

@@ -7,12 +7,17 @@ namespace WEB_EF.Controllers
 {
     public class ClientsController : Controller
     {
-        private static readonly AutoparkContext context = new();
+        private readonly AutoparkContext _context;
+
+        public ClientsController(AutoparkContext context)
+        {
+            _context = context;
+        }
 
         // GET: ClientsController
         public ActionResult Index()
         {
-            return View(context.Clients.Where(c=>!c.IsDeleted).ToList());
+            return View(_context.Clients.Where(c=>!c.IsDeleted).ToList());
         }
 
         // GET: ClientsController/Create
@@ -28,14 +33,14 @@ namespace WEB_EF.Controllers
         {
             try
             {
-                if (context.Clients.Any(c => c.Name == name && surname == c.Surname))
+                if (_context.Clients.Any(c => c.Name == name && surname == c.Surname))
                 {
                     ViewData["Message"] = $"Client {name} {surname} already excists";
                     return View();
                 }
 
-                context.Clients.Add(new Client { Name = name, Surname = surname });
-                context.SaveChanges();
+                _context.Clients.Add(new Client { Name = name, Surname = surname });
+                _context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -47,7 +52,7 @@ namespace WEB_EF.Controllers
         // GET: ClientsController/Edit/5
         public ActionResult Edit(int id)
         {
-            var obj = context.Clients.FirstOrDefault(ct => ct.Id == id && !ct.IsDeleted);
+            var obj = _context.Clients.FirstOrDefault(ct => ct.Id == id && !ct.IsDeleted);
             if (obj == null)
             {
                 return RedirectToAction("Index");
@@ -63,13 +68,13 @@ namespace WEB_EF.Controllers
         {
             try
             {
-                if (context.Clients.Any(c => c.Id != id && c.Name == name && surname == c.Surname))
+                if (_context.Clients.Any(c => c.Id != id && c.Name == name && surname == c.Surname))
                 {
                     ViewData["Message"] = $"Client {name} {surname} already excists";
                     return Edit(id);
                 }
 
-                var obj = context.Clients.FirstOrDefault(cl => !cl.IsDeleted && cl.Id == id);
+                var obj = _context.Clients.FirstOrDefault(cl => !cl.IsDeleted && cl.Id == id);
                 if (obj == null)
                 {
                     ViewData["Message"] = $"Client not found";
@@ -77,7 +82,7 @@ namespace WEB_EF.Controllers
                 }
                 obj.Name = name;
                 obj.Surname = surname;
-                context.SaveChanges();
+                _context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -91,11 +96,11 @@ namespace WEB_EF.Controllers
         {
             try
             {
-                var obj = context.Clients.FirstOrDefault(ct => !ct.IsDeleted && ct.Id == id);
+                var obj = _context.Clients.FirstOrDefault(ct => !ct.IsDeleted && ct.Id == id);
                 if (obj != null)
                 {
-                    context.Clients.Remove(obj);
-                    context.SaveChanges();
+                    _context.Clients.Remove(obj);
+                    _context.SaveChanges();
                 }
 
                 return RedirectToAction(nameof(Index));
