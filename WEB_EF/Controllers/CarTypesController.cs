@@ -25,18 +25,17 @@ namespace WEB_EF.Controllers
         // POST: ClientsController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(string typeName, IFormCollection collection)
         {
-            var tname = collection["TypeName"].ToString();
             try
             {
-                if (context.CarTypes.Any(ct => ct.TypeName == tname))
+                if (context.CarTypes.Any(ct => ct.TypeName == typeName))
                 {
-                    ViewData["Message"] = $"This value({tname}) already excists";
+                    ViewData["Message"] = $"This value({typeName}) already excists";
                     return View();
                 }
 
-                context.CarTypes.Add(new() { TypeName = tname });
+                context.CarTypes.Add(new() { TypeName = typeName });
                 context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
@@ -62,7 +61,7 @@ namespace WEB_EF.Controllers
         // POST: ClientsController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, string typeName, IFormCollection collection)
         {
             try
             {
@@ -73,14 +72,14 @@ namespace WEB_EF.Controllers
                     return View(obj);
                 }
 
-                var tName = collection["TypeName"].ToString().Trim();
+                typeName = typeName.Trim();
                 if (context.CarTypes.Any(ct=>ct.Id != id && ct.TypeName == collection["TypeName"].ToString().Trim()))
                 {
-                    ViewData["Message"] = $"This value({tName}) already excists";
+                    ViewData["Message"] = $"This value({typeName}) already excists";
                     return View(obj);
                 }
 
-                obj.TypeName = tName;
+                obj.TypeName = typeName;
                 context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }

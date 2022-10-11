@@ -10,7 +10,6 @@ namespace WEB_EF.Controllers
     {
         private static readonly AutoparkContext context = new();
 
-        // GET: ClientsController
         public ActionResult Index()
         {
             return View(context.Cars.Include(c => c.Client).Include(c => c.CarTypeNavigation).Where(j => !j.IsDeleted).ToList());
@@ -25,31 +24,10 @@ namespace WEB_EF.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(string regNumber, int clientID, int carType, IFormCollection collection)
         {
             try
             {
-                var regNumber = collection["regNumber"].ToString();
-                var clientIDStr = collection["ClientID"].ToString();
-                var carTypeIDStr = collection["CarType"].ToString();
-
-                if (context.Cars.Any(c=> c.RegNumber == regNumber))
-                {
-                    ViewData["Message"] = "Car with this registration number already excists";
-                    return Create();
-                }
-
-                if (!int.TryParse(clientIDStr, out int clientID))
-                {
-                    ViewData["Message"] = "Invalid client ID";
-                    return Create();
-                }
-
-                if (!int.TryParse(carTypeIDStr, out int carTypeID))
-                {
-                    ViewData["Message"] = "Invalid car type ID";
-                    return Create();
-                }
 
                 var client = context.Clients.FirstOrDefault(c => c.Id == clientID && !c.IsDeleted);
                 if (client == null)
@@ -58,14 +36,14 @@ namespace WEB_EF.Controllers
                     return Create();
                 }
 
-                var carType = context.CarTypes.FirstOrDefault(c => c.Id == carTypeID && !c.IsDeleted);
-                if (carType == null)
+                var carTypeNavigation = context.CarTypes.FirstOrDefault(c => c.Id == carType && !c.IsDeleted);
+                if (carTypeNavigation == null)
                 {
                     ViewData["Message"] = "Car type not found";
                     return Create();
                 }
 
-                context.Cars.Add(new Car { RegNumber = regNumber, CarType = carType.Id, CarTypeNavigation = carType, Client = client, ClientId = client.Id });
+                context.Cars.Add(new Car { RegNumber = regNumber, CarType = carType, CarTypeNavigation = carTypeNavigation, Client = client, ClientId = client.Id });
                 context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
@@ -91,32 +69,10 @@ namespace WEB_EF.Controllers
         // POST: ClientsController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, string regNumber, int clientID, int carType, IFormCollection collection)
         {
             try
             {
-                var regNumber = collection["regNumber"].ToString();
-                var clientIDStr = collection["ClientID"].ToString();
-                var carTypeIDStr = collection["CarType"].ToString();
-
-                if (context.Cars.Any(c => c.RegNumber == regNumber && c.Id != id))
-                {
-                    ViewData["Message"] = "Car with this registration number already excists";
-                    return Edit(id);
-                }
-
-                if (!int.TryParse(clientIDStr, out int clientID))
-                {
-                    ViewData["Message"] = "Invalid client ID";
-                    return Edit(id);
-                }
-
-                if (!int.TryParse(carTypeIDStr, out int carTypeID))
-                {
-                    ViewData["Message"] = "Invalid car type ID";
-                    return Edit(id);
-                }
-
                 var client = context.Clients.FirstOrDefault(c => c.Id == clientID && !c.IsDeleted);
                 if (client == null)
                 {
@@ -124,8 +80,8 @@ namespace WEB_EF.Controllers
                     return Edit(id);
                 }
 
-                var carType = context.CarTypes.FirstOrDefault(c => c.Id == carTypeID && !c.IsDeleted);
-                if (carType == null)
+                var carTypeNavigation = context.CarTypes.FirstOrDefault(c => c.Id == carType && !c.IsDeleted);
+                if (carTypeNavigation == null)
                 {
                     ViewData["Message"] = "Car type not found";
                     return Edit(id);
@@ -135,8 +91,8 @@ namespace WEB_EF.Controllers
                 car.RegNumber = regNumber;
                 car.Client = client;
                 car.ClientId = client.Id;
-                car.CarTypeNavigation = carType;
-                car.CarType = carTypeID;
+                car.CarTypeNavigation = carTypeNavigation;
+                car.CarType = carType;
                 context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }

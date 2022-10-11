@@ -28,16 +28,10 @@ namespace WEB_EF.Controllers
         // POST: JournalController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(int carID, int parkingPlace, DateTime comingDate, DateTime? departureDate, IFormCollection collection)
         {
             try
             {
-                if (!(!string.IsNullOrEmpty(collection["CarId"]) && int.TryParse(collection["CarId"], out int carID)))
-                {
-                    ViewData["Message"] = "Invalid carID format";
-                    return Create();
-                }
-
                 var car = context.Cars.FirstOrDefault(c => !c.IsDeleted && c.Id == carID);
                 if (car == null)
                 {
@@ -45,37 +39,11 @@ namespace WEB_EF.Controllers
                     return Create();
                 }
 
-                if (!(!string.IsNullOrEmpty(collection["ParkingPlace"]) && int.TryParse(collection["ParkingPlace"], out int parkingPlaceId)))
-                {
-                    ViewData["Message"] = "Invalid ParkingPlace format";
-                    return Create();
-                }
-
-                var parkingPlace = context.ParkingPlaces.FirstOrDefault(c => !c.IsDeleted && c.Id == parkingPlaceId);
-                if (parkingPlace == null)
+                var parkingPlaceNavigation = context.ParkingPlaces.FirstOrDefault(c => !c.IsDeleted && c.Id == parkingPlace);
+                if (parkingPlaceNavigation == null)
                 {
                     ViewData["Message"] = "Parking place not found";
                     return Create();
-                }
-
-                if (!(!string.IsNullOrEmpty(collection["ComingDate"]) && DateTime.TryParseExact(collection["ComingDate"], "yyyy-MM-ddTHH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime comingDate)))
-                {
-                    ViewData["Message"] = "Invalid coming date";
-                    return Create();
-                }
-
-                DateTime? departureDate = null;
-                if (!string.IsNullOrEmpty(collection["DepartureDate"]))
-                {
-                    if (DateTime.TryParseExact(collection["DepartureDate"].ToString(), "yyyy-MM-ddTHH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime thedate))
-                    {
-                        departureDate = thedate;
-                    }
-                    else
-                    {
-                        ViewData["Message"] = "Invalid departure date";
-                        return Create();
-                    }
                 }
 
                 Journal journalRecord = new()
@@ -83,8 +51,8 @@ namespace WEB_EF.Controllers
                     Car = car,
                     CarId = carID,
                     ComingDate = comingDate,
-                    ParkingPlace = parkingPlaceId,
-                    ParkingPlaceNavigation = parkingPlace,
+                    ParkingPlace = parkingPlace,
+                    ParkingPlaceNavigation = parkingPlaceNavigation,
                     DepartureDate = departureDate
                 };
 
@@ -125,7 +93,7 @@ namespace WEB_EF.Controllers
         // POST: JournalController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, int carID, int parkingPlace, DateTime comingDate, DateTime? departureDate, IFormCollection collection)
         {
             try
             {
@@ -136,57 +104,25 @@ namespace WEB_EF.Controllers
                     return Edit(id);
                 }
 
-                if (!(!string.IsNullOrEmpty(collection["CarId"]) && int.TryParse(collection["CarId"], out int carID)))
-                {
-                    ViewData["Message"] = "Invalid carID format";
-                    return Edit(id);
-                }
-
                 var car = context.Cars.FirstOrDefault(c => !c.IsDeleted && c.Id == carID);
                 if (car == null)
                 {
                     ViewData["Message"] = "Car not found";
-                    return Edit(id);
+                    return Create();
                 }
 
-                if (!(!string.IsNullOrEmpty(collection["ParkingPlace"]) && int.TryParse(collection["ParkingPlace"], out int parkingPlaceId)))
-                {
-                    ViewData["Message"] = "Invalid ParkingPlace format";
-                    return Edit(id);
-                }
-
-                var parkingPlace = context.ParkingPlaces.FirstOrDefault(c => !c.IsDeleted && c.Id == parkingPlaceId);
-                if (parkingPlace == null)
+                var parkingPlaceNavigation = context.ParkingPlaces.FirstOrDefault(c => !c.IsDeleted && c.Id == parkingPlace);
+                if (parkingPlaceNavigation == null)
                 {
                     ViewData["Message"] = "Parking place not found";
-                    return Edit(id);
-                }
-
-                if (!(!string.IsNullOrEmpty(collection["ComingDate"]) && DateTime.TryParseExact(collection["ComingDate"], "yyyy-MM-ddTHH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime comingDate)))
-                {
-                    ViewData["Message"] = "Invalid coming date";
-                    return Edit(id);
-                }
-
-                DateTime? departureDate = null;
-                if (!string.IsNullOrEmpty(collection["DepartureDate"]))
-                {
-                    if (DateTime.TryParseExact(collection["DepartureDate"].ToString(), "yyyy-MM-ddTHH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime thedate))
-                    {
-                        departureDate = thedate;
-                    }
-                    else
-                    {
-                        ViewData["Message"] = "Invalid departure date";
-                        return Edit(id);
-                    }
+                    return Create();
                 }
 
                 journalRecord.Car = car;
                 journalRecord.CarId = carID;
                 journalRecord.ComingDate = comingDate;
-                journalRecord.ParkingPlace = parkingPlaceId;
-                journalRecord.ParkingPlaceNavigation = parkingPlace;
+                journalRecord.ParkingPlace = parkingPlace;
+                journalRecord.ParkingPlaceNavigation = parkingPlaceNavigation;
                 journalRecord.DepartureDate = departureDate;
                 if (IsRecordAdequate(journalRecord, out string exp))
                 {
@@ -228,6 +164,7 @@ namespace WEB_EF.Controllers
             }
         }
 
+        [NonAction]
         private static bool IsRecordAdequate(Journal record, out string explanation)
         {
             if (record == null)

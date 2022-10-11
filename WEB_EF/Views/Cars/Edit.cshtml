@@ -17,7 +17,7 @@
     <table>
         <tr>
             @(ViewData["Message"] ?? string.Empty)
-            @Html.HiddenFor(m => m.Id);
+            @Html.HiddenFor(m => m.Id)
         </tr>
         <tr>
             <td>@Html.LabelFor(m=>m.RegNumber)</td> <td>@Html.TextBoxFor(m=>m.RegNumber)</td>

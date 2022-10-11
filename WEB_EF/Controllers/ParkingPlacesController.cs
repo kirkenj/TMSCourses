@@ -26,27 +26,23 @@ namespace WEB_EF.Controllers
         // POST: ClientsController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(int carType, IFormCollection collection)
         {
             try
             {
-                var carTypeStr = collection["CarType"];
-                if (string.IsNullOrEmpty(carTypeStr) || !int.TryParse(carTypeStr, out int carTypeId))
-                {
-                    ViewData["Message"] = "Invalid car type";
-                    return Create();
-                }
-
-                var parkingPlace = new ParkingPlace();
-                var carType = context.CarTypes.FirstOrDefault(ct => !ct.IsDeleted && ct.Id == carTypeId);
-                if (carType == null)
+                var carTypeNavigation = context.CarTypes.FirstOrDefault(ct => !ct.IsDeleted && ct.Id == carType);
+                if (carTypeNavigation == null)
                 {
                     ViewData["Message"] = "Car type not found";
                     return Create();
                 }
 
-                parkingPlace.CarType = carType.Id;
-                parkingPlace.CarTypeNavigation = carType;
+                var parkingPlace = new ParkingPlace()
+                {
+                    CarType = carTypeNavigation.Id,
+                    CarTypeNavigation = carTypeNavigation,
+                };
+
                 context.ParkingPlaces.Add(parkingPlace);
                 context.SaveChanges();
                 return RedirectToAction(nameof(Index));
@@ -73,17 +69,10 @@ namespace WEB_EF.Controllers
         // POST: ClientsController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, int carType, IFormCollection collection)
         {
             try
             {
-                var carTypeStr = collection["CarType"];
-                if (string.IsNullOrEmpty(carTypeStr) || !int.TryParse(carTypeStr, out int carTypeId))
-                {
-                    ViewData["Message"] = "Invalid car type";
-                    return Edit(id);
-                }
-
                 var parkingPlace = context.ParkingPlaces.FirstOrDefault(p => !p.IsDeleted && p.Id == id);
                 if (parkingPlace == null)
                 {
@@ -91,15 +80,15 @@ namespace WEB_EF.Controllers
                     return Create();
                 }
 
-                var carType = context.CarTypes.FirstOrDefault(ct => !ct.IsDeleted && ct.Id == carTypeId); 
-                if (carType == null)
+                var carTypeNavigation = context.CarTypes.FirstOrDefault(ct => !ct.IsDeleted && ct.Id == carType); 
+                if (carTypeNavigation == null)
                 {
                     ViewData["Message"] = "Car type not found";
                     return Create();
                 }
 
-                parkingPlace.CarType = carType.Id;
-                parkingPlace.CarTypeNavigation = carType;
+                parkingPlace.CarType = carTypeNavigation.Id;
+                parkingPlace.CarTypeNavigation = carTypeNavigation;
                 context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }

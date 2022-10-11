@@ -24,12 +24,10 @@ namespace WEB_EF.Controllers
         // POST: ClientsController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(string name, string surname, IFormCollection collection)
         {
             try
             {
-                var name = collection["Name"].ToString();
-                var surname = collection["Surname"].ToString();
                 if (context.Clients.Any(c => c.Name == name && surname == c.Surname))
                 {
                     ViewData["Message"] = $"Client {name} {surname} already excists";
@@ -61,12 +59,10 @@ namespace WEB_EF.Controllers
         // POST: ClientsController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, string name, string surname, IFormCollection collection)
         {
             try
             {
-                var name = collection["Name"].ToString();
-                var surname = collection["Surname"].ToString();
                 if (context.Clients.Any(c => c.Id != id && c.Name == name && surname == c.Surname))
                 {
                     ViewData["Message"] = $"Client {name} {surname} already excists";
