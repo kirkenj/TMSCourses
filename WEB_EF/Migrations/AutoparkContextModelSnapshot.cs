@@ -10,7 +10,7 @@ using WEB_EF.Models.DBContexts;
 
 namespace WEB_EF.Migrations
 {
-    [DbContext(typeof(AutoparkContext))]
+    [DbContext(typeof(AutoparkDBContext))]
     partial class AutoparkContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
@@ -109,14 +109,6 @@ namespace WEB_EF.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)")
-                        .HasDefaultValue("Undefined")
-                        .HasColumnName("PhoneNumber");
 
                     b.Property<string>("Surname")
                         .IsRequired()

@@ -1,12 +1,20 @@
 using Microsoft.EntityFrameworkCore;
 using WEB_EF.Models.DBContexts;
+using WEB_EF.Models.Interfaces;
+using WEB_EF.Models.Services;
+using WEB_EF.Models.Classes;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddDbContext<AutoparkContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
+builder.Services.AddDbContext<AutoparkDBContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddTransient<IAutoparkDBContext, AutoparkDBContext>();
+builder.Services.AddTransient<ICRUDleService<Car>, CarCrudlService>();
+builder.Services.AddTransient<ICRUDleService<CarType>, CarTypeCrudlService>();
+builder.Services.AddTransient<ICRUDleService<Client>, ClientCrudlService>();
+builder.Services.AddTransient<ICRUDleService<Journal>, JournalCrudlService>();
+builder.Services.AddTransient<ICRUDleService<ParkingPlace>, ParkingPlaceCrudlService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -30,6 +38,3 @@ app.MapControllerRoute(
     pattern: "{controller=Journal}/{action=Index}/{id?}");
 
 app.Run();
-//Scaffold-DbContext "Server=DESKTOP-9VGHPR7\SQLEXPRESS;Database=Autopark;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer
-//Scaffold -DbContext "Server=DESKTOP-9VGHPR7\SQLEXPRESS;Database=Autopark;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir "Models"
-//Scaffold - DbContext "*connection*" "*provider*" - OutputDir "BackendProject" - ContextDir "DbContexts"

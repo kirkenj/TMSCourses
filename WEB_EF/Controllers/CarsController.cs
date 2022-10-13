@@ -1,23 +1,25 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WEB_EF.Models.Classes;
-using WEB_EF.Models.DBContexts;
 using Microsoft.EntityFrameworkCore;
+using WEB_EF.Models.Interfaces;
 
 namespace WEB_EF.Controllers
 {
     public class CarsController : Controller
     {
-        private readonly AutoparkContext _context;
+        private readonly ICRUDleService<Car> _service;
+        private readonly IAutoparkDBContext _context;
 
-        public CarsController(AutoparkContext context)
+        public CarsController(ICRUDleService<Car> CRUDLService, IAutoparkDBContext context)
         {
             _context = context;
+            _service = CRUDLService;
         }
 
         public ActionResult Index()
         {
-            return View(_context.Cars.Include(c => c.Client).Include(c => c.CarTypeNavigation).Where(j => !j.IsDeleted).ToList());
+            return View(_service.GetViaIQueriable().Include(c => c.Client).Include(c => c.CarTypeNavigation).Where(j => !j.IsDeleted).ToList());
         }
 
         public ActionResult Create()
@@ -33,34 +35,31 @@ namespace WEB_EF.Controllers
         {
             try
             {
-
-                var client = _context.Clients.FirstOrDefault(c => c.Id == clientID && !c.IsDeleted);
-                if (client == null)
+                if (!_context.Clients.Any(c => c.Id == clientID && !c.IsDeleted))
                 {
                     ViewData["Message"] = "Client not found";
                     return Create();
                 }
 
-                var carTypeNavigation = _context.CarTypes.FirstOrDefault(c => c.Id == carType && !c.IsDeleted);
-                if (carTypeNavigation == null)
+                if (!_context.CarTypes.Any(c => c.Id == carType && !c.IsDeleted))
                 {
                     ViewData["Message"] = "Car type not found";
                     return Create();
                 }
 
-                _context.Cars.Add(new Car { RegNumber = regNumber, CarType = carType, CarTypeNavigation = carTypeNavigation, Client = client, ClientId = client.Id });
-                _context.SaveChanges();
+                _service.Create(new Car { RegNumber = regNumber, CarType = carType, ClientId = clientID });
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch(Exception ex)
             {
-                return View();
+                ViewData["Message"] = ex.Message;
+                return Create();
             }
         }
 
         public ActionResult Edit(int id)
         {
-            var obj = _context.Cars.FirstOrDefault(ct => ct.Id == id && !ct.IsDeleted);
+            var obj = _service.GetViaIQueriable().FirstOrDefault(ct => ct.Id == id && !ct.IsDeleted);
             if (obj == null)
             {
                 return RedirectToAction("Index");
@@ -78,27 +77,23 @@ namespace WEB_EF.Controllers
         {
             try
             {
-                var client = _context.Clients.FirstOrDefault(c => c.Id == clientID && !c.IsDeleted);
-                if (client == null)
+                if (!_context.Clients.Any(c => c.Id == clientID && !c.IsDeleted))
                 {
                     ViewData["Message"] = "Client not found";
                     return Edit(id);
                 }
 
-                var carTypeNavigation = _context.CarTypes.FirstOrDefault(c => c.Id == carType && !c.IsDeleted);
-                if (carTypeNavigation == null)
+                if (!_context.CarTypes.Any(c => c.Id == carType && !c.IsDeleted))
                 {
                     ViewData["Message"] = "Car type not found";
                     return Edit(id);
                 }
 
-                var car = _context.Cars.First(c => c.Id == id);
+                var car = _service.GetViaIQueriable().First(c => c.Id == id);
                 car.RegNumber = regNumber;
-                car.Client = client;
-                car.ClientId = client.Id;
-                car.CarTypeNavigation = carTypeNavigation;
+                car.ClientId = clientID;
                 car.CarType = carType;
-                _context.SaveChanges();
+                _service.Update(car);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -111,9 +106,8 @@ namespace WEB_EF.Controllers
         {
             try
             {
-                var car = _context.Cars.First(c => c.Id == id);
-                _context.Cars.Remove(car);
-                _context.SaveChanges();
+                var car = _service.GetViaIQueriable().First(c => c.Id == id);
+                _service.Delete(car);
                 return RedirectToAction(nameof(Index));
             }
             catch

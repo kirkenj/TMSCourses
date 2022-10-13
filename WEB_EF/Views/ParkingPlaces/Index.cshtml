@@ -6,11 +6,6 @@
     throw new ArgumentNullException(nameof(Model));
 }
 
-@if (!(ViewData["CarTypes"] != null && ViewData["CarTypes"] is List<CarType> carTypes))
-{
-    throw new ArgumentException("CarTypes");
-}
-
 <div class="text-center">
     <h1 class="display-4">Parking places</h1>    
 </div>

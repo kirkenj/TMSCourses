@@ -11,7 +11,7 @@ using WEB_EF.Models.DBContexts;
 
 namespace WEB_EF.Migrations
 {
-    [DbContext(typeof(AutoparkContext))]
+    [DbContext(typeof(AutoparkDBContext))]
     [Migration("20221006213151_AlterAllAddIsDeleted")]
     partial class AlterAllAddIsDeleted
     {

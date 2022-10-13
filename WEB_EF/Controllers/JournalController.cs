@@ -3,23 +3,26 @@ using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
 using WEB_EF.Models.Classes;
 using WEB_EF.Models.DBContexts;
+using WEB_EF.Models.Interfaces;
 
 namespace WEB_EF.Controllers
 {
     public class JournalController : Controller
     {
-        private readonly AutoparkContext _context;
+        private readonly IAutoparkDBContext _context;
+        private readonly ICRUDleService<Journal> _service;
 
-        public JournalController(AutoparkContext context)
+        public JournalController(IAutoparkDBContext context, ICRUDleService<Journal> service)
         {
             _context = context;
+            _service = service;
         }
 
 
         // GET: JournalController
         public ActionResult Index()
         {
-            return View(_context.Journals.Where(j => !j.IsDeleted).Include(j=>j.Car).Include(j=>j.ParkingPlaceNavigation).ToList());
+            return View(_service.GetViaIQueriable().Where(j => !j.IsDeleted).Include(j=>j.Car).Include(j=>j.ParkingPlaceNavigation).ToList());
         }
 
         // GET: JournalController/Create
@@ -37,16 +40,14 @@ namespace WEB_EF.Controllers
         public ActionResult Create(int carID, int parkingPlace, DateTime comingDate, DateTime? departureDate, IFormCollection collection)
         {
             try
-            {
-                var car = _context.Cars.FirstOrDefault(c => !c.IsDeleted && c.Id == carID);
-                if (car == null)
+            { 
+                if (!_context.Cars.Any(c => !c.IsDeleted && c.Id == carID))
                 {
                     ViewData["Message"] = "Car not found";
                     return Create();
                 }
 
-                var parkingPlaceNavigation = _context.ParkingPlaces.FirstOrDefault(c => !c.IsDeleted && c.Id == parkingPlace);
-                if (parkingPlaceNavigation == null)
+                if (!_context.ParkingPlaces.Any(c => !c.IsDeleted && c.Id == parkingPlace))
                 {
                     ViewData["Message"] = "Parking place not found";
                     return Create();
@@ -54,25 +55,19 @@ namespace WEB_EF.Controllers
 
                 Journal journalRecord = new()
                 {
-                    Car = car,
                     CarId = carID,
                     ComingDate = comingDate,
                     ParkingPlace = parkingPlace,
-                    ParkingPlaceNavigation = parkingPlaceNavigation,
                     DepartureDate = departureDate
                 };
 
-                if (IsRecordAdequate(journalRecord, out string exp))
-                {
-                    _context.Journals.Add(journalRecord);
-                    _context.SaveChanges();
-                }
-                else
+                if (!IsRecordAdequate(journalRecord, out string exp))
                 {
                     ViewData["Message"] = exp;
                     return Create();
                 }
 
+                _service.Create(journalRecord);
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
@@ -85,7 +80,7 @@ namespace WEB_EF.Controllers
         // GET: JournalController/Edit/5
         public ActionResult Edit(int id)
         {
-            var record = _context.Journals.FirstOrDefault(j => !j.IsDeleted && j.Id == id);
+            var record = _service.GetViaIQueriable().FirstOrDefault(j => !j.IsDeleted && j.Id == id);
             if (record == null)
             {
                 return RedirectToAction(nameof(Index));
@@ -103,7 +98,7 @@ namespace WEB_EF.Controllers
         {
             try
             {
-                Journal? journalRecord = _context.Journals.FirstOrDefault(j => !j.IsDeleted && j.Id == id);
+                var journalRecord = _service.GetViaIQueriable().FirstOrDefault(j => !j.IsDeleted && j.Id == id);
                 if (journalRecord == null)
                 {
                     ViewData["Message"] = "Record not found";
@@ -124,22 +119,17 @@ namespace WEB_EF.Controllers
                     return Create();
                 }
 
-                journalRecord.Car = car;
                 journalRecord.CarId = carID;
                 journalRecord.ComingDate = comingDate;
                 journalRecord.ParkingPlace = parkingPlace;
-                journalRecord.ParkingPlaceNavigation = parkingPlaceNavigation;
                 journalRecord.DepartureDate = departureDate;
-                if (IsRecordAdequate(journalRecord, out string exp))
-                {
-                    _context.SaveChanges();
-                }
-                else
+                if (!IsRecordAdequate(journalRecord, out string exp))
                 {
                     ViewData["Message"] = exp; 
                     return Edit(id);
                 }
 
+                _service.Update(journalRecord);
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
@@ -160,8 +150,7 @@ namespace WEB_EF.Controllers
                     return Edit(id);
                 }
 
-                _context.Journals.Remove(journalRecord);
-                _context.SaveChanges();
+                _service.Delete(journalRecord);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -185,19 +174,21 @@ namespace WEB_EF.Controllers
                 return false;
             }
 
-            if (record.Car == null)
+            var car = _context.Cars.FirstOrDefault(c => c.Id == record.CarId && !c.IsDeleted);
+            if (car == null)
             {
                 explanation = "Car is null";
                 return false;
             }
 
-            if (record.ParkingPlaceNavigation == null)
+            var parkingPlace = _context.ParkingPlaces.FirstOrDefault(c => c.Id == record.ParkingPlace && !c.IsDeleted);
+            if (parkingPlace == null)
             {
                 explanation = "Parking place is null";
                 return false;
             }
 
-            if (record.Car.CarType != record.ParkingPlaceNavigation.CarType)
+            if (car.CarType != parkingPlace.CarType)
             {
                 explanation = "Car's type is not equal to parking place's type";
                 return false;
@@ -211,13 +202,13 @@ namespace WEB_EF.Controllers
                 return false;
             }
 
-            if (_context.Journals.Any(j => !j.IsDeleted && j.Id != record.Id && j.CarId == record.CarId && (j.ComingDate <= departureDate && (j.DepartureDate?? ((DateTime)System.Data.SqlTypes.SqlDateTime.MaxValue)) >= comingDate)))
+            if (_service.GetViaIQueriable().Any(j => !j.IsDeleted && j.Id != record.Id && j.CarId == record.CarId && (j.ComingDate <= departureDate && (j.DepartureDate?? ((DateTime)System.Data.SqlTypes.SqlDateTime.MaxValue)) >= comingDate)))
             {
                 explanation = "Car is in parking at this period";
                 return false;
             }
 
-            if (_context.Journals.Any(j => !j.IsDeleted && j.Id != record.Id && j.ParkingPlace == record.ParkingPlace && (j.ComingDate <= departureDate && (j.DepartureDate ?? ((DateTime)System.Data.SqlTypes.SqlDateTime.MaxValue)) >= comingDate)))
+            if (_service.GetViaIQueriable().Any(j => !j.IsDeleted && j.Id != record.Id && j.ParkingPlace == record.ParkingPlace && (j.ComingDate <= departureDate && (j.DepartureDate ?? ((DateTime)System.Data.SqlTypes.SqlDateTime.MaxValue)) >= comingDate)))
             {
                 explanation = "Place is taken at this period";
                 return false;
