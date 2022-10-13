@@ -3,7 +3,7 @@ using WEB_EF.Models.Classes;
 
 namespace WEB_EF.Models.Services
 {
-    public class CarTypeCrudlService : ICRUDleService<CarType>
+    public class CarTypeCrudlService : ICRUDlService<CarType>
     {
         public CarTypeCrudlService(IAutoparkDBContext context)
         {

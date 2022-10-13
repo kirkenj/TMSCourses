@@ -10,11 +10,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<AutoparkDBContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddTransient<IAutoparkDBContext, AutoparkDBContext>();
-builder.Services.AddTransient<ICRUDleService<Car>, CarCrudlService>();
-builder.Services.AddTransient<ICRUDleService<CarType>, CarTypeCrudlService>();
-builder.Services.AddTransient<ICRUDleService<Client>, ClientCrudlService>();
-builder.Services.AddTransient<ICRUDleService<Journal>, JournalCrudlService>();
-builder.Services.AddTransient<ICRUDleService<ParkingPlace>, ParkingPlaceCrudlService>();
+builder.Services.AddTransient<ICRUDlService<Car>, CarCrudlService>();
+builder.Services.AddTransient<ICRUDlService<CarType>, CarTypeCrudlService>();
+builder.Services.AddTransient<ICRUDlService<Client>, ClientCrudlService>();
+builder.Services.AddTransient<ICRUDlService<Journal>, JournalCrudlService>();
+builder.Services.AddTransient<ICRUDlService<ParkingPlace>, ParkingPlaceCrudlService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

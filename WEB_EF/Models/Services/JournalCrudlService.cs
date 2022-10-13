@@ -3,7 +3,7 @@ using WEB_EF.Models.Classes;
 
 namespace WEB_EF.Models.Services
 {
-    public class JournalCrudlService : ICRUDleService<Journal>
+    public class JournalCrudlService : ICRUDlService<Journal>
     {
         public JournalCrudlService(IAutoparkDBContext context)
         {

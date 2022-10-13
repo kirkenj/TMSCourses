@@ -10,9 +10,9 @@ namespace WEB_EF.Controllers
     public class JournalController : Controller
     {
         private readonly IAutoparkDBContext _context;
-        private readonly ICRUDleService<Journal> _service;
+        private readonly ICRUDlService<Journal> _service;
 
-        public JournalController(IAutoparkDBContext context, ICRUDleService<Journal> service)
+        public JournalController(IAutoparkDBContext context, ICRUDlService<Journal> service)
         {
             _context = context;
             _service = service;

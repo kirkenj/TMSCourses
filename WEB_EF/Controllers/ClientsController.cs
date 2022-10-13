@@ -9,9 +9,9 @@ namespace WEB_EF.Controllers
     public class ClientsController : Controller
     {
         private readonly IAutoparkDBContext _context;
-        private readonly ICRUDleService<Client> _service;
+        private readonly ICRUDlService<Client> _service;
 
-        public ClientsController(IAutoparkDBContext context, ICRUDleService<Client> service)
+        public ClientsController(IAutoparkDBContext context, ICRUDlService<Client> service)
         {
             _context = context;
             _service = service;

@@ -4,7 +4,7 @@ using WEB_EF.Models.Interfaces;
 
 namespace WEB_EF.Models.Services
 {
-    public class CarCrudlService : ICRUDleService<Car>
+    public class CarCrudlService : ICRUDlService<Car>
     {
         public CarCrudlService(IAutoparkDBContext context)
         {

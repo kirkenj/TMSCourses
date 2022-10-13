@@ -8,10 +8,10 @@ namespace WEB_EF.Controllers
 {
     public class CarsController : Controller
     {
-        private readonly ICRUDleService<Car> _service;
+        private readonly ICRUDlService<Car> _service;
         private readonly IAutoparkDBContext _context;
 
-        public CarsController(ICRUDleService<Car> CRUDLService, IAutoparkDBContext context)
+        public CarsController(ICRUDlService<Car> CRUDLService, IAutoparkDBContext context)
         {
             _context = context;
             _service = CRUDLService;
