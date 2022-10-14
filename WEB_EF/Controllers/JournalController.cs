@@ -43,18 +43,6 @@ namespace WEB_EF.Controllers
         {
             try
             { 
-                if (!_context.Cars.Any(c => !c.IsDeleted && c.Id == carID))
-                {
-                    ViewData["Message"] = "Car not found";
-                    return Create();
-                }
-
-                if (!_context.ParkingPlaces.Any(c => !c.IsDeleted && c.Id == parkingPlace))
-                {
-                    ViewData["Message"] = "Parking place not found";
-                    return Create();
-                }
-
                 Journal journalRecord = new()
                 {
                     CarId = carID,
@@ -107,24 +95,6 @@ namespace WEB_EF.Controllers
                     return Edit(id);
                 }
 
-                var car = _context.Cars.FirstOrDefault(c => !c.IsDeleted && c.Id == carID);
-                if (car == null)
-                {
-                    ViewData["Message"] = "Car not found";
-                    return Create();
-                }
-
-                var parkingPlaceNavigation = _context.ParkingPlaces.FirstOrDefault(c => !c.IsDeleted && c.Id == parkingPlace);
-                if (parkingPlaceNavigation == null)
-                {
-                    ViewData["Message"] = "Parking place not found";
-                    return Create();
-                }
-
-                journalRecord.CarId = carID;
-                journalRecord.ComingDate = comingDate;
-                journalRecord.ParkingPlace = parkingPlace;
-                journalRecord.DepartureDate = departureDate;
                 if (!_validateService.Validate(journalRecord, out string exp))
                 {
                     ViewData["Message"] = exp; 

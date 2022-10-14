@@ -31,14 +31,14 @@ namespace WEB_EF.Models.Services
             var car = _context.Cars.FirstOrDefault(c => c.Id == record.CarId && !c.IsDeleted);
             if (car == null)
             {
-                explanation = "Car is null";
+                explanation = "Car not found";
                 return false;
             }
 
             var parkingPlace = _context.ParkingPlaces.FirstOrDefault(c => c.Id == record.ParkingPlace && !c.IsDeleted);
             if (parkingPlace == null)
             {
-                explanation = "Parking place is null";
+                explanation = "Parking place not found";
                 return false;
             }
 

@@ -14,6 +14,7 @@ builder.Services.AddTransient<ICRUDlService<Car>, CarCrudlService>();
 builder.Services.AddTransient<ICRUDlService<CarType>, CarTypeCrudlService>();
 builder.Services.AddTransient<ICRUDlService<Client>, ClientCrudlService>();
 builder.Services.AddTransient<ICRUDlService<Journal>, JournalCrudlService>();
+builder.Services.AddTransient<IValidateService<Journal>, JournalValidateService>();
 builder.Services.AddTransient<ICRUDlService<ParkingPlace>, ParkingPlaceCrudlService>();
 var app = builder.Build();
 
