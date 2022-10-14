@@ -1,4 +1,4 @@
-﻿using WEB_EF.Models.Classes;
+﻿using WEB_EF.Models.Entities;
 using WEB_EF.Models.Interfaces;
 
 namespace WEB_EF.Models.Services

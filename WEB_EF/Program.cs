@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using WEB_EF.Models.DBContexts;
 using WEB_EF.Models.Interfaces;
 using WEB_EF.Models.Services;
-using WEB_EF.Models.Classes;
+using WEB_EF.Models.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using WEB_EF.Models.Classes;
+using WEB_EF.Models.Entities;
 
 namespace WEB_EF.Models.Interfaces
 {

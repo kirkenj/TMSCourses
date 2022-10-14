@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using WEB_EF.Models.Classes;
+using WEB_EF.Models.Entities;
 using WEB_EF.Models.DBContexts;
 using WEB_EF.Models.Interfaces;
 

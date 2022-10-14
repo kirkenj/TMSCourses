@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace WEB_EF.Models.Classes
+﻿namespace WEB_EF.Models.Entities
 {
     public partial class ParkingPlace
     {
