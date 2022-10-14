@@ -11,11 +11,13 @@ namespace WEB_EF.Controllers
     {
         private readonly IAutoparkDBContext _context;
         private readonly ICRUDlService<Journal> _service;
+        private readonly IValidateService<Journal> _validateService;
 
-        public JournalController(IAutoparkDBContext context, ICRUDlService<Journal> service)
+        public JournalController(IAutoparkDBContext context, ICRUDlService<Journal> service, IValidateService<Journal> validateService)
         {
             _context = context;
             _service = service;
+            _validateService = validateService;
         }
 
 
@@ -61,7 +63,7 @@ namespace WEB_EF.Controllers
                     DepartureDate = departureDate
                 };
 
-                if (!IsRecordAdequate(journalRecord, out string exp))
+                if (!_validateService.Validate(journalRecord, out string exp))
                 {
                     ViewData["Message"] = exp;
                     return Create();
@@ -123,7 +125,7 @@ namespace WEB_EF.Controllers
                 journalRecord.ComingDate = comingDate;
                 journalRecord.ParkingPlace = parkingPlace;
                 journalRecord.DepartureDate = departureDate;
-                if (!IsRecordAdequate(journalRecord, out string exp))
+                if (!_validateService.Validate(journalRecord, out string exp))
                 {
                     ViewData["Message"] = exp; 
                     return Edit(id);
@@ -143,7 +145,7 @@ namespace WEB_EF.Controllers
         {
             try
             {
-                Journal? journalRecord = _context.Journals.FirstOrDefault(j => !j.IsDeleted && j.Id == id);
+                Journal? journalRecord = _service.GetViaIQueriable().FirstOrDefault(j => !j.IsDeleted && j.Id == id);
                 if (journalRecord == null)
                 {
                     ViewData["Message"] = "Record not found";
@@ -158,65 +160,5 @@ namespace WEB_EF.Controllers
                 return View();
             }
         }
-
-        [NonAction]
-        private bool IsRecordAdequate(Journal record, out string explanation)
-        {
-            if (record == null)
-            {
-                explanation = "Record is null";
-                return false;
-            }
-
-            if (record.IsDeleted)
-            {
-                explanation = "Record is deleted";
-                return false;
-            }
-
-            var car = _context.Cars.FirstOrDefault(c => c.Id == record.CarId && !c.IsDeleted);
-            if (car == null)
-            {
-                explanation = "Car is null";
-                return false;
-            }
-
-            var parkingPlace = _context.ParkingPlaces.FirstOrDefault(c => c.Id == record.ParkingPlace && !c.IsDeleted);
-            if (parkingPlace == null)
-            {
-                explanation = "Parking place is null";
-                return false;
-            }
-
-            if (car.CarType != parkingPlace.CarType)
-            {
-                explanation = "Car's type is not equal to parking place's type";
-                return false;
-            }
-
-            var comingDate = record.ComingDate;
-            var departureDate = record.DepartureDate ?? DateTime.MaxValue;
-            if (comingDate > departureDate)
-            {
-                explanation = "Coming date is bigger than departure date";
-                return false;
-            }
-
-            if (_service.GetViaIQueriable().Any(j => !j.IsDeleted && j.Id != record.Id && j.CarId == record.CarId && (j.ComingDate <= departureDate && (j.DepartureDate?? ((DateTime)System.Data.SqlTypes.SqlDateTime.MaxValue)) >= comingDate)))
-            {
-                explanation = "Car is in parking at this period";
-                return false;
-            }
-
-            if (_service.GetViaIQueriable().Any(j => !j.IsDeleted && j.Id != record.Id && j.ParkingPlace == record.ParkingPlace && (j.ComingDate <= departureDate && (j.DepartureDate ?? ((DateTime)System.Data.SqlTypes.SqlDateTime.MaxValue)) >= comingDate)))
-            {
-                explanation = "Place is taken at this period";
-                return false;
-            }
-
-
-            explanation = string.Empty;
-            return true;
-        }    
     }
 }
