@@ -1,0 +1,41 @@
+﻿@using WEB_EF.Models.Entities
+@using System
+@model Journal
+
+@{
+    if (!(ViewData["Cars"] != null && ViewData["Cars"] is List<Car> cars))
+    {
+        throw new ArgumentException("Cars");
+    }
+
+    if (!(ViewData["ParkingPlaces"] != null && ViewData["ParkingPlaces"] is List<ParkingPlace> parkingPlaces))
+    {
+        throw new ArgumentException("ParkingPlaces");
+    }
+
+    if (!(ViewData["CarTypes"] != null && ViewData["CarTypes"] is List<CarType> carTypes))
+    {
+        throw new ArgumentException("CarTypes");
+    }
+}
+
+<form method = "post">
+    <table>
+        <tr>
+            @(ViewData["Message"] ?? string.Empty)
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(m=>m.Car)</td> <td>@Html.DropDownListFor(m=>m.CarId, cars.Select(c=> new SelectListItem{Value = c.Id.ToString(), Text = c.RegNumber + ' ' + c.CarTypeNavigation.TypeName}))</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(m=>m.ComingDate)</td> <td><input type="datetime-local" value = "@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" id = "ComingDate" name = "ComingDate"/></td>    
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(m=>m.ParkingPlace)</td> <td>@Html.DropDownListFor(m=>m.ParkingPlace, parkingPlaces.Select(c=> new SelectListItem{Value = c.Id.ToString(), Text = $"{c.Id} {c.CarTypeNavigation.TypeName}"}))</td>    
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(m=>m.DepartureDate)</td> <td>@Html.EditorFor(m=>m.DepartureDate)</td>    
+        </tr>
+    </table>   
+    <button type = "submit">Save</button>
+</form>

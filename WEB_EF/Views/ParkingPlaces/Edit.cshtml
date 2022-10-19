@@ -1,0 +1,21 @@
+﻿@using WEB_EF.Models.Entities;
+@model ParkingPlace
+@{
+    if (!(ViewData["CarTypes"] != null && ViewData["CarTypes"] is List<CarType> carTypes))
+    {
+        throw new ArgumentNullException("CarTypes");
+    }
+}
+
+<form method = "post">
+    @(ViewData["Message"] ?? string.Empty)
+    <table>
+        <tr>
+            <td>@Html.LabelFor(m=>m.Id)</td> <td>@Html.DisplayTextFor(m=>m.Id)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(m=>m.CarType)</td> <td>@Html.DropDownListFor(m=>m.CarType, carTypes.Select(c=> new SelectListItem{Value = c.Id.ToString(), Text = c.TypeName}))</td>    
+        </tr>
+    </table>   
+    <button type = "submit">Save</button>
+</form>

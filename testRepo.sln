@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32328.378
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HT1", "testRepo\HT1.csproj", "{0578C31F-C472-4A15-B977-EF0FF5C37F5E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "testRepo", "testRepo\testRepo.csproj", "{0578C31F-C472-4A15-B977-EF0FF5C37F5E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "class20_06", "20_06\class20_06.csproj", "{B80A01FD-5BEC-4D96-8BB4-B4AC2E6F7C1B}"
 EndProject
@@ -22,6 +22,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HT12GenTree", "HT12GenTree\HT12GenTree.csproj", "{0F4D9D26-EAAE-4533-AFE9-73D99F9DA26D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestProjectForHT12", "TestProjectForHT12\TestProjectForHT12.csproj", "{E348AE0E-3A03-40FF-95A4-B675138F5997}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WEB_EF", "WEB_EF\WEB_EF.csproj", "{04D50558-26F3-4390-83FA-D91082E502B3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +71,10 @@ Global
 		{E348AE0E-3A03-40FF-95A4-B675138F5997}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E348AE0E-3A03-40FF-95A4-B675138F5997}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E348AE0E-3A03-40FF-95A4-B675138F5997}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04D50558-26F3-4390-83FA-D91082E502B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04D50558-26F3-4390-83FA-D91082E502B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04D50558-26F3-4390-83FA-D91082E502B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04D50558-26F3-4390-83FA-D91082E502B3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

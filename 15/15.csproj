@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\testRepo\HT1.csproj" />
+    <ProjectReference Include="..\testRepo\testRepo.csproj" />
   </ItemGroup>
 
 </Project>

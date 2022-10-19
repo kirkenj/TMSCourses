@@ -1,0 +1,39 @@
+﻿@using WEB_EF.Models.Entities
+@using System;
+@model List<Journal>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+@if (Model == null)
+{
+    throw new ArgumentNullException(nameof(Model));
+}
+
+<div class="text-center">
+    <h1 class="display-4">Journal</h1>         
+</div>
+
+@Html.ActionLink("Add", "Create")
+@(ViewData["Message"] ?? string.Empty)
+<table>
+    <tr>
+        <th>Registration number</th>
+        <th>Coming date</th>
+        <th>Parking place</th>
+        <th>Departure date</th>
+        <th>Edit</th>
+        <th>Delete</th>
+    </tr>
+    @for (int i = 0; i < Model.Count; i++)
+    {
+        <tr>
+            <td>@Html.DisplayFor(m=> Model[i].Car.RegNumber)</td>
+            <td>@Html.DisplayFor(m=> Model[i].ComingDate)</td>
+            <td>@Html.DisplayFor(m=> Model[i].ParkingPlaceNavigation.Id)</td>
+            <td>@Html.DisplayFor(m=> Model[i].DepartureDate)</td>
+            <td>@Html.ActionLink("Edit", "Edit", "Journal", new {id = Model[i].Id}, null)</td>
+            <td>@Html.ActionLink("Delete", "Delete", "Journal", new {id = Model[i].Id}, null)</td>
+        </tr>
+    }
+</table>   
