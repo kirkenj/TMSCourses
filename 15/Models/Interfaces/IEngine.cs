@@ -1,6 +1,5 @@
 ﻿using _15.Models.Enums;
 
-
 namespace _15.Models.Interfaces
 {
     public interface IEngine

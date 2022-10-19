@@ -1,0 +1,37 @@
+﻿@using _15.Models.Enums
+@model _15.Models.Classes.Car
+
+@{
+    var fuels = Enum.GetValues(typeof(Fuel)).Cast<Fuel>().ToArray();
+}
+
+@{
+    <form method = "post">
+    <table>
+                <tr>
+                    <td><input name = "index" hidden="hidden" value = @ViewData["index"]></td>
+                </tr>
+                <tr>
+                    <td>Fuel</td>
+                    <td>@Html.DropDownList("fuel", new SelectList(fuels.OrderByDescending(f=>f==Model.Fuel).Select(f=>f.ToString())))</td>
+                </tr>
+                <tr>
+                    <td>Engine Power</td>
+                    <td><input name = "enginePower" value = @Model.EnginePower></td>
+                </tr>
+                <tr>
+                    <td>Identifier</td>
+                    <td><input name = "identifier" value = @Model.Identifier></td>
+                </tr>
+                <tr>
+                    <td>Fuel tank capacity</td>
+                    <td><input name = "tankCapacity" value = @Model.FuelTankCapacity></td>
+                </tr>
+                <tr>
+                    <td>Fuel level</td>
+                    <td><input name = "fuelLevel" value = @Model.FuelLevel></td>
+                </tr>
+    </table>
+    <button type = "submit">Save</button>
+</form>
+}

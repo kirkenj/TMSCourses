@@ -2,7 +2,7 @@
 
 namespace _15.Models.Interfaces
 {
-    public interface ICar <T> where T : IEngine
+    public interface ICar<T> where T : IEngine
     {
         public T? Engine { get; }
         public int FuelTankCapacity { get; }

@@ -1,24 +1,40 @@
 ﻿using _15.Models.Enums;
 using _15.Models.Interfaces;
-using static testRepo.Programm;
-
+using _15.Models.Structs;
+using _15.Models.Exceptions;
 
 namespace _15.Models.Classes
 {
-    internal class Car : ICar<IEngine>, ICloneable, IComparable
+    [Serializable]
+    public class Car :  ICar<Engine>, ICloneable, IComparable
     {
         private static readonly Random _random = new();
-        public IEngine? Engine { get; private set; }
+        public Engine? Engine { get; set; } = default;
+        public int FuelTankCapacity { get; set; } = 0;
+        public string Identifier { get; set; } = string.Empty;
+        public int FuelLevel 
+        { 
+            get => _fuelLevel; 
+            set 
+            {
+                if (value < 0)
+                {
+                    throw new FuelException("Value can not be less 0",nameof(value));
+                }
 
-        public int FuelTankCapacity { get; private set; }
-
-        public string Identifier { get; private set; } = string.Empty;
-
-        public int FuelLevel { get; private set; }
-
-        public Fuel Fuel => Engine?.Fuel ?? throw new ArgumentNullException(nameof(Engine));
-
-        public int EnginePower => Engine?.Power ?? throw new ArgumentNullException(nameof(Engine));
+                if (value > FuelTankCapacity) 
+                {
+                    _fuelLevel = FuelTankCapacity;
+                }
+                else
+                {
+                    _fuelLevel = value;
+                }
+            } 
+        }
+        private int _fuelLevel = 0;
+        public Fuel Fuel => Engine?.Fuel ?? throw new MissingValueException(nameof(Engine));
+        public int EnginePower => Engine?.Power ?? throw new MissingValueException(nameof(Engine));
 
         public object Clone() => new Car(Fuel, EnginePower, FuelTankCapacity, Identifier);
         
@@ -32,12 +48,17 @@ namespace _15.Models.Classes
         {
             if (Engine == null)
             {
-                throw new Exception("Car doesn't have an engine");
+                throw new MissingValueException(nameof(Engine));
             }
 
             if (fuel != this.Engine.Fuel)
             {
-                throw new ArgumentException("Invalid Fuel");
+                throw new FuelException("Invalid Fuel");
+            }
+
+            if (fuelVolume < 0)
+            {
+                throw new FuelException("Value can not be less 0", nameof(fuelVolume));
             }
 
             int freeTankVolume = FuelTankCapacity - FuelLevel;
@@ -55,50 +76,81 @@ namespace _15.Models.Classes
         {
             if (Engine == null)
             {
-                throw new ArgumentNullException(nameof(Engine), "Car can't ride without an engine");
+                throw new MissingValueException(nameof(Engine), "Car can't ride without an engine");
             }
 
             if (FuelLevel == 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(FuelLevel), "Car can't ride not having fuel in the tank");
+                throw new FuelException(nameof(FuelLevel), "Car can't ride not having fuel in the tank");
             }
 
             FuelLevel -= _random.Next(0, FuelLevel);
         }
 
-        public Car(Fuel fuel, int enginePower, int tankCapacity, string identifier) : this(new Engine(fuel, enginePower), tankCapacity, identifier) { }
+        public Car() { }
 
-        public Car(IEngine engine, int tankCapacity, string identifier)
+        public Car(Fuel fuel, int enginePower, int tankCapacity, string identifier, int fuelLevel = 0) : this(new Engine(fuel, enginePower), tankCapacity, identifier, fuelLevel) { }
+
+        public Car(CarStruct? carStruct) 
         {
-            Engine = engine ?? throw new ArgumentNullException(nameof(engine));
+            if (carStruct == null)
+            {
+                throw new MissingValueException(nameof(carStruct));
+            }
+
+            Engine = new Engine(carStruct.Value.Fuel, carStruct.Value.EnginePower);
+            FuelTankCapacity = carStruct.Value.FuelTankCapacity;
+            Identifier = carStruct.Value.Identifier;
+            FuelLevel = carStruct.Value.FuelLevel;
+        }
+
+        public Car(Engine engine, int tankCapacity, string identifier, int fuelLevel = 0)
+        {
+            Engine = engine ?? throw new MissingValueException(nameof(engine));
             if (tankCapacity < 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(tankCapacity));
+                throw new InvalidValueException(nameof(tankCapacity), "Tank capacity can not be less 0");
             }
 
             FuelTankCapacity = tankCapacity;
             if (string.IsNullOrWhiteSpace(identifier))
             {
-                throw new ArgumentNullException(nameof(identifier));
+                throw new MissingValueException(nameof(identifier));
             }
 
+            FuelLevel = fuelLevel;
             Identifier = identifier.Trim();
         }
 
-        public override string ToString() => $"Identifier: \"{Identifier}\", {Engine}, Fuel tank capacity: {FuelTankCapacity}, Fuel level: {FuelLevel}";
-
-        public static Car? CreateCarByUser()
+        public void Edit(Engine engine, int tankCapacity, string identifier, int fuelLevel = 0)
         {
-            var engine = Classes.Engine.CreateEngineByUser();
-            if (engine == default)
+            Engine = engine ?? throw new MissingValueException(nameof(engine));
+            if (tankCapacity < 0)
             {
-                return null;
+                throw new InvalidValueException(nameof(tankCapacity), "Tank capacity can not be less 0");
             }
 
-            var tankCapacity = ReadIntFromConsole("Input tank's capacity (liters)", 0, 1000);
-            Console.WriteLine("Input car's identifier");
-            string identifier = Console.ReadLine() ?? "";
-            return new Car(engine, tankCapacity, identifier);
+            FuelTankCapacity = tankCapacity;
+            if (string.IsNullOrWhiteSpace(identifier))
+            {
+                throw new MissingValueException(nameof(identifier));
+            }
+
+            Identifier = identifier.Trim();
+            FuelLevel = fuelLevel;
         }
+
+        public void Edit(Fuel fuel, int enginePower, int tankCapacity, string identifier, int fuelLevel = 0) => Edit(new Engine(fuel, enginePower), tankCapacity, identifier, fuelLevel);
+        public void Edit(CarStruct? carStruct)
+        {
+            if (carStruct == null) 
+            {
+                throw new MissingValueException(nameof(carStruct)); 
+            }
+
+            Edit(new Engine(carStruct.Value.Fuel, carStruct.Value.EnginePower), carStruct.Value.FuelTankCapacity, carStruct.Value.Identifier, carStruct.Value.FuelLevel);
+        }
+        public CarStruct GetStruct() => new() { Engine = Engine?.GetStruct() ?? throw new MissingValueException(nameof(Engine)), FuelLevel = FuelLevel, FuelTankCapacity = FuelTankCapacity, Identifier = Identifier }; 
+        public override string ToString() => $"Identifier: \"{Identifier}\", {Engine ?? throw new MissingValueException(nameof(Engine))}, Fuel tank capacity: {FuelTankCapacity}, Fuel level: {FuelLevel}";
     }
 }

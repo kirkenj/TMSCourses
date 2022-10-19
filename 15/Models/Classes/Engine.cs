@@ -1,16 +1,16 @@
 ﻿using _15.Models.Enums;
 using _15.Models.Interfaces;
+using _15.Models.Structs;
 using static testRepo.Programm;
 
 namespace _15.Models.Classes
 {
-    internal class Engine : IEngine
+    [Serializable]
+    public class Engine : IEngine
     {
-        private static readonly Fuel[] _fuelTypes = Enum.GetValues(typeof(Fuel)).Cast<Fuel>().ToArray();
+        public Fuel Fuel { get; set; } = 0;
 
-        public Fuel Fuel { get; private set; }
-
-        public int Power { get; private set; }
+        public int Power { get; set; } = 0;
 
         public Engine(Fuel fuel, int power)
         {
@@ -23,18 +23,12 @@ namespace _15.Models.Classes
             Fuel = fuel;
         }
 
-        public override string ToString() => $"Power: {Power}, Fuel: {Fuel}";
-
-        public static Engine? CreateEngineByUser()
+        public Engine()
         {
-            var fuel = SeletctItemFromArray("Select engine's fuel", _fuelTypes);
-            if (fuel == default)
-            {
-                return null;
-            }
 
-            var power = ReadIntFromConsole("Input engine's power", 0, int.MaxValue);
-            return new Engine(fuel, power);
         }
+
+        public EngineStruct GetStruct() => new() { Fuel = this.Fuel, Power = this.Power };
+        public override string ToString() => $"Power: {Power}, Fuel: {Fuel}";
     }
 }

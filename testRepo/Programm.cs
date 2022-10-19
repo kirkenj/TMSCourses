@@ -2,6 +2,11 @@
 {
     public class Programm
     {
+        public static bool YesNoSelection(string message)
+        {
+            return ReadIntFromConsole(message + "\n1.Yes\n2.No", 1, 2) == 1;
+        }
+
         public static void Swap<T>(ref T a, ref T b) => (b, a) = (a, b);
 
         public static int SelectItemIndexFromArray<T>(in string msg, T[] arr, bool doUseCancel = true, in string afterArrPrintMsg = "")
@@ -63,7 +68,7 @@
             return ret;
         }
 
-        public static int ReadIntFromConsole(in string menu, int minValue, int maxValue)
+        public static int ReadIntFromConsole(in string message, int minValue, int maxValue)
         {
             if (maxValue < minValue)
             {
@@ -73,9 +78,9 @@
             int ret;
             do
             {
-                if (!string.IsNullOrWhiteSpace(menu))
+                if (!string.IsNullOrWhiteSpace(message))
                 {
-                    Console.WriteLine(CONSOLE_SEPARATOR + menu + '\n' + CONSOLE_SEPARATOR);
+                    Console.WriteLine(CONSOLE_SEPARATOR + message + '\n' + CONSOLE_SEPARATOR);
                 }
 
                 ret = ReadIntFromConsole($"Input value from {minValue} to {maxValue}");
