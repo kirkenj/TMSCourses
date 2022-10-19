@@ -1,0 +1,31 @@
+﻿@using WEB_EF.Models.Entities;
+@model List<ParkingPlace>;
+
+@if(Model == null)
+{
+    throw new ArgumentNullException(nameof(Model));
+}
+
+<div class="text-center">
+    <h1 class="display-4">Parking places</h1>    
+</div>
+
+@Html.ActionLink("Add", "Create")
+@(ViewData["Message"] ?? string.Empty)
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Car type</th>
+        <th>Edit</th>
+        <th>Delete</th>
+    </tr>
+    @foreach (var type in Model)
+    {
+        <tr>
+            <td>@type.Id</td>
+            <td>@type.CarTypeNavigation.TypeName</td>
+            <td>@Html.ActionLink("Edit", "Edit", "ParkingPlaces", new {id = type.Id}, null)</td>
+            <td>@Html.ActionLink("Delete", "Delete", "ParkingPlaces", new {id = type.Id}, null)</td>
+        </tr>
+    }
+</table>   
