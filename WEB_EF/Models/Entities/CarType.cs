@@ -10,7 +10,6 @@
 
         public int Id { get; set; }
         public string TypeName { get; set; } = null!;
-        public bool IsDeleted { get; set; }
 
         public virtual ICollection<Car> Cars { get; set; }
         public virtual ICollection<ParkingPlace> ParkingPlaces { get; set; }

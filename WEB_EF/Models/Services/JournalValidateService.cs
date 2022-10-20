@@ -22,20 +22,14 @@ namespace WEB_EF.Models.Services
                 return false;
             }
 
-            if (record.IsDeleted)
-            {
-                explanation = "Record is deleted";
-                return false;
-            }
-
-            var car = _context.Cars.FirstOrDefault(c => c.Id == record.CarId && !c.IsDeleted);
+            var car = _context.Cars.FirstOrDefault(c => c.Id == record.CarId);
             if (car == null)
             {
                 explanation = "Car not found";
                 return false;
             }
 
-            var parkingPlace = _context.ParkingPlaces.FirstOrDefault(c => c.Id == record.ParkingPlace && !c.IsDeleted);
+            var parkingPlace = _context.ParkingPlaces.FirstOrDefault(c => c.Id == record.ParkingPlace);
             if (parkingPlace == null)
             {
                 explanation = "Parking place not found";
@@ -56,13 +50,13 @@ namespace WEB_EF.Models.Services
                 return false;
             }
 
-            if (_service.GetViaIQueriable().Any(j => !j.IsDeleted && j.Id != record.Id && j.CarId == record.CarId && (j.ComingDate <= departureDate && (j.DepartureDate ?? ((DateTime)System.Data.SqlTypes.SqlDateTime.MaxValue)) >= comingDate)))
+            if (_service.GetViaIQueriable().Any(j => j.Id != record.Id && j.CarId == record.CarId && (j.ComingDate <= departureDate && (j.DepartureDate ?? ((DateTime)System.Data.SqlTypes.SqlDateTime.MaxValue)) >= comingDate)))
             {
                 explanation = "Car is in parking at this period";
                 return false;
             }
 
-            if (_service.GetViaIQueriable().Any(j => !j.IsDeleted && j.Id != record.Id && j.ParkingPlace == record.ParkingPlace && (j.ComingDate <= departureDate && (j.DepartureDate ?? ((DateTime)System.Data.SqlTypes.SqlDateTime.MaxValue)) >= comingDate)))
+            if (_service.GetViaIQueriable().Any(j => j.Id != record.Id && j.ParkingPlace == record.ParkingPlace && (j.ComingDate <= departureDate && (j.DepartureDate ?? ((DateTime)System.Data.SqlTypes.SqlDateTime.MaxValue)) >= comingDate)))
             {
                 explanation = "Place is taken at this period";
                 return false;

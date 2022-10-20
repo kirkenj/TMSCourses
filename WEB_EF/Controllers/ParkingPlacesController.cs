@@ -20,13 +20,13 @@ namespace WEB_EF.Controllers
         // GET: ClientsController
         public ActionResult Index()
         {
-            return View(_service.GetViaIQueriable().Where(j => !j.IsDeleted).Include(j => j.CarTypeNavigation).ToList());
+            return View(_service.GetViaIQueriable().Include(j => j.CarTypeNavigation).ToList());
         }
 
         // GET: ClientsController/Create
         public ActionResult Create()
         {
-            ViewData["CarTypes"] = _context.CarTypes.Where(ct=>!ct.IsDeleted).ToList();
+            ViewData["CarTypes"] = _context.CarTypes.ToList();
             return View();
         }
 
@@ -37,7 +37,7 @@ namespace WEB_EF.Controllers
         {
             try
             {
-                var carTypeNavigation = _context.CarTypes.FirstOrDefault(ct => !ct.IsDeleted && ct.Id == carType);
+                var carTypeNavigation = _context.CarTypes.FirstOrDefault(ct => ct.Id == carType);
                 if (carTypeNavigation == null)
                 {
                     ViewData["Message"] = "Car type not found";
@@ -61,8 +61,8 @@ namespace WEB_EF.Controllers
         // GET: ClientsController/Edit/5
         public ActionResult Edit(int id)
         {
-            ViewData["CarTypes"] = _context.CarTypes.Where(ct => !ct.IsDeleted).ToList();
-            var place = _service.GetViaIQueriable().FirstOrDefault(p => !p.IsDeleted && p.Id == id);
+            ViewData["CarTypes"] = _context.CarTypes.ToList();
+            var place = _service.GetViaIQueriable().FirstOrDefault(p => p.Id == id);
             if (place == null)
             {
                 return RedirectToAction(nameof(Index));
@@ -78,14 +78,14 @@ namespace WEB_EF.Controllers
         {
             try
             {
-                var parkingPlace = _service.GetViaIQueriable().FirstOrDefault(p => !p.IsDeleted && p.Id == id);
+                var parkingPlace = _service.GetViaIQueriable().FirstOrDefault(p => p.Id == id);
                 if (parkingPlace == null)
                 {
                     ViewData["Message"] = "Parking place not found";
                     return Create();
                 }
 
-                var carTypeNavigation = _context.CarTypes.FirstOrDefault(ct => !ct.IsDeleted && ct.Id == carType); 
+                var carTypeNavigation = _context.CarTypes.FirstOrDefault(ct => ct.Id == carType); 
                 if (carTypeNavigation == null)
                 {
                     ViewData["Message"] = "Car type not found";
@@ -107,7 +107,7 @@ namespace WEB_EF.Controllers
         {
             try
             {
-                var parkingPlace = _service.GetViaIQueriable().FirstOrDefault(p => !p.IsDeleted && p.Id == id);
+                var parkingPlace = _service.GetViaIQueriable().FirstOrDefault(p => p.Id == id);
                 if (parkingPlace != null)
                 {
                     _service.Delete(parkingPlace);

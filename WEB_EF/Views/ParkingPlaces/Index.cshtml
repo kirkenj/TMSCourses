@@ -23,7 +23,7 @@
     {
         <tr>
             <td>@type.Id</td>
-            <td>@type.CarTypeNavigation.TypeName</td>
+            <td>@(type.CarTypeNavigation?.TypeName ?? "Undefined")</td>
             <td>@Html.ActionLink("Edit", "Edit", "ParkingPlaces", new {id = type.Id}, null)</td>
             <td>@Html.ActionLink("Delete", "Delete", "ParkingPlaces", new {id = type.Id}, null)</td>
         </tr>

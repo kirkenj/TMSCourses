@@ -11,6 +11,10 @@
     {
         throw new ArgumentException("CarTypes");
     }
+
+    
+    var clientsSelection = clients.Select(c => new SelectListItem { Value = c.Id.ToString(), Text = c.Name + ' ' + c.Surname }).ToList();
+    clientsSelection.Add(new SelectListItem { Value = null, Text = "Not set" });
 }
 
 <form method = "post">
@@ -22,7 +26,7 @@
             <td>@Html.LabelFor(m=>m.RegNumber)</td> <td>@Html.TextBoxFor(m=>m.RegNumber)</td>
         </tr>
         <tr>
-            <td>@Html.LabelFor(m=>m.Client)</td> <td>@Html.DropDownListFor(m=>m.ClientId, clients.Select(c=> new SelectListItem{Value = c.Id.ToString(), Text = c.Name + ' ' + c.Surname}))</td>    
+            <td>@Html.LabelFor(m=>m.Client)</td> <td>@Html.DropDownListFor(m=>m.ClientId, clientsSelection)</td>    
         </tr>
         <tr>
             <td>@Html.LabelFor(m=>m.CarType)</td> <td>@Html.DropDownListFor(m=>m.CarType, carTypes.Select(c=> new SelectListItem{Value = c.Id.ToString(), Text = c.TypeName}))</td>    

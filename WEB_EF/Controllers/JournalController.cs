@@ -24,15 +24,15 @@ namespace WEB_EF.Controllers
         // GET: JournalController
         public ActionResult Index()
         {
-            return View(_service.GetViaIQueriable().Where(j => !j.IsDeleted).Include(j=>j.Car).Include(j=>j.ParkingPlaceNavigation).ToList());
+            return View(_service.GetViaIQueriable().Include(j=>j.Car).Include(j=>j.ParkingPlaceNavigation).ToList());
         }
 
         // GET: JournalController/Create
         public ActionResult Create()
         {
-            ViewData["Cars"] = _context.Cars.Where(c => !c.IsDeleted).ToList();
-            ViewData["ParkingPlaces"] = _context.ParkingPlaces.Where(c => !c.IsDeleted).ToList();
-            ViewData["CarTypes"] = _context.CarTypes.Where(c => !c.IsDeleted).ToList();
+            ViewData["Cars"] = _context.Cars.ToList();
+            ViewData["ParkingPlaces"] = _context.ParkingPlaces.ToList();
+            ViewData["CarTypes"] = _context.CarTypes.ToList();
             return View();
         }
 
@@ -70,15 +70,15 @@ namespace WEB_EF.Controllers
         // GET: JournalController/Edit/5
         public ActionResult Edit(int id)
         {
-            var record = _service.GetViaIQueriable().FirstOrDefault(j => !j.IsDeleted && j.Id == id);
+            var record = _service.GetViaIQueriable().FirstOrDefault(j => j.Id == id);
             if (record == null)
             {
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["Cars"] = _context.Cars.Where(c => !c.IsDeleted).ToList();
-            ViewData["ParkingPlaces"] = _context.ParkingPlaces.Where(c => !c.IsDeleted).ToList();
-            ViewData["CarTypes"] = _context.CarTypes.Where(c => !c.IsDeleted).ToList();
+            ViewData["Cars"] = _context.Cars.ToList();
+            ViewData["ParkingPlaces"] = _context.ParkingPlaces.ToList();
+            ViewData["CarTypes"] = _context.CarTypes.ToList();
             return View(record);
         }
         // POST: JournalController/Edit/5
@@ -88,7 +88,7 @@ namespace WEB_EF.Controllers
         {
             try
             {
-                var journalRecord = _service.GetViaIQueriable().FirstOrDefault(j => !j.IsDeleted && j.Id == id);
+                var journalRecord = _service.GetViaIQueriable().FirstOrDefault(j => j.Id == id);
                 if (journalRecord == null)
                 {
                     ViewData["Message"] = "Record not found";
@@ -115,7 +115,7 @@ namespace WEB_EF.Controllers
         {
             try
             {
-                Journal? journalRecord = _service.GetViaIQueriable().FirstOrDefault(j => !j.IsDeleted && j.Id == id);
+                Journal? journalRecord = _service.GetViaIQueriable().FirstOrDefault(j => j.Id == id);
                 if (journalRecord == null)
                 {
                     ViewData["Message"] = "Record not found";

@@ -21,7 +21,7 @@ namespace WEB_EF.Controllers
         // GET: ClientsController
         public ActionResult Index()
         {
-            return View(_service.GetViaIQueriable().Where(ct => !ct.IsDeleted).Include(c => c.Cars.Where(c=>!c.IsDeleted)).Include(c => c.ParkingPlaces.Where(c => !c.IsDeleted)).ToList());
+            return View(_service.GetViaIQueriable().Include(c => c.Cars).Include(c => c.ParkingPlaces).ToList());
         }
 
         // GET: ClientsController/Create
@@ -56,7 +56,7 @@ namespace WEB_EF.Controllers
         // GET: ClientsController/Edit/5
         public ActionResult Edit(int id)
         {
-            var obj = _service.GetViaIQueriable().FirstOrDefault(ct => ct.Id == id && !ct.IsDeleted);
+            var obj = _service.GetViaIQueriable().FirstOrDefault(ct => ct.Id == id);
             if (obj == null)
             {
                 return RedirectToAction("Index");
@@ -72,7 +72,7 @@ namespace WEB_EF.Controllers
         {
             try
             {
-                var obj = _service.GetViaIQueriable().FirstOrDefault(ct => !ct.IsDeleted && ct.Id == id);
+                var obj = _service.GetViaIQueriable().FirstOrDefault(ct => ct.Id == id);
                 if (obj == null)
                 {
                     ViewData["Message"] = $"Car not found";
@@ -102,7 +102,7 @@ namespace WEB_EF.Controllers
         {
             try
             {
-                var obj = _context.CarTypes.FirstOrDefault(ct => !ct.IsDeleted && ct.Id == id);
+                var obj = _context.CarTypes.FirstOrDefault(ct => ct.Id == id);
                 if (obj != null)
                 {
                     _service.Delete(obj);

@@ -23,7 +23,7 @@
         <tr>
             <td>@type.RegNumber</td>
             <td>@type.CarTypeNavigation.TypeName</td>
-            <td>@(type.Client.Surname + ' ' + type.Client.Name)</td>
+            <td>@(type.Client == null ? "Not set" : type.Client.Surname + ' ' + type.Client.Name)</td>
             <td>@Html.ActionLink("Edit", "Edit", "Cars", new {id = type.Id}, null)</td>
             <td>@Html.ActionLink("Delete", "Delete", "Cars", new {id = type.Id}, null)</td>
         </tr>

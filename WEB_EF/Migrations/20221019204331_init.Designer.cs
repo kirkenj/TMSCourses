@@ -12,8 +12,8 @@ using WEB_EF.Models.DBContexts;
 namespace WEB_EF.Migrations
 {
     [DbContext(typeof(AutoparkDBContext))]
-    [Migration("20221006213151_AlterAllAddIsDeleted")]
-    partial class AlterAllAddIsDeleted
+    [Migration("20221019204331_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,7 +24,7 @@ namespace WEB_EF.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("WEB_EF.Models.Classes.Car", b =>
+            modelBuilder.Entity("WEB_EF.Models.Entities.Car", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -36,15 +36,9 @@ namespace WEB_EF.Migrations
                     b.Property<int>("CarType")
                         .HasColumnType("int");
 
-                    b.Property<int>("ClientId")
+                    b.Property<int?>("ClientId")
                         .HasColumnType("int")
                         .HasColumnName("ClientID");
-
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false)
-                        .HasColumnName("IsDeleted");
 
                     b.Property<string>("RegNumber")
                         .IsRequired()
@@ -64,7 +58,7 @@ namespace WEB_EF.Migrations
                     b.ToTable("Cars");
                 });
 
-            modelBuilder.Entity("WEB_EF.Models.Classes.CarType", b =>
+            modelBuilder.Entity("WEB_EF.Models.Entities.CarType", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -72,12 +66,6 @@ namespace WEB_EF.Migrations
                         .HasColumnName("ID");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false)
-                        .HasColumnName("IsDeleted");
 
                     b.Property<string>("TypeName")
                         .IsRequired()
@@ -92,7 +80,7 @@ namespace WEB_EF.Migrations
                     b.ToTable("CarTypes");
                 });
 
-            modelBuilder.Entity("WEB_EF.Models.Classes.Client", b =>
+            modelBuilder.Entity("WEB_EF.Models.Entities.Client", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -101,24 +89,10 @@ namespace WEB_EF.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false)
-                        .HasColumnName("IsDeleted");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)")
-                        .HasDefaultValue("Undefined")
-                        .HasColumnName("PhoneNumber");
 
                     b.Property<string>("Surname")
                         .IsRequired()
@@ -133,7 +107,7 @@ namespace WEB_EF.Migrations
                     b.ToTable("Clients");
                 });
 
-            modelBuilder.Entity("WEB_EF.Models.Classes.Journal", b =>
+            modelBuilder.Entity("WEB_EF.Models.Entities.Journal", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -152,12 +126,6 @@ namespace WEB_EF.Migrations
                     b.Property<DateTime?>("DepartureDate")
                         .HasColumnType("datetime");
 
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false)
-                        .HasColumnName("IsDeleted");
-
                     b.Property<int>("ParkingPlace")
                         .HasColumnType("int");
 
@@ -170,7 +138,7 @@ namespace WEB_EF.Migrations
                     b.ToTable("Journal", (string)null);
                 });
 
-            modelBuilder.Entity("WEB_EF.Models.Classes.ParkingPlace", b =>
+            modelBuilder.Entity("WEB_EF.Models.Entities.ParkingPlace", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -182,12 +150,6 @@ namespace WEB_EF.Migrations
                     b.Property<int>("CarType")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false)
-                        .HasColumnName("IsDeleted");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CarType");
@@ -195,18 +157,19 @@ namespace WEB_EF.Migrations
                     b.ToTable("ParkingPlaces");
                 });
 
-            modelBuilder.Entity("WEB_EF.Models.Classes.Car", b =>
+            modelBuilder.Entity("WEB_EF.Models.Entities.Car", b =>
                 {
-                    b.HasOne("WEB_EF.Models.Classes.CarType", "CarTypeNavigation")
+                    b.HasOne("WEB_EF.Models.Entities.CarType", "CarTypeNavigation")
                         .WithMany("Cars")
                         .HasForeignKey("CarType")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("FK_Cars_CarTypes");
 
-                    b.HasOne("WEB_EF.Models.Classes.Client", "Client")
+                    b.HasOne("WEB_EF.Models.Entities.Client", "Client")
                         .WithMany("Cars")
                         .HasForeignKey("ClientId")
-                        .IsRequired()
+                        .OnDelete(DeleteBehavior.Cascade)
                         .HasConstraintName("FK_Cars_Clients");
 
                     b.Navigation("CarTypeNavigation");
@@ -214,17 +177,19 @@ namespace WEB_EF.Migrations
                     b.Navigation("Client");
                 });
 
-            modelBuilder.Entity("WEB_EF.Models.Classes.Journal", b =>
+            modelBuilder.Entity("WEB_EF.Models.Entities.Journal", b =>
                 {
-                    b.HasOne("WEB_EF.Models.Classes.Car", "Car")
+                    b.HasOne("WEB_EF.Models.Entities.Car", "Car")
                         .WithMany("Journals")
                         .HasForeignKey("CarId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("FK_Journal_Cars");
 
-                    b.HasOne("WEB_EF.Models.Classes.ParkingPlace", "ParkingPlaceNavigation")
+                    b.HasOne("WEB_EF.Models.Entities.ParkingPlace", "ParkingPlaceNavigation")
                         .WithMany("Journals")
                         .HasForeignKey("ParkingPlace")
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired()
                         .HasConstraintName("FK_Journal_ParkingPlaces");
 
@@ -233,35 +198,36 @@ namespace WEB_EF.Migrations
                     b.Navigation("ParkingPlaceNavigation");
                 });
 
-            modelBuilder.Entity("WEB_EF.Models.Classes.ParkingPlace", b =>
+            modelBuilder.Entity("WEB_EF.Models.Entities.ParkingPlace", b =>
                 {
-                    b.HasOne("WEB_EF.Models.Classes.CarType", "CarTypeNavigation")
+                    b.HasOne("WEB_EF.Models.Entities.CarType", "CarTypeNavigation")
                         .WithMany("ParkingPlaces")
                         .HasForeignKey("CarType")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("FK_ParkingPlaces_CarTypes");
 
                     b.Navigation("CarTypeNavigation");
                 });
 
-            modelBuilder.Entity("WEB_EF.Models.Classes.Car", b =>
+            modelBuilder.Entity("WEB_EF.Models.Entities.Car", b =>
                 {
                     b.Navigation("Journals");
                 });
 
-            modelBuilder.Entity("WEB_EF.Models.Classes.CarType", b =>
+            modelBuilder.Entity("WEB_EF.Models.Entities.CarType", b =>
                 {
                     b.Navigation("Cars");
 
                     b.Navigation("ParkingPlaces");
                 });
 
-            modelBuilder.Entity("WEB_EF.Models.Classes.Client", b =>
+            modelBuilder.Entity("WEB_EF.Models.Entities.Client", b =>
                 {
                     b.Navigation("Cars");
                 });
 
-            modelBuilder.Entity("WEB_EF.Models.Classes.ParkingPlace", b =>
+            modelBuilder.Entity("WEB_EF.Models.Entities.ParkingPlace", b =>
                 {
                     b.Navigation("Journals");
                 });

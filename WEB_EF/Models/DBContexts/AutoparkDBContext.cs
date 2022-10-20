@@ -42,14 +42,13 @@ namespace WEB_EF.Models.DBContexts
                 entity.HasOne(d => d.CarTypeNavigation)
                     .WithMany(p => p.Cars)
                     .HasForeignKey(d => d.CarType)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Cars_CarTypes");
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasConstraintName("FK_Cars_CarTypes"); 
 
-                entity.Property(e => e.IsDeleted).HasColumnName("IsDeleted").HasDefaultValue(false);
                 entity.HasOne(d => d.Client)
                     .WithMany(p => p.Cars)
                     .HasForeignKey(d => d.ClientId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.SetNull)
                     .HasConstraintName("FK_Cars_Clients");
             });
 
@@ -60,7 +59,6 @@ namespace WEB_EF.Models.DBContexts
 
                 entity.Property(e => e.Id).HasColumnName("ID").UseIdentityColumn();
 
-                entity.Property(e => e.IsDeleted).HasColumnName("IsDeleted").HasDefaultValue(false);
                 entity.Property(e => e.TypeName).HasMaxLength(10);
             });
 
@@ -74,7 +72,7 @@ namespace WEB_EF.Models.DBContexts
                 entity.Property(e => e.Name).HasMaxLength(50);
 
                 entity.Property(e => e.Surname).HasMaxLength(50);
-                entity.Property(e => e.IsDeleted).HasColumnName("IsDeleted").HasDefaultValue(false);
+
             });
 
             modelBuilder.Entity<Journal>(entity =>
@@ -88,30 +86,30 @@ namespace WEB_EF.Models.DBContexts
                 entity.Property(e => e.ComingDate).HasColumnType("datetime");
 
                 entity.Property(e => e.DepartureDate).HasColumnType("datetime");
-                entity.Property(e => e.IsDeleted).HasColumnName("IsDeleted").HasDefaultValue(false);
+
 
                 entity.HasOne(d => d.Car)
                     .WithMany(p => p.Journals)
                     .HasForeignKey(d => d.CarId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_Journal_Cars");
 
                 entity.HasOne(d => d.ParkingPlaceNavigation)
                     .WithMany(p => p.Journals)
                     .HasForeignKey(d => d.ParkingPlace)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.ClientCascade)
                     .HasConstraintName("FK_Journal_ParkingPlaces");
             });
 
             modelBuilder.Entity<ParkingPlace>(entity =>
             {
                 entity.Property(e => e.Id).HasColumnName("ID").UseIdentityColumn();
-                entity.Property(e => e.IsDeleted).HasColumnName("IsDeleted").HasDefaultValue(false);
+
 
                 entity.HasOne(d => d.CarTypeNavigation)
                     .WithMany(p => p.ParkingPlaces)
                     .HasForeignKey(d => d.CarType)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.NoAction)
                     .HasConstraintName("FK_ParkingPlaces_CarTypes");
             });
 

@@ -8,10 +8,9 @@
         }
 
         public int Id { get; set; }
-        public bool IsDeleted { get; set; }
-        public int CarType { get; set; }
+        public int? CarType { get; set; }
 
-        public virtual CarType CarTypeNavigation { get; set; } = null!;
+        public virtual CarType? CarTypeNavigation { get; set; }
         public virtual ICollection<Journal> Journals { get; set; }
     }
 }
