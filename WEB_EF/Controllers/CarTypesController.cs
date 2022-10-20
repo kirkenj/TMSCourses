@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using WEB_EF.Models.Entities;
-using WEB_EF.Models.DBContexts;
-using WEB_EF.Models.Interfaces;
+using WebApi.Models.Entities;
+using WebApi.Models.DBContexts;
+using WebApi.Models.Interfaces;
 
-namespace WEB_EF.Controllers
+namespace WebApi.Controllers
 {
     public class CarTypesController : Controller
     {
