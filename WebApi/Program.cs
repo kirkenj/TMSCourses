@@ -4,6 +4,8 @@ using WebApiDatabase.Entities;
 using WebApiDatabase.Interfaces;
 using WebApi.Models.Interfaces;
 using WebApi.Models.Services;
+using WebApi.MiddleWares;
+using WebApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +17,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AutoparkDBContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddTransient<IAutoparkDBContext, AutoparkDBContext>();
-builder.Services.AddTransient<ICRUDlService<Car>, CarCrudlService>();
+builder.Services.AddTransient<IDeleteService<int>, CarDeleteService>();
+builder.Services.AddTransient<IUpdateService<CarUpdateModel>, CarUpdateService>();
+builder.Services.AddTransient<IGetService2<Car, CarItemModel>, CarGetService>();
+builder.Services.AddTransient<ICreateService<CarCreateModel>, CarCreateService>();
 builder.Services.AddTransient<ICRUDlService<CarType>, CarTypeCrudlService>();
 builder.Services.AddTransient<ICRUDlService<Client>, ClientCrudlService>();
 builder.Services.AddTransient<ICRUDlService<Journal>, JournalCrudlService>();
@@ -29,6 +34,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<ExceptionCatchingMiddleWare>();
 
 app.UseHttpsRedirection();
 

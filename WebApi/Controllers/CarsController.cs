@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using WebApiDatabase.Interfaces;
+﻿using Microsoft.AspNetCore.Mvc;
 using WebApiDatabase.Entities;
+using WebApi.Models.Interfaces;
+using WebApi.Models;
 
 namespace WebApi.Controllers
 {
@@ -14,25 +9,31 @@ namespace WebApi.Controllers
     [ApiController]
     public class CarsController : ControllerBase
     {
-        private readonly IAutoparkDBContext _context;
+        private readonly IGetService2<Car, CarItemModel> _getService;
+        private readonly IUpdateService<CarUpdateModel> _updateService;
+        private readonly IDeleteService<int> _deleteService;
+        private readonly ICreateService<CarCreateModel> _createService;
 
-        public CarsController(IAutoparkDBContext context)
+        public CarsController(IGetService2<Car, CarItemModel> getService, IUpdateService<CarUpdateModel> updateService, IDeleteService<int> deleteService, ICreateService<CarCreateModel> createService)
         {
-            _context = context;
+            _getService = getService;
+            _createService = createService;
+            _updateService = updateService;
+            _deleteService = deleteService;
         }
 
         // GET: api/Cars1
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Car>>> GetCars()
+        public IEnumerable<CarItemModel> GetCars()
         {
-            return await _context.Cars.ToListAsync();
+            return _getService.GetAll();
         }
 
         // GET: api/Cars1/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Car>> GetCar(int id)
+        public ActionResult<CarItemModel> GetCar(int id)
         {
-            var car = await _context.Cars.FindAsync(id);
+            var car = _getService.GetFirst(c => c.Id == id);
 
             if (car == null)
             {
@@ -45,65 +46,28 @@ namespace WebApi.Controllers
 
         // PUT: api/Cars1/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutCar(int id, Car car)
+        [HttpPut]
+        public IActionResult PutCar(CarUpdateModel car)
         {
-            if (id != car.Id)
-            {
-                return BadRequest();
-            }
-
-            
-            _context.Entry(car).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CarExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            _updateService.Update(car);
+            return Ok();
         }
 
         // POST: api/Cars1
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Car>> PostCar(Car car)
+        public IActionResult PostCar(CarCreateModel car)
         {
-            _context.Cars.Add(car);
-            await _context.SaveChangesAsync();
-            return CreatedAtAction("GetCar", new { id = car.Id }, car);
+            _createService.Create(car);
+            return CreatedAtAction(nameof(PutCar), car);
         }
 
         // DELETE: api/Cars1/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCar(int id)
+        public IActionResult DeleteCar(int id)
         {
-            var car = await _context.Cars.FindAsync(id);
-            if (car == null)
-            {
-                return NotFound();
-            }
-
-            _context.Cars.Remove(car);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool CarExists(int id)
-        {
-            return _context.Cars.Any(e => e.Id == id);
+            _deleteService.Delete(id);
+            return Ok();
         }
     }
 }
