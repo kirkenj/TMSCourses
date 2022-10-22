@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApiDatabase.Interfaces;
 using WebApiDatabase.Entities;
+using WebApi.Models.Interfaces;
+using WebApi.Models;
+
 
 namespace WebApi.Controllers
 {
@@ -14,95 +17,63 @@ namespace WebApi.Controllers
     [ApiController]
     public class CarTypesController : ControllerBase
     {
-        private readonly IAutoparkDBContext _context;
+        private readonly IGetService2<CarType, CarTypeItemModel> _getService;
+        private readonly IUpdateService<CarTypeUpdateModel> _updateService;
+        private readonly IDeleteService<int> _deleteService;
+        private readonly ICreateService<CarTypeCreateModel> _createService;
 
-        public CarTypesController(IAutoparkDBContext context)
+        public CarTypesController(IGetService2<CarType, CarTypeItemModel> getService, IUpdateService<CarTypeUpdateModel> updateService, IDeleteService<int> deleteService, ICreateService<CarTypeCreateModel> createService)
         {
-            _context = context;
+            _getService = getService;
+            _createService = createService;
+            _updateService = updateService;
+            _deleteService = deleteService;
         }
 
         // GET: api/CarTypes
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CarType>>> GetCarTypes()
+        public ActionResult<IEnumerable<CarTypeItemModel>> GetCarTypes()
         {
-            return await _context.CarTypes.ToListAsync();
+            return _getService.GetAll();
         }
 
         // GET: api/CarTypes/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<CarType>> GetCarType(int id)
+        public ActionResult<CarTypeItemModel?> GetCarType(int id)
         {
-            var carType = await _context.CarTypes.FindAsync(id);
-
-            if (carType == null)
+            var car = _getService.GetFirst(c => c.Id == id);
+            if (car == null)
             {
                 return NotFound();
             }
 
-            return carType;
+            return car;
         }
 
         // PUT: api/CarTypes/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutCarType(int id, CarType carType)
+        [HttpPut]
+        public IActionResult PutCarType(CarTypeUpdateModel carType)
         {
-            if (id != carType.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(carType).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CarTypeExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            _updateService.Update(carType);
+            return Ok();
         }
 
         // POST: api/CarTypes
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<CarType>> PostCarType(CarType carType)
+        public ActionResult<CarType> PostCarType(CarTypeCreateModel carType)
         {
-            _context.CarTypes.Add(carType);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetCarType", new { id = carType.Id }, carType);
+            _createService.Create(carType);
+            return CreatedAtAction("GetCarType", carType, carType);
         }
 
         // DELETE: api/CarTypes/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCarType(int id)
+        public IActionResult DeleteCarType(int id)
         {
-            var carType = await _context.CarTypes.FindAsync(id);
-            if (carType == null)
-            {
-                return NotFound();
-            }
-
-            _context.CarTypes.Remove(carType);
-            await _context.SaveChangesAsync();
-
+            _deleteService.Delete(id);
             return NoContent();
-        }
-
-        private bool CarTypeExists(int id)
-        {
-            return _context.CarTypes.Any(e => e.Id == id);
         }
     }
 }

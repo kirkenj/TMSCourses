@@ -17,11 +17,17 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AutoparkDBContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddTransient<IAutoparkDBContext, AutoparkDBContext>();
+
 builder.Services.AddTransient<IDeleteService<int>, CarDeleteService>();
 builder.Services.AddTransient<IUpdateService<CarUpdateModel>, CarUpdateService>();
 builder.Services.AddTransient<IGetService2<Car, CarItemModel>, CarGetService>();
 builder.Services.AddTransient<ICreateService<CarCreateModel>, CarCreateService>();
-builder.Services.AddTransient<ICRUDlService<CarType>, CarTypeCrudlService>();
+
+builder.Services.AddTransient<IDeleteService<int>, CarTypeDeleteService>();
+builder.Services.AddTransient<IUpdateService<CarTypeUpdateModel>, CarTypeUpdateService>();
+builder.Services.AddTransient<IGetService2<CarType, CarTypeItemModel>, CarTypeGetService>();
+builder.Services.AddTransient<ICreateService<CarTypeCreateModel>, CarTypeCreateService>();
+
 builder.Services.AddTransient<ICRUDlService<Client>, ClientCrudlService>();
 builder.Services.AddTransient<ICRUDlService<Journal>, JournalCrudlService>();
 builder.Services.AddTransient<IValidateService<Journal>, JournalValidateService>();

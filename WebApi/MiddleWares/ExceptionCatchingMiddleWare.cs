@@ -22,7 +22,7 @@ namespace WebApi.MiddleWares
             catch (Exception ex)
             {
                 context.Response.StatusCode = 500;
-                await context.Response.WriteAsJsonAsync(new {ex.Message});
+                await context.Response.WriteAsJsonAsync(new {exception = ex.GetType().Name, ex.Message});
             }
         }
     }
