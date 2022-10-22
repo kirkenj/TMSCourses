@@ -4,7 +4,7 @@ using WebApiDatabase.Interfaces;
 
 namespace WebApi.Models.Services
 {
-    public class CarTypeGetService : IGetService2<CarType, CarTypeItemModel>
+    public class CarTypeGetService : IGetService<CarType, CarTypeItemModel>
     {
         public CarTypeGetService(IAutoparkDBContext context)
         {

@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using WebApiDatabase.Interfaces;
+﻿using Microsoft.AspNetCore.Mvc;
 using WebApiDatabase.Entities;
 using WebApi.Models.Interfaces;
 using WebApi.Models;
@@ -17,12 +10,12 @@ namespace WebApi.Controllers
     [ApiController]
     public class CarTypesController : ControllerBase
     {
-        private readonly IGetService2<CarType, CarTypeItemModel> _getService;
+        private readonly IGetService<CarType, CarTypeItemModel> _getService;
         private readonly IUpdateService<CarTypeUpdateModel> _updateService;
         private readonly IDeleteService<int> _deleteService;
         private readonly ICreateService<CarTypeCreateModel> _createService;
 
-        public CarTypesController(IGetService2<CarType, CarTypeItemModel> getService, IUpdateService<CarTypeUpdateModel> updateService, IDeleteService<int> deleteService, ICreateService<CarTypeCreateModel> createService)
+        public CarTypesController(IGetService<CarType, CarTypeItemModel> getService, IUpdateService<CarTypeUpdateModel> updateService, IDeleteService<int> deleteService, ICreateService<CarTypeCreateModel> createService)
         {
             _getService = getService;
             _createService = createService;
@@ -73,7 +66,7 @@ namespace WebApi.Controllers
         public IActionResult DeleteCarType(int id)
         {
             _deleteService.Delete(id);
-            return NoContent();
+            return Ok();
         }
     }
 }

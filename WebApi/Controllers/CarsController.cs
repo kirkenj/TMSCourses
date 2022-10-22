@@ -9,12 +9,12 @@ namespace WebApi.Controllers
     [ApiController]
     public class CarsController : ControllerBase
     {
-        private readonly IGetService2<Car, CarItemModel> _getService;
+        private readonly IGetService<Car, CarItemModel> _getService;
         private readonly IUpdateService<CarUpdateModel> _updateService;
         private readonly IDeleteService<int> _deleteService;
         private readonly ICreateService<CarCreateModel> _createService;
 
-        public CarsController(IGetService2<Car, CarItemModel> getService, IUpdateService<CarUpdateModel> updateService, IDeleteService<int> deleteService, ICreateService<CarCreateModel> createService)
+        public CarsController(IGetService<Car, CarItemModel> getService, IUpdateService<CarUpdateModel> updateService, IDeleteService<int> deleteService, ICreateService<CarCreateModel> createService)
         {
             _getService = getService;
             _createService = createService;

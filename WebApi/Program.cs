@@ -20,18 +20,19 @@ builder.Services.AddTransient<IAutoparkDBContext, AutoparkDBContext>();
 
 builder.Services.AddTransient<IDeleteService<int>, CarDeleteService>();
 builder.Services.AddTransient<IUpdateService<CarUpdateModel>, CarUpdateService>();
-builder.Services.AddTransient<IGetService2<Car, CarItemModel>, CarGetService>();
+builder.Services.AddTransient<IGetService<Car, CarItemModel>, CarGetService>();
 builder.Services.AddTransient<ICreateService<CarCreateModel>, CarCreateService>();
 
 builder.Services.AddTransient<IDeleteService<int>, CarTypeDeleteService>();
 builder.Services.AddTransient<IUpdateService<CarTypeUpdateModel>, CarTypeUpdateService>();
-builder.Services.AddTransient<IGetService2<CarType, CarTypeItemModel>, CarTypeGetService>();
+builder.Services.AddTransient<IGetService<CarType, CarTypeItemModel>, CarTypeGetService>();
 builder.Services.AddTransient<ICreateService<CarTypeCreateModel>, CarTypeCreateService>();
 
-builder.Services.AddTransient<ICRUDlService<Client>, ClientCrudlService>();
-builder.Services.AddTransient<ICRUDlService<Journal>, JournalCrudlService>();
-builder.Services.AddTransient<IValidateService<Journal>, JournalValidateService>();
-builder.Services.AddTransient<ICRUDlService<ParkingPlace>, ParkingPlaceCrudlService>();
+builder.Services.AddTransient<IDeleteService<int>, ParkingPlaceDeleteService>();
+builder.Services.AddTransient<IUpdateService<ParkingPlaceUpdateModel>, ParkingPlaceUpdateService>();
+builder.Services.AddTransient<IGetService<ParkingPlace, ParkingPlaceItemModel>, ParkingPlaceGetService>();
+builder.Services.AddTransient<ICreateService<int>, ParkingPlaceCreateService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

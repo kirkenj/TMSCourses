@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using WebApiDatabase.Interfaces;
+﻿using Microsoft.AspNetCore.Mvc;
 using WebApiDatabase.Entities;
+using WebApi.Models.Interfaces;
+using WebApi.Models;
 
 namespace WebApi.Controllers
 {
@@ -14,95 +9,63 @@ namespace WebApi.Controllers
     [ApiController]
     public class ParkingPlacesController : ControllerBase
     {
-        private readonly IAutoparkDBContext _context;
+        readonly IDeleteService<int> _deleteService;
+        readonly IUpdateService<ParkingPlaceUpdateModel> _updateService;
+        readonly IGetService<ParkingPlace, ParkingPlaceItemModel> _getService;
+        readonly ICreateService<int> _createService;
 
-        public ParkingPlacesController(IAutoparkDBContext context)
+        public ParkingPlacesController(IDeleteService<int> deleteService, IUpdateService<ParkingPlaceUpdateModel> updateService, IGetService<ParkingPlace, ParkingPlaceItemModel> getService, ICreateService<int> createService)
         {
-            _context = context;
+            _deleteService = deleteService;
+            _updateService = updateService;
+            _getService = getService;
+            _createService = createService;
         }
 
         // GET: api/ParkingPlaces
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ParkingPlace>>> GetParkingPlaces()
+        public IEnumerable<ParkingPlaceItemModel> GetParkingPlaces()
         {
-            return await _context.ParkingPlaces.ToListAsync();
+            return _getService.GetAll();
         }
 
         // GET: api/ParkingPlaces/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ParkingPlace>> GetParkingPlace(int id)
+        public ActionResult<ParkingPlaceItemModel> GetParkingPlace(int id)
         {
-            var parkingPlace = await _context.ParkingPlaces.FindAsync(id);
-
-            if (parkingPlace == null)
+            var place = _getService.GetFirst(c => c.Id == id);
+            if (place == null) 
             {
                 return NotFound();
             }
 
-            return parkingPlace;
+            return new ParkingPlaceItemModel { Id = place.Id, CarType = place.CarType };
         }
 
         // PUT: api/ParkingPlaces/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutParkingPlace(int id, ParkingPlace parkingPlace)
+        [HttpPut]
+        public IActionResult PutParkingPlace(ParkingPlaceUpdateModel updateModel)
         {
-            if (id != parkingPlace.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(parkingPlace).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ParkingPlaceExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            _updateService.Update(updateModel);
+            return Ok();
         }
 
         // POST: api/ParkingPlaces
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<ParkingPlace>> PostParkingPlace(ParkingPlace parkingPlace)
+        public ActionResult<int> PostParkingPlace(int newParkingPlaceCarType)
         {
-            _context.ParkingPlaces.Add(parkingPlace);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetParkingPlace", new { id = parkingPlace.Id }, parkingPlace);
+            _createService.Create(newParkingPlaceCarType);
+            return CreatedAtAction("GetParkingPlace", new { type = newParkingPlaceCarType}, newParkingPlaceCarType);
         }
 
         // DELETE: api/ParkingPlaces/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteParkingPlace(int id)
+        public IActionResult DeleteParkingPlace(int id)
         {
-            var parkingPlace = await _context.ParkingPlaces.FindAsync(id);
-            if (parkingPlace == null)
-            {
-                return NotFound();
-            }
-
-            _context.ParkingPlaces.Remove(parkingPlace);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool ParkingPlaceExists(int id)
-        {
-            return _context.ParkingPlaces.Any(e => e.Id == id);
+            _deleteService.Delete(id);
+            return Ok();
         }
     }
 }
