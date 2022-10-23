@@ -4,7 +4,7 @@ using WebApiDatabase.Interfaces;
 
 namespace WebApi.Models.Services
 {
-    public class ParkingPlaceGetService : IGetService<ParkingPlace, ParkingPlaceItemModel>
+    public class ParkingPlaceGetService : IGetService<ParkingPlaceItemModel>
     {
         public ParkingPlaceGetService(IAutoparkDBContext context)
         {
@@ -12,28 +12,26 @@ namespace WebApi.Models.Services
         }
 
         private readonly IAutoparkDBContext _context;
+        private IQueryable<ParkingPlaceItemModel> ItemModels => _context.ParkingPlaces.Select(c => new ParkingPlaceItemModel { Id = c.Id, CarType = c.CarType });
 
         public List<ParkingPlaceItemModel> GetAll()
         {
-            return _context.ParkingPlaces.Select(c=> new ParkingPlaceItemModel { Id = c.Id, CarType = c.CarType}).ToList();
+            return ItemModels.ToList();
         }
 
         public ParkingPlaceItemModel GetFirst()
         {
-            var place = _context.ParkingPlaces.First();
-            return new ParkingPlaceItemModel { Id = place.Id, CarType = place.CarType };
+            return ItemModels.First();
         }
 
-        public IQueryable<ParkingPlace> GetViaIQueriable()
+        public IQueryable<ParkingPlaceItemModel> GetViaIQueriable()
         {
-            return _context.ParkingPlaces;
+            return ItemModels;
         }
 
-        public ParkingPlaceItemModel? GetFirst(Func<ParkingPlace, bool> func)
+        public ParkingPlaceItemModel? GetFirst(Func<ParkingPlaceItemModel, bool> func)
         {
-            var place = _context.ParkingPlaces.FirstOrDefault(func);
-            return place == null ? null : new ParkingPlaceItemModel { Id = place.Id, CarType = place.CarType };
-
+            return ItemModels.FirstOrDefault(func);
         }
     }
 }

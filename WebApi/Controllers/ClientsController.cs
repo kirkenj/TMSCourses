@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using WebApiDatabase.Interfaces;
-using WebApiDatabase.Entities;
+﻿using Microsoft.AspNetCore.Mvc;
+using WebApi.Models;
+using WebApi.Models.Interfaces;
 
 namespace WebApi.Controllers
 {
@@ -14,26 +8,31 @@ namespace WebApi.Controllers
     [ApiController]
     public class ClientsController : ControllerBase
     {
-        private readonly IAutoparkDBContext _context;
+        private readonly IGetService<ClientItemModel> _getService;
+        private readonly IUpdateService<ClientUpdateModel> _updateService;
+        private readonly IDeleteService<int> _deleteService;
+        private readonly ICreateService<ClientCreateModel> _createService;
 
-        public ClientsController(IAutoparkDBContext context)
+        public ClientsController(IGetService<ClientItemModel> getService, IUpdateService<ClientUpdateModel> updateService, IDeleteService<int> deleteService, ICreateService<ClientCreateModel> createService)
         {
-            _context = context;
+            _getService = getService;
+            _createService = createService;
+            _updateService = updateService;
+            _deleteService = deleteService;
         }
 
         // GET: api/Clients
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Client>>> GetClients()
+        public ActionResult<IEnumerable<ClientItemModel>> GetClients()
         {
-            return await _context.Clients.ToListAsync();
+            return _getService.GetAll();
         }
 
         // GET: api/Clients/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Client>> GetClient(int id)
+        public ActionResult<ClientItemModel> GetClient(int id)
         {
-            var client = await _context.Clients.FindAsync(id);
-
+            var client = _getService.GetFirst(i => i.Id == id);
             if (client == null)
             {
                 return NotFound();
@@ -44,65 +43,28 @@ namespace WebApi.Controllers
 
         // PUT: api/Clients/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutClient(int id, Client client)
+        [HttpPut]
+        public IActionResult PutClient(ClientUpdateModel client)
         {
-            if (id != client.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(client).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ClientExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            _updateService.Update(client);
+            return Ok();
         }
 
         // POST: api/Clients
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Client>> PostClient(Client client)
+        public ActionResult<ClientCreateModel> PostClient(ClientCreateModel client)
         {
-            _context.Clients.Add(client);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetClient", new { id = client.Id }, client);
+            _createService.Create(client);
+            return CreatedAtAction("PostClient", client);
         }
 
         // DELETE: api/Clients/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteClient(int id)
+        public IActionResult DeleteClient(int id)
         {
-            var client = await _context.Clients.FindAsync(id);
-            if (client == null)
-            {
-                return NotFound();
-            }
-
-            _context.Clients.Remove(client);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool ClientExists(int id)
-        {
-            return _context.Clients.Any(e => e.Id == id);
+            _deleteService.Delete(id);
+            return Ok();
         }
     }
 }

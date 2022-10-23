@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WebApiDatabase.Entities;
 using WebApi.Models.Interfaces;
 using WebApi.Models;
 
@@ -11,10 +10,10 @@ namespace WebApi.Controllers
     {
         readonly IDeleteService<int> _deleteService;
         readonly IUpdateService<ParkingPlaceUpdateModel> _updateService;
-        readonly IGetService<ParkingPlace, ParkingPlaceItemModel> _getService;
+        readonly IGetService<ParkingPlaceItemModel> _getService;
         readonly ICreateService<int> _createService;
 
-        public ParkingPlacesController(IDeleteService<int> deleteService, IUpdateService<ParkingPlaceUpdateModel> updateService, IGetService<ParkingPlace, ParkingPlaceItemModel> getService, ICreateService<int> createService)
+        public ParkingPlacesController(IDeleteService<int> deleteService, IUpdateService<ParkingPlaceUpdateModel> updateService, IGetService<ParkingPlaceItemModel> getService, ICreateService<int> createService)
         {
             _deleteService = deleteService;
             _updateService = updateService;

@@ -4,7 +4,7 @@ using WebApiDatabase.Interfaces;
 
 namespace WebApi.Models.Services
 {
-    public class CarTypeGetService : IGetService<CarType, CarTypeItemModel>
+    public class CarTypeGetService : IGetService<CarTypeItemModel>
     {
         public CarTypeGetService(IAutoparkDBContext context)
         {
@@ -12,28 +12,26 @@ namespace WebApi.Models.Services
         }
 
         private readonly IAutoparkDBContext _context;
+        private IQueryable<CarTypeItemModel> ItemModels => _context.CarTypes.Select(c => new CarTypeItemModel { Id = c.Id, TypeName = c.TypeName });
 
         public List<CarTypeItemModel> GetAll()
         {
-            return _context.CarTypes.Select(c=> new CarTypeItemModel { Id = c.Id, TypeName = c.TypeName}).ToList();
+            return ItemModels.ToList();
         }
 
         public CarTypeItemModel GetFirst()
         {
-            var type = _context.CarTypes.First();
-            return new CarTypeItemModel { Id = type.Id, TypeName = type.TypeName };
+            return ItemModels.First();
         }
 
-        public IQueryable<CarType> GetViaIQueriable()
+        public IQueryable<CarTypeItemModel> GetViaIQueriable()
         {
-            return _context.CarTypes;
+            return ItemModels;
         }
 
-        public CarTypeItemModel? GetFirst(Func<CarType, bool> func)
+        public CarTypeItemModel? GetFirst(Func<CarTypeItemModel, bool> func)
         {
-            var type = _context.CarTypes.FirstOrDefault(func);
-            return type == null ? null : new CarTypeItemModel { Id = type.Id, TypeName = type.TypeName };
-
+            return ItemModels.FirstOrDefault(func);
         }
     }
 }

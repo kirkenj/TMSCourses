@@ -1,11 +1,10 @@
 ﻿namespace WebApi.Models.Interfaces
 {
-    public interface IGetService<Tentity, TModel>
-        where TModel : class
+    public interface IGetService<TModel>
     {
         public List<TModel> GetAll();
-        public IQueryable<Tentity> GetViaIQueriable();
+        public IQueryable<TModel> GetViaIQueriable();
         public TModel GetFirst();
-        public TModel? GetFirst(Func<Tentity, bool> func);
+        public TModel? GetFirst(Func<TModel, bool> func);
     }
 }
