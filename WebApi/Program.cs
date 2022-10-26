@@ -18,27 +18,30 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AutoparkDBContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddTransient<IAutoparkDBContext, AutoparkDBContext>();
 
-builder.Services.AddTransient<IDeleteService<int>, CarDeleteService>();
-builder.Services.AddTransient<IUpdateService<CarUpdateModel>, CarUpdateService>();
-builder.Services.AddTransient<IGetService<CarItemModel>, CarGetService>();
-builder.Services.AddTransient<ICreateService<CarCreateModel>, CarCreateService>();
+builder.Services.AddTransient<IDeleteService<int>, CarCRUDLService>();
+builder.Services.AddTransient<IUpdateService<CarUpdateModel>, CarCRUDLService>();
+builder.Services.AddTransient<IGetService<CarItemModel>, CarCRUDLService>();
+builder.Services.AddTransient<ICreateService<CarCreateModel>, CarCRUDLService>();
 
-builder.Services.AddTransient<IDeleteService<int>, CarTypeDeleteService>();
-builder.Services.AddTransient<IUpdateService<CarTypeUpdateModel>, CarTypeUpdateService>();
-builder.Services.AddTransient<IGetService<CarTypeItemModel>, CarTypeGetService>();
-builder.Services.AddTransient<ICreateService<CarTypeCreateModel>, CarTypeCreateService>();
+builder.Services.AddTransient<IDeleteService<int>, CarTypeCRUDLService>();
+builder.Services.AddTransient<IUpdateService<CarTypeUpdateModel>, CarTypeCRUDLService>();
+builder.Services.AddTransient<IGetService<CarTypeItemModel>, CarTypeCRUDLService>();
+builder.Services.AddTransient<ICreateService<CarTypeCreateModel>, CarTypeCRUDLService>();
 
-builder.Services.AddTransient<IDeleteService<int>, ParkingPlaceDeleteService>();
-builder.Services.AddTransient<IUpdateService<ParkingPlaceUpdateModel>, ParkingPlaceUpdateService>();
-builder.Services.AddTransient<IGetService<ParkingPlaceItemModel>, ParkingPlaceGetService>();
-builder.Services.AddTransient<ICreateService<int>, ParkingPlaceCreateService>();
+builder.Services.AddTransient<IDeleteService<int>, ParkingPlaceCRUDLService>();
+builder.Services.AddTransient<IUpdateService<ParkingPlaceUpdateModel>, ParkingPlaceCRUDLService>();
+builder.Services.AddTransient<IGetService<ParkingPlaceItemModel>, ParkingPlaceCRUDLService>();
+builder.Services.AddTransient<ICreateService<int>, ParkingPlaceCRUDLService>();
 
-builder.Services.AddTransient<IDeleteService<int>, ClientDeleteService>();
-builder.Services.AddTransient<IUpdateService<ClientUpdateModel>, ClientUpdateService>();
-builder.Services.AddTransient<IGetService<ClientItemModel>, ClientGetService>();
-builder.Services.AddTransient<ICreateService<ClientCreateModel>, ClientCreateService>();
+builder.Services.AddTransient<IDeleteService<int>, ClientCRUDLService>();
+builder.Services.AddTransient<IUpdateService<ClientUpdateModel>, ClientCRUDLService>();
+builder.Services.AddTransient<IGetService<ClientItemModel>, ClientCRUDLService>();
+builder.Services.AddTransient<ICreateService<ClientCreateModel>, ClientCRUDLService>();
 
-builder.Services.AddTransient<ICreateService<ClientCreateModel>, ClientCreateService>();
+builder.Services.AddTransient<IDeleteService<int>, JournalCRUDLService>();
+builder.Services.AddTransient<IUpdateService<JournalUpdateModel>, JournalCRUDLService>();
+builder.Services.AddTransient<IGetService<JournalItemModel>, JournalCRUDLService>();
+builder.Services.AddTransient<ICreateService<JournalCreateModel>, JournalCRUDLService>();
 
 var app = builder.Build();
 

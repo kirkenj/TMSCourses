@@ -8,25 +8,32 @@ namespace WebApi.Controllers
     [ApiController]
     public class JournalController : ControllerBase
     {
-        private readonly ICRUDLService<JournalCreateModel, JournalUpdateModel, int, JournalItemModel> _service;
 
-        public JournalController(ICRUDLService<JournalCreateModel, JournalUpdateModel, int, JournalItemModel> context)
+        private readonly IGetService<JournalItemModel> _getService;
+        private readonly IUpdateService<JournalUpdateModel> _updateService;
+        private readonly IDeleteService<int> _deleteService;
+        private readonly ICreateService<JournalCreateModel> _createService;
+
+        public JournalController(IGetService<JournalItemModel> getService, IUpdateService<JournalUpdateModel> updateService, IDeleteService<int> deleteService, ICreateService<JournalCreateModel> createService)
         {
-            _service = context;
+            _createService = createService;
+            _getService = getService;
+            _updateService = updateService;
+            _deleteService = deleteService;
         }
 
         // GET: api/Journals
         [HttpGet]
         public ActionResult<IEnumerable<JournalItemModel>> GetJournals()
         {
-            return _service.GetAll();
+            return _getService.GetAll();
         }
 
         // GET: api/Journals/5
         [HttpGet("{id}")]
         public ActionResult<JournalItemModel> GetJournal(int id)
         {
-            var journal = _service.GetFirst(j => j.Id == id);
+            var journal = _getService.GetFirst(j => j.Id == id);
 
             if (journal == null)
             {
@@ -41,7 +48,7 @@ namespace WebApi.Controllers
         [HttpPut]
         public IActionResult PutJournal(JournalUpdateModel journal)
         {
-            _service.Update(journal);
+            _updateService.Update(journal);
             return Ok();
         }
 
@@ -50,7 +57,7 @@ namespace WebApi.Controllers
         [HttpPost]
         public ActionResult<JournalCreateModel> PostJournal(JournalCreateModel model)
         {
-            _service.Create(model);
+            _createService.Create(model);
             return CreatedAtAction("GetJournal", model);
         }
 
@@ -58,7 +65,7 @@ namespace WebApi.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteJournal(int id)
         {
-            _service.Delete(id);
+            _deleteService.Delete(id);
             return Ok();
         }
     }
