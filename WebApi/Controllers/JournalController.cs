@@ -8,7 +8,6 @@ namespace WebApi.Controllers
     [ApiController]
     public class JournalController : ControllerBase
     {
-
         private readonly IGetService<JournalItemModel> _getService;
         private readonly IUpdateService<JournalUpdateModel> _updateService;
         private readonly IDeleteService<int> _deleteService;

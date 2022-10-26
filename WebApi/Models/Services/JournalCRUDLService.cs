@@ -6,7 +6,6 @@ namespace WebApi.Models.Services
 {
     public class JournalCRUDLService : ICRUDLService<JournalCreateModel, JournalUpdateModel, int, JournalItemModel>
     {
-
         public JournalCRUDLService(IAutoparkDBContext context)
         {
             _context = context;

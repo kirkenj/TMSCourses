@@ -8,10 +8,10 @@ namespace WebApi.Controllers
     [ApiController]
     public class ParkingPlacesController : ControllerBase
     {
-        readonly IDeleteService<int> _deleteService;
-        readonly IUpdateService<ParkingPlaceUpdateModel> _updateService;
-        readonly IGetService<ParkingPlaceItemModel> _getService;
-        readonly ICreateService<int> _createService;
+        private readonly IDeleteService<int> _deleteService;
+        private readonly IUpdateService<ParkingPlaceUpdateModel> _updateService;
+        private readonly IGetService<ParkingPlaceItemModel> _getService;
+        private readonly ICreateService<int> _createService;
 
         public ParkingPlacesController(IDeleteService<int> deleteService, IUpdateService<ParkingPlaceUpdateModel> updateService, IGetService<ParkingPlaceItemModel> getService, ICreateService<int> createService)
         {

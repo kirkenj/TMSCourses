@@ -1,6 +1,5 @@
 ﻿using WebApiDatabase.Entities;
 using WebApiDatabase.Interfaces;
-using WebApi.Models;
 using WebApi.Models.Interfaces;
 
 namespace WebApi.Models.Services

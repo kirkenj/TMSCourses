@@ -2,7 +2,6 @@
 using WebApi.Models.Interfaces;
 using WebApi.Models;
 
-
 namespace WebApi.Controllers
 {
     [Route("api/[controller]")]

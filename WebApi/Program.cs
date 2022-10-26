@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using WebApiDatabase;
-using WebApiDatabase.Entities;
 using WebApiDatabase.Interfaces;
 using WebApi.Models.Interfaces;
 using WebApi.Models.Services;
