@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using WEB_EF.Models.DBContexts;
-using WEB_EF.Models.Interfaces;
-using WEB_EF.Models.Services;
-using WEB_EF.Models.Entities;
+using WebApi.Models.DBContexts;
+using WebApi.Models.Interfaces;
+using WebApi.Models.Services;
+using WebApi.Models.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 

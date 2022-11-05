@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using WEB_EF.Models.DBContexts;
+using WebApiDatabase.Models.DBContexts;
 
 #nullable disable
 
-namespace WEB_EF.Migrations
+namespace WebApiDatabase.Migrations
 {
     [DbContext(typeof(AutoparkDBContext))]
     [Migration("20221019204331_init")]

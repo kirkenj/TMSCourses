@@ -1,4 +1,4 @@
-namespace WEB_EF.Models
+namespace WebApi.Models
 {
     public class ErrorViewModel
     {

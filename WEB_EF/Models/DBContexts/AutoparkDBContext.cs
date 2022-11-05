@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using WEB_EF.Models.Entities;
-using WEB_EF.Models.Interfaces;
+using WebApi.Models.Entities;
+using WebApi.Models.Interfaces;
 
-namespace WEB_EF.Models.DBContexts
+namespace WebApi.Models.DBContexts
 {
     public partial class AutoparkDBContext : DbContext, IAutoparkDBContext
     {

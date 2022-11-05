@@ -1,7 +1,7 @@
-﻿using WEB_EF.Models.Entities;
-using WEB_EF.Models.Interfaces;
+﻿using WebApi.Models.Entities;
+using WebApi.Models.Interfaces;
 
-namespace WEB_EF.Models.Services
+namespace WebApi.Models.Services
 {
     public class ClientCrudlService : ICRUDlService<Client>
     {

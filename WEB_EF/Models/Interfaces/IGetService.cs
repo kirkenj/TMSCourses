@@ -1,4 +1,4 @@
-﻿namespace WEB_EF.Models.Interfaces
+﻿namespace WebApi.Models.Interfaces
 {
     public interface IGetService<T>
     {

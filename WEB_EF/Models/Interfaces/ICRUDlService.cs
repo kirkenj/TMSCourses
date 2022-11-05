@@ -1,4 +1,4 @@
-﻿namespace WEB_EF.Models.Interfaces
+﻿namespace WebApi.Models.Interfaces
 {
     public interface ICRUDlService<T> : ICreateService<T>, IDeleteService<T>, IUpdateService<T>, IGetService<T>
     {

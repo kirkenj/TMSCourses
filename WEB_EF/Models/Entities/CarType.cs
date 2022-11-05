@@ -1,4 +1,4 @@
-﻿namespace WEB_EF.Models.Entities
+﻿namespace WebApi.Models.Entities
 {
     public partial class CarType
     {
