@@ -13,7 +13,7 @@ namespace WebApi.Models.Services
 
         private readonly IAutoparkDBContext _context;
 
-        public async Task CreateAsync(JournalCreateModel item)
+        public void Create(JournalCreateModel item)
         {
             var record = new Journal()
             {
@@ -29,14 +29,14 @@ namespace WebApi.Models.Services
             }
 
             _context.Journals.Add(record);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
 
-        public async Task DeleteAsync(int id)
+        public void Delete(int id)
         {
             var record = _context.Journals.Single(c => c.Id == id);
             _context.Journals.Remove(record);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
 
         private IQueryable<JournalItemModel> ItemModels => _context.Journals.Select(j => new JournalItemModel
@@ -48,14 +48,14 @@ namespace WebApi.Models.Services
             ParkingPlace = j.ParkingPlace
         });
 
-        public async Task<List<JournalItemModel>> GetAllAsync()
+        public List<JournalItemModel> GetAll()
         {
-            return await Task.Run(() => ItemModels.ToList());
+            return ItemModels.ToList();
         }
 
-        public async Task<JournalItemModel> GetFirstAsync()
+        public JournalItemModel GetFirst()
         {
-            return await Task.Run(() => ItemModels.First());
+            return ItemModels.First();
         }
 
         public IQueryable<JournalItemModel> GetViaIQueriable()
@@ -63,12 +63,12 @@ namespace WebApi.Models.Services
             return ItemModels;
         }
 
-        public async Task<JournalItemModel?> GetFirstAsync(Func<JournalItemModel, bool> func)
+        public JournalItemModel? GetFirst(Func<JournalItemModel, bool> func)
         {
-            return await Task.Run(() => ItemModels.FirstOrDefault(func));
+            return ItemModels.FirstOrDefault(func);
         }
 
-        public async Task UpdateAsync(JournalUpdateModel item)
+        public void Update(JournalUpdateModel item)
         {
             var record = _context.Journals.First(j => j.Id == item.Id);
             record.ComingDate = item.NewComingDate;
@@ -82,7 +82,7 @@ namespace WebApi.Models.Services
             }
 
             _context.Journals.Add(record);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
 
         public bool IsValid(Journal record, out string explanation)

@@ -2,6 +2,6 @@
 {
     public interface IDeleteService<T>
     {
-        public Task DeleteAsync(T item);
+        public void Delete(T item);
     }
 }

@@ -2,6 +2,6 @@
 {
     public interface ICreateService<T>
     {
-        public Task CreateAsync(T item);
+        public void Create(T item);
     }
 }

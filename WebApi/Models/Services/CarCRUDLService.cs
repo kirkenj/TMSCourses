@@ -13,7 +13,7 @@ namespace WebApi.Models.Services
 
         private readonly IAutoparkDBContext _context;
 
-        public async Task CreateAsync(CarCreateModel item)
+        public void Create(CarCreateModel item)
         {
             var car = new Car()
             {
@@ -23,26 +23,26 @@ namespace WebApi.Models.Services
             };
 
             _context.Cars.Add(car);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
 
-        public async Task DeleteAsync(int id)
+        public void Delete(int id)
         {
             var car = _context.Cars.Single(c => c.Id == id);
             _context.Cars.Remove(car);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
 
         private IQueryable<CarItemModel> ItemModels => _context.Cars.Select(c => CarItemModel.FromCarEntity(c));
 
-        public async Task<List<CarItemModel>> GetAllAsync()
+        public List<CarItemModel> GetAll()
         {
-            return await Task.Run(()=> ItemModels.ToList());
+            return ItemModels.ToList();
         }
 
-        public async Task<CarItemModel> GetFirstAsync()
+        public CarItemModel GetFirst()
         {
-            return await Task.Run(() => ItemModels.First());
+            return ItemModels.First();
         }
 
         public IQueryable<CarItemModel> GetViaIQueriable()
@@ -50,18 +50,18 @@ namespace WebApi.Models.Services
             return ItemModels;
         }
 
-        public async Task<CarItemModel?> GetFirstAsync(Func<CarItemModel, bool> func)
+        public CarItemModel? GetFirst(Func<CarItemModel, bool> func)
         {
-            return await Task.Run(() => ItemModels.FirstOrDefault(func));
+            return ItemModels.FirstOrDefault(func);
         }
 
-        public async Task UpdateAsync(CarUpdateModel item)
+        public void Update(CarUpdateModel item)
         {
             var car = _context.Cars.Single(c => c.Id == item.Id);
             car.ClientId = item.NewClientId;
             car.CarType = item.NewCarType;
             car.RegNumber = item.NewRegNumber;
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
     }
 }

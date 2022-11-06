@@ -13,7 +13,7 @@ namespace WebApi.Models.Services
 
         private readonly IAutoparkDBContext _context;
 
-        public async Task CreateAsync(int parkingPlaceCarType)
+        public void Create(int parkingPlaceCarType)
         {
             ParkingPlace type = new()
             {
@@ -21,26 +21,26 @@ namespace WebApi.Models.Services
             };
 
             _context.ParkingPlaces.Add(type);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
 
-        public async Task DeleteAsync(int id)
+        public void Delete(int id)
         {
             var type = _context.ParkingPlaces.Single(c => c.Id == id);
             _context.ParkingPlaces.Remove(type);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
 
         private IQueryable<ParkingPlaceItemModel> ItemModels => _context.ParkingPlaces.Select(c => new ParkingPlaceItemModel { Id = c.Id, CarType = c.CarType });
 
-        public async Task<List<ParkingPlaceItemModel>> GetAllAsync()
+        public List<ParkingPlaceItemModel> GetAll()
         {
-            return await Task.Run(() => ItemModels.ToList());
+            return ItemModels.ToList();
         }
 
-        public async Task<ParkingPlaceItemModel> GetFirstAsync()
+        public ParkingPlaceItemModel GetFirst()
         {
-            return await Task.Run(()=> ItemModels.First());
+            return ItemModels.First();
         }
 
         public IQueryable<ParkingPlaceItemModel> GetViaIQueriable()
@@ -48,16 +48,16 @@ namespace WebApi.Models.Services
             return ItemModels;
         }
 
-        public async Task<ParkingPlaceItemModel?> GetFirstAsync(Func<ParkingPlaceItemModel, bool> func)
+        public ParkingPlaceItemModel? GetFirst(Func<ParkingPlaceItemModel, bool> func)
         {
-            return await Task.Run(() => ItemModels.FirstOrDefault(func));
+            return ItemModels.FirstOrDefault(func);
         }
 
-        public async Task UpdateAsync(ParkingPlaceUpdateModel item)
+        public void Update(ParkingPlaceUpdateModel item)
         {
             var type = _context.ParkingPlaces.Single(c => c.Id == item.Id);
             type.CarType = item.NewCarType;
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
     }
 }
