@@ -8,8 +8,4 @@
 
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\WEB_EF\WEB_EF.csproj" />
-  </ItemGroup>
-
 </Project>

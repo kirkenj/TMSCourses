@@ -23,16 +23,17 @@ namespace WebApi.Controllers
 
         // GET: api/Journals
         [HttpGet]
-        public ActionResult<IEnumerable<JournalItemModel>> GetJournals()
+        public async Task<ActionResult<IEnumerable<JournalItemModel>>> GetJournals()
         {
-            return _getService.GetAll();
+            var journals = await _getService.GetAllAsync();
+            return journals;
         }
 
         // GET: api/Journals/5
         [HttpGet("{id}")]
-        public ActionResult<JournalItemModel> GetJournal(int id)
+        public async Task<ActionResult<JournalItemModel>> GetJournal(int id)
         {
-            var journal = _getService.GetFirst(j => j.Id == id);
+            var journal = await _getService.GetFirstAsync(j => j.Id == id);
 
             if (journal == null)
             {
@@ -45,26 +46,26 @@ namespace WebApi.Controllers
         // PUT: api/Journals/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut]
-        public IActionResult PutJournal(JournalUpdateModel journal)
+        public async Task<IActionResult> PutJournal(JournalUpdateModel journal)
         {
-            _updateService.Update(journal);
+            await _updateService.UpdateAsync(journal);
             return Ok();
         }
 
         // POST: api/Journals
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public ActionResult<JournalCreateModel> PostJournal(JournalCreateModel model)
+        public async Task<ActionResult<JournalCreateModel>> PostJournal(JournalCreateModel model)
         {
-            _createService.Create(model);
+            await _createService.CreateAsync(model);
             return CreatedAtAction("GetJournal", model);
         }
 
         // DELETE: api/Journals/5
         [HttpDelete("{id}")]
-        public IActionResult DeleteJournal(int id)
+        public async Task<IActionResult> DeleteJournal(int id)
         {
-            _deleteService.Delete(id);
+            await _deleteService.DeleteAsync(id);
             return Ok();
         }
     }
