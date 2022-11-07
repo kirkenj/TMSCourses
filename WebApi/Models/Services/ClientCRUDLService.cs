@@ -13,7 +13,7 @@ namespace WebApi.Models.Services
 
         private readonly IAutoparkDBContext _context;
 
-        public void Create(ClientCreateModel item)
+        public async Task CreateAsync(ClientCreateModel item)
         {
             var client = new Client()
             {
@@ -22,26 +22,26 @@ namespace WebApi.Models.Services
             };
 
             _context.Clients.Add(client);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public void Delete(int id)
+        public async Task DeleteAsync(int id)
         {
             var client = _context.Clients.Single(c => c.Id == id);
             _context.Clients.Remove(client);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
         private IQueryable<ClientItemModel> ItemModels => _context.Clients.Select(c => new ClientItemModel { Id = c.Id, Surname = c.Surname, Name = c.Name });
 
-        public List<ClientItemModel> GetAll()
+        public async Task<List<ClientItemModel>> GetAllAsync()
         {
-            return ItemModels.ToList();
+            return await Task.Run(() => ItemModels.ToList());
         }
 
-        public ClientItemModel GetFirst()
+        public async Task<ClientItemModel>GetFirstAsync()
         {
-            return ItemModels.First();
+            return await Task.Run(() => ItemModels.First());
         }
 
         public IQueryable<ClientItemModel> GetViaIQueriable()
@@ -49,17 +49,17 @@ namespace WebApi.Models.Services
             return ItemModels;
         }
 
-        public ClientItemModel? GetFirst(Func<ClientItemModel, bool> func)
+        public async Task<ClientItemModel?> GetFirstAsync(Func<ClientItemModel, bool> func)
         {
-            return ItemModels.FirstOrDefault(func);
+            return await Task.Run(() => ItemModels.FirstOrDefault(func));
         }
 
-        public void Update(ClientUpdateModel item)
+        public async Task UpdateAsync(ClientUpdateModel item)
         {
             var client = _context.Clients.Single(c => c.Id == item.Id);
             client.Name = item.NewName;
             client.Surname = item.NewSurname;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
     }
 }

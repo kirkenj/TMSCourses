@@ -2,6 +2,6 @@
 {
     public interface IUpdateService<T>
     {
-        public void Update(T item);
+        public Task UpdateAsync(T item);
     }
 }

@@ -23,16 +23,16 @@ namespace WebApi.Controllers
 
         // GET: api/CarTypes
         [HttpGet]
-        public ActionResult<IEnumerable<CarTypeItemModel>> GetCarTypes()
+        public async Task<ActionResult<IEnumerable<CarTypeItemModel>>> GetCarTypes()
         {
-            return _getService.GetAll();
+            return await _getService.GetAllAsync();
         }
 
         // GET: api/CarTypes/5
         [HttpGet("{id}")]
-        public ActionResult<CarTypeItemModel?> GetCarType(int id)
+        public async Task<ActionResult<CarTypeItemModel?>> GetCarType(int id)
         {
-            var car = _getService.GetFirst(c => c.Id == id);
+            var car = await _getService.GetFirstAsync(c => c.Id == id);
             if (car == null)
             {
                 return NotFound();
@@ -44,26 +44,26 @@ namespace WebApi.Controllers
         // PUT: api/CarTypes/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut]
-        public IActionResult PutCarType(CarTypeUpdateModel carType)
+        public async Task<IActionResult> PutCarType(CarTypeUpdateModel carType)
         {
-            _updateService.Update(carType);
+            await _updateService.UpdateAsync(carType);
             return Ok();
         }
 
         // POST: api/CarTypes
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public ActionResult<CarTypeCreateModel> PostCarType(CarTypeCreateModel carType)
+        public async Task<ActionResult<CarTypeCreateModel>> PostCarType(CarTypeCreateModel carType)
         {
-            _createService.Create(carType);
+            await _createService.CreateAsync(carType);
             return CreatedAtAction("GetCarType", carType);
         }
 
         // DELETE: api/CarTypes/5
         [HttpDelete("{id}")]
-        public IActionResult DeleteCarType(int id)
+        public async Task<IActionResult> DeleteCarType(int id)
         {
-            _deleteService.Delete(id);
+            await _deleteService.DeleteAsync(id);
             return Ok();
         }
     }

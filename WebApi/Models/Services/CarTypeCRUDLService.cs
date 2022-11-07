@@ -13,7 +13,7 @@ namespace WebApi.Models.Services
 
         private readonly IAutoparkDBContext _context;
 
-        public void Create(CarTypeCreateModel item)
+        public async Task CreateAsync(CarTypeCreateModel item)
         {
             CarType type = new()
             {
@@ -21,26 +21,26 @@ namespace WebApi.Models.Services
             };
 
             _context.CarTypes.Add(type);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public void Delete(int id)
+        public async Task DeleteAsync(int id)
         {
             var type = _context.CarTypes.Single(c => c.Id == id);
             _context.CarTypes.Remove(type);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
         private IQueryable<CarTypeItemModel> ItemModels => _context.CarTypes.Select(c => new CarTypeItemModel { Id = c.Id, TypeName = c.TypeName });
 
-        public List<CarTypeItemModel> GetAll()
+        public async Task<List<CarTypeItemModel>> GetAllAsync()
         {
-            return ItemModels.ToList();
+            return await Task.Run(() => ItemModels.ToList());
         }
 
-        public CarTypeItemModel GetFirst()
+        public async Task<CarTypeItemModel> GetFirstAsync()
         {
-            return ItemModels.First();
+            return await Task.Run(() => ItemModels.First());
         }
 
         public IQueryable<CarTypeItemModel> GetViaIQueriable()
@@ -48,16 +48,16 @@ namespace WebApi.Models.Services
             return ItemModels;
         }
 
-        public CarTypeItemModel? GetFirst(Func<CarTypeItemModel, bool> func)
+        public async Task<CarTypeItemModel?> GetFirstAsync(Func<CarTypeItemModel, bool> func)
         {
-            return ItemModels.FirstOrDefault(func);
+            return await Task.Run(() => ItemModels.FirstOrDefault(func));
         }
 
-        public void Update(CarTypeUpdateModel item)
+        public async Task UpdateAsync(CarTypeUpdateModel item)
         {
             var type = _context.CarTypes.Single(c => c.Id == item.Id);
             type.TypeName = item.NewTypeName;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
     }
 }

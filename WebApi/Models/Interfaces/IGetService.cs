@@ -2,9 +2,9 @@
 {
     public interface IGetService<TModel>
     {
-        public List<TModel> GetAll();
+        public Task<List<TModel>> GetAllAsync();
         public IQueryable<TModel> GetViaIQueriable();
-        public TModel GetFirst();
-        public TModel? GetFirst(Func<TModel, bool> func);
+        public Task<TModel> GetFirstAsync();
+        public Task<TModel?> GetFirstAsync(Func<TModel, bool> func);
     }
 }
