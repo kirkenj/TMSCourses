@@ -23,16 +23,16 @@ namespace WebApi.Controllers
 
         // GET: api/Cars1
         [HttpGet]
-        public IEnumerable<CarItemModel> GetCars()
+        public async Task<IEnumerable<CarItemModel>> GetCars()
         {
-            return _getService.GetAll();
+            return await _getService.GetAllAsync();
         }
 
         // GET: api/Cars1/5
         [HttpGet("{id}")]
-        public ActionResult<CarItemModel> GetCar(int id)
+        public async Task<ActionResult<CarItemModel>> GetCar(int id)
         {
-            var car = _getService.GetFirst(c => c.Id == id);
+            var car = await _getService.GetFirstAsync(c => c.Id == id);
 
             if (car == null)
             {
@@ -45,26 +45,26 @@ namespace WebApi.Controllers
         // PUT: api/Cars1/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut]
-        public IActionResult PutCar(CarUpdateModel car)
+        public async Task<IActionResult> PutCar(CarUpdateModel car)
         {
-            _updateService.Update(car);
+            await _updateService.UpdateAsync(car);
             return Ok();
         }
 
         // POST: api/Cars1
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public IActionResult PostCar(CarCreateModel car)
+        public async Task<IActionResult> PostCar(CarCreateModel car)
         {
-            _createService.Create(car);
+            await _createService.CreateAsync(car);
             return CreatedAtAction(nameof(PutCar), car);
         }
 
         // DELETE: api/Cars1/5
         [HttpDelete("{id}")]
-        public IActionResult DeleteCar(int id)
+        public async Task<IActionResult> DeleteCar(int id)
         {
-            _deleteService.Delete(id);
+            await _deleteService.DeleteAsync(id);
             return Ok();
         }
     }

@@ -23,47 +23,47 @@ namespace WebApi.Controllers
 
         // GET: api/ParkingPlaces
         [HttpGet]
-        public IEnumerable<ParkingPlaceItemModel> GetParkingPlaces()
+        public async Task<IEnumerable<ParkingPlaceItemModel>> GetParkingPlaces()
         {
-            return _getService.GetAll();
+            return await _getService.GetAllAsync();
         }
 
         // GET: api/ParkingPlaces/5
         [HttpGet("{id}")]
-        public ActionResult<ParkingPlaceItemModel> GetParkingPlace(int id)
+        public async Task<ActionResult<ParkingPlaceItemModel>> GetParkingPlace(int id)
         {
-            var place = _getService.GetFirst(c => c.Id == id);
+            var place = await _getService.GetFirstAsync(c => c.Id == id);
             if (place == null) 
             {
                 return NotFound();
             }
 
-            return new ParkingPlaceItemModel { Id = place.Id, CarType = place.CarType };
+            return place;
         }
 
         // PUT: api/ParkingPlaces/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut]
-        public IActionResult PutParkingPlace(ParkingPlaceUpdateModel updateModel)
+        public async Task<IActionResult> PutParkingPlace(ParkingPlaceUpdateModel updateModel)
         {
-            _updateService.Update(updateModel);
+            await _updateService.UpdateAsync(updateModel);
             return Ok();
         }
 
         // POST: api/ParkingPlaces
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public ActionResult<int> PostParkingPlace(int newParkingPlaceCarType)
+        public async Task<ActionResult<int>> PostParkingPlace(int newParkingPlaceCarType)
         {
-            _createService.Create(newParkingPlaceCarType);
+            await _createService.CreateAsync(newParkingPlaceCarType);
             return CreatedAtAction("GetParkingPlace", new { type = newParkingPlaceCarType}, newParkingPlaceCarType);
         }
 
         // DELETE: api/ParkingPlaces/5
         [HttpDelete("{id}")]
-        public IActionResult DeleteParkingPlace(int id)
+        public async Task<IActionResult> DeleteParkingPlace(int id)
         {
-            _deleteService.Delete(id);
+            await _deleteService.DeleteAsync(id);
             return Ok();
         }
     }
